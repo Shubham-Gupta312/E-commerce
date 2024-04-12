@@ -4,6 +4,10 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
+    public function __construct()
+    {
+        $this->gM = Model("GeneralModel");
+    }
     public function index(): string
     {
         return view('welcome_message');
@@ -155,7 +159,7 @@ class Home extends BaseController
                     0 => $row['id'],
                     1 => ucfirst($row['cat_name']),
                     2 => '<img src="../assets/uploads/' . $row['cat_image'] . '" height="100px" width="100px">',
-                    3 =>  '<button class="btn '.$buttonCSSClass.'" id="statusBtn" data-id="' . $status . '" data-status="active">'. $buttonName .'</button>',
+                    3 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
                     4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -192,15 +196,15 @@ class Home extends BaseController
             $id = $this->request->getPost('id');
             $st = $this->request->getPost('status');
             $dId = $this->request->getPost('dataId');
-    
+
             if ($dId == 1 && $st == 'active') {
                 $status = 0;
             } else {
                 $status = 1;
             }
-    
-            $result = $md->updateStatus($id, $status);
-    
+
+            $result = $md->updateStatus(esc($id), $status);
+
             if ($result) {
                 return $this->response->setJSON(['status' => $status]);
             } else {
@@ -218,7 +222,7 @@ class Home extends BaseController
         $id = $this->request->getPost('id');
 
         $editCat = new \App\Models\CategoryModel();
-        $ed = $editCat->find($id);
+        $ed = $editCat->find(esc($id));
 
         if ($ed) {
             $response = ['status' => 'true', 'message' => $ed];
@@ -412,10 +416,9 @@ class Home extends BaseController
 
             $data['classification'] = $fetchCat->findAll($length, $start);
             $totalRecords = $fetchCat->countAll();
-            // $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->countAllResults() : $totalRecords;
-            $totalFilterRecords =
-                // $totalFilterRecords = $totalRecords;
-                $associativeArray = [];
+            $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->fetchCatName('category', 'cat_name')->countAllResults() : $totalRecords;
+            // $totalFilterRecords = $totalRecords;
+            $associativeArray = [];
 
             foreach ($data['classification'] as $row) {
                 $status = $row['status'];
@@ -431,7 +434,7 @@ class Home extends BaseController
                     0 => $row['id'],
                     1 => ucfirst($row['cat_name']),
                     2 => ucfirst($row['cat_variant']),
-                    3 => '<button class="btn '.$buttonCSSClass.'" id="toggle-status" data-id="' . $status . '" data-status="active">'. $buttonName .'</button>',
+                    3 => '<button class="btn ' . $buttonCSSClass . '" id="toggle-status" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
                     4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -468,15 +471,15 @@ class Home extends BaseController
             $id = $this->request->getPost('id');
             $st = $this->request->getPost('status');
             $dId = $this->request->getPost('dataId');
-    
+
             if ($dId == 1 && $st == 'active') {
                 $status = 0;
             } else {
                 $status = 1;
             }
-    
-            $result = $md->updateStatus($id, $status);
-    
+
+            $result = $md->updateStatus(esc($id), $status);
+
             if ($result) {
                 return $this->response->setJSON(['status' => $status]);
             } else {
@@ -487,7 +490,7 @@ class Home extends BaseController
             return $this->response->setJSON(['error' => 'Internal Server Error']);
         }
     }
-    
+
 
 
 
