@@ -24,14 +24,18 @@ $routes->group('admin', static function ($routes) {
     $routes->post('updateCategory', 'Home::updateCategory');
     $routes->post('deleteCategory', 'Home::deleteCategory');
 
-    $routes->get('classification', 'Home::Classification');
-    $routes->post('categorization', 'Home::Classification');
-    $routes->get('fetchClassification', 'Home::fetchClassification');
+    $routes->get('subCategory', 'Home::subCategory');
+
+    $routes->get('unitMaster', 'Home::unitMaster');
+    $routes->post('unitMaster', 'Home::unitMaster');
+    $routes->get('fetchUnitMaster', 'Home::fetchUnitMaster');
     $routes->post('toggle_status', 'Home::toggle_status');
-    $routes->post('editCategorization', 'Home::editCategorization');
-    $routes->post('updateCategorization', 'Home::updateCategorization');
-    $routes->post('deleteCategorization', 'Home::deleteCategorization');
+    $routes->post('editUnitMaster', 'Home::editUnitMaster');
+    $routes->post('updateUnitMaster', 'Home::updateUnitMaster');
+    $routes->post('deleteUnitMaster', 'Home::deleteUnitMaster');
     
     $routes->get('products', 'Home::Products');
+    $routes->post('products', 'Home::Products');
     $routes->post('fetchcatvariant', 'Home::fetchcatvariant');
+    $routes->get('fetchproducts', 'Home::fetchproducts');
 });

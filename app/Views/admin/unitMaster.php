@@ -21,11 +21,11 @@
             <div class="row">
                 <!-- <div class="col-lg-3 col-md-6"> -->
                 <div class="col-lg-6">
-                    <h1>Categorization</h1>
+                    <h1>Unit Master</h1>
                 </div>
                 <div class="col-lg-6 text-lg-right">
                     <button class="btn btn-outline-primary" title="Add Category" id="add_category"><i
-                            class="fas fa-plus"></i> Add Categorization</button>
+                            class="fas fa-plus"></i> Add Unit</button>
                 </div>
                 <!-- </div> -->
                 <!-- Column -->
@@ -36,22 +36,18 @@
                     <form id="categorizationForm">
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
-                                <label for="cat_name">Category Name</label><span class="text-danger">*</span>
-                                <select name="cat_name" class="form-control" id="cat_name">
-                                    <option value="" selected="selected">Please choose a option</option>
-                                    <?php
-                                    foreach ($category as $option) {
-                                        echo "<option value=\"{$option['id']}\">{$option['cat_name']}</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <label for="cat_var">Category Variant</label><span class="text-danger">*</span>
-                                <select name="cat_var" class="form-control" id="cat_var">
-                                    <option value="" selected="selected">Please choose a option</option>
+                                <label for="cat_name">Unit Name</label><span class="text-danger">*</span>
+                                <!-- <input type="text" class="form-control onlychars" name="unit" id="unit"
+                                    placeholder="Enter Unit (kg, gms)"> -->
+                                <select name="unit" class="form-control" id="unit">
+                                    <option value="" selected="selected">Please Choose one</option>
                                     <option value="kg">Kg</option>
-                                    <option value="gms">gms</option>
+                                    <option value="grm">Grm</option>
+                                    <option value="ltr">Ltr</option>
+                                    <option value="pcs">Peice</option>
+                                    <option value="pck">Packet</option>
+                                    <option value="mltr">Mililitre</option>
+                                    <option value="bx">Box</option>
                                 </select>
                             </div>
                         </div>
@@ -75,27 +71,17 @@
                                 <div class="row">
                                     <input type="hidden" name="id" id="catId" val="">
                                     <div class="col-lg-12 col-md-6">
-                                        <label for="cat_name">Category Name</label><span class="text-danger">*</span>
-                                        <select name="edit_cat_name" class="form-control" id="edit_cat_name">
+                                        <label for="unit name">Unit Name</label><span class="text-danger">*</span>
+                                        <select name="edit_unit_name" class="form-control" id="edit_unit_name">
                                             <option value="" selected="selected">Please choose a option</option>
-                                            <?php
-                                            // Assuming $options is an array containing dynamic options fetched from a data source
-                                            foreach ($category as $option) {
-                                                echo "<option value=\"{$option['id']}\">{$option['cat_name']}</option>";
-                                            }
-                                            ?>
+                                            <option value="kg">Kg</option>
+                                            <option value="grm">Grm</option>
+                                            <option value="ltr">Ltr</option>
+                                            <option value="pcs">Peice</option>
+                                            <option value="pck">Packet</option>
+                                            <option value="mltr">Mlltr</option>
+                                            <option value="bx">Box</option>
                                         </select>
-                                    </div>
-                                    <div class="col-lg-12 col-md-6 mt-3">
-                                        <div class="form-group">
-                                            <label for="cat_var">Category Variant</label><span
-                                                class="text-danger">*</span>
-                                            <select name="edit_cat_var" class="form-control" id="edit_cat_var">
-                                                <option value="" selected="selected">Please choose a option</option>
-                                                <option value="Kg">Kg</option>
-                                                <option value="gms">gms</option>
-                                            </select>
-                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -113,8 +99,7 @@
                 <table class="table table-bordered" id="CategorizationTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <th>Category Name</th>
-                        <th>Category Variant</th>
+                        <th>Unit Name</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -129,7 +114,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer">
-            © 2024 All Rights Reserved Ayush
+            © 2024 All Rights Reserved Sri Krishna Ghee
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->
@@ -144,7 +129,7 @@
 <script>
     $(document).ready(function () {
         $('body').on('keyup', ".onlychars", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
+            this.value = this.value.replace(/[^[A-Za-z]]*/gi, '');
         });
 
         $('#add_category').click(function (e) {
@@ -158,17 +143,10 @@
         jQuery(document).ready(function (e) {
             $('#categorizationForm').bootstrapValidator({
                 fields: {
-                    'cat_name': {
+                    'unit': {
                         validators: {
                             notEmpty: {
-                                message: "Please Choose a Category"
-                            },
-                        }
-                    },
-                    'cat_var': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please Choose a Category Variant"
+                                message: "Please Select Unit"
                             },
                         }
                     },
@@ -181,7 +159,7 @@
                 // console.log(formData);
                 // Use AJAX to submit form data
                 $.ajax({
-                    url: "<?= base_url('admin/categorization') ?>",
+                    url: "<?= base_url('admin/unitMaster') ?>",
                     type: 'POST',
                     data: formData,
                     success: function (response) {
@@ -214,11 +192,11 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
-            columnDefs: [
-                { targets: [0, 3, 4], orderable: false }
-            ],
+            // columnDefs: [
+            //     { targets: [0, 3, 4], orderable: false }
+            // ],
             ajax: {
-                url: "<?= base_url('admin/fetchClassification') ?>",
+                url: "<?= base_url('admin/fetchUnitMaster') ?>",
                 type: "GET",
                 error: function (xhr, error, thrown) {
                     // console.log("AJAX error:", xhr, error, thrown);
@@ -227,7 +205,7 @@
             drawCallback: function (settings) {
                 // console.log('Table redrawn:', settings);
             },
-            "order": [[1, 'desc'], [2, 'desc']],
+            "order": [[1, 'desc']],
         });
 
 
@@ -263,7 +241,7 @@
             });
         });
 
-        
+
         $(document).on('click', '#editCat', function (e) {
             e.preventDefault();
             var button = $(this);
@@ -273,15 +251,14 @@
             $('#catId').val(catId);
             $.ajax({
                 method: 'POST',
-                url: "<?= base_url('admin/editCategorization') ?>",
+                url: "<?= base_url('admin/editUnitMaster') ?>",
                 data: {
                     'id': catId
                 },
                 success: function (response) {
                     // console.log(response);
                     if (response.status == 'true') {
-                        $('#edit_cat_name').val(response.message.cat_id);
-                        $('#edit_cat_var').val(response.message.cat_variant);
+                        $('#edit_unit_name').val(response.message.unit_name);
                     } else {
                         $.notify(response.message, "error");
                     }
@@ -293,18 +270,11 @@
             var $form = $('#editCategoryForm');
             $form.bootstrapValidator({
                 fields: {
-                    'edit_cat_name': {
+                    'edit_unit_name': {
                         validators: {
                             notEmpty: {
-                                message: 'Please select category'
+                                message: 'Please select Unit Name'
                             },
-                        }
-                    },
-                    'edit_cat_var': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please select One variant"
-                            }
                         }
                     },
                 },
@@ -312,10 +282,10 @@
             $form.bootstrapValidator('validate');
             if ($form.data('bootstrapValidator').isValid()) {
                 var formData = $form.serialize();
-                console.log(formData);
+                // console.log(formData);
                 $.ajax({
                     method: "POST",
-                    url: "<?= base_url('admin/updateCategorization') ?>",
+                    url: "<?= base_url('admin/updateUnitMaster') ?>",
                     data: formData,
                     success: function (response) {
                         // console.log(response);
@@ -339,7 +309,7 @@
             // console.log(catId);
             $.ajax({
                 method: "POST",
-                url: "<?= base_url('admin/deleteCategorization') ?>",
+                url: "<?= base_url('admin/deleteUnitMaster') ?>",
                 data: {
                     'id': catId
                 },

@@ -147,18 +147,25 @@
                             <span class="hide-menu">Category </span>
                         </a>
                     </li>
-                    <!-- Weight / Size -->
+                    <!-- Sub-Category -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/classification') ?>" aria-expanded="false">
-                            <i class="mdi mdi-gauge"></i>
-                            <span class="hide-menu">Categorization</span>
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/subCategory') ?>" aria-expanded="false">
+                            <i class="fas fa-list-alt"></i>
+                            <span class="hide-menu">Sub-Category </span>
                         </a>
                     </li>
-                    <!-- Product -->
-                    <li class="sidebar-item">
+                     <!-- Product -->
+                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/products') ?>" aria-expanded="false">
                             <i class="fas fa-shopping-basket "></i>
                             <span class="hide-menu">Products </span>
+                        </a>
+                    </li>
+                    <!-- Weight / Size -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/unitMaster') ?>" aria-expanded="false">
+                            <i class="mdi mdi-gauge"></i>
+                            <span class="hide-menu">Unit Master</span>
                         </a>
                     </li>
                     <!-- Product Stock-->

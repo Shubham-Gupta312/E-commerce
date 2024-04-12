@@ -51,15 +51,20 @@
             border-radius: 8px;
             background-color: #fff;
         }
-        #CategoryTable_wrapper{ margin-top: 15px;}
+
+        #CategoryTable_wrapper {
+            margin-top: 15px;
+        }
 
         .help-block {
             color: #cc0000;
         }
+
         .note_form {
             margin-top: -12px;
             overflow: hidden;
         }
+
         .float-end {
             float: right;
         }
@@ -89,7 +94,9 @@
         crossorigin="anonymous"></script>
     <!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.0/classic/ckeditor.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
+        integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="../assets/libs/popper.js/dist/umd/popper.min.js"></script>
     <script src="../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>

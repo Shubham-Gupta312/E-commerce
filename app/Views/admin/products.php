@@ -40,14 +40,19 @@
                                     <label for="cat_name">Category Name</label><span class="text-danger">*</span>
                                     <select name="cat_name" class="form-control" id="cat_name">
                                         <option value="" selected="selected">Please choose an option</option>
-                                        <?php
-                                        foreach ($category as $option) {
-                                            echo "<option value=\"{$option['id']}\">{$option['cat_name']}</option>";
-                                        }
-                                        ?>
-                                        ?>
+                                        <?php foreach ($category as $option): ?>
+                                            <option value="<?php echo $option['id']; ?>"><?php echo $option['cat_name']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <label for="sub_cat">Sub-Category</label><span class="text-danger">*</span>
+                                <select class="form-control" name="sub_cat" id="sub_cat">
+                                    <option value="" selected="selected">Please choose an option</option>
+                                    <option value="">Option 1</option>
+                                </select>
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <div class="form-group">
@@ -56,20 +61,29 @@
                                         id="product_name" placeholder="Enter Product Name">
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="form-group">
-                                    <label for="cat_var">Category Variant</label><span class="text-danger">*</span>
-                                    <select name="cat_var" class="form-control" id="cat_var">
-                                        <option value="" selected="selected">Please choose an option</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
+
                         <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                                <label for="prqty">Product Qty</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlynum" name="qty" id="qty"
-                                    placeholder="Enter Product Quantity">
+                            <div class="col-lg-4 col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="unit_type">Weight / Size</label>
+                                            <input type="text" class="form-control" name="unit_type"
+                                                placeholder="Enter Weight / Size">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="unit">Unit</label>
+                                            <select class="form-control" name="unit">
+                                                <option value="option1">Option 1</option>
+                                                <option value="option2">Option 2</option>
+                                                <option value="option3">Option 3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <label for="prcode">Product Code</label><span class="text-danger">*</span>
@@ -80,16 +94,17 @@
                                 <div class="form-group">
                                     <label for="primg">Product Image</label><span class="text-danger">*</span>
                                     <input type="file" class="form-control" name="product_image" id="product_image"
-                                        accept=".jpg, ,png, .jpeg">
+                                        accept=".jpg, ,.png, .jpeg">
                                 </div>
                                 <div class="note_form">
                                     <small>Less than or equal to 1Mb </small>
                                 </div>
                             </div>
+
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-4 col-md-6">
-                                <label for="igst">iGST %</label><span class="text-danger">*</span>
+                                <label for="igst">iGST %</label>
                                 <input type="text" class="form-control onlynum" name="igst" id="igst"
                                     placeholder="Enter iGST">
                             </div>
@@ -140,7 +155,7 @@
             </div>
             <!-- End Categories Form -->
             <!-- Edit Categories Form  -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -179,14 +194,22 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Edit Categories Form  End -->
             <div class="table-responsive">
-                <table class="table table-bordered" id="CategoryTable" style="width: 1100px;">
+                <table class="table table-bordered" id="productTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
+                        <th>Product Name</th>
                         <th>Category Name</th>
-                        <th>Category Image</th>
+                        <th>Product Qty</th>
+                        <th>Product Code</th>
+                        <th>Product Image</th>
+                        <th>Product Purchase Price</th>
+                        <th>Product MRP</th>
+                        <th>Product Selling Price</th>
+                        <th>Product Stock</th>
+                        <th>Product Description</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -201,7 +224,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer">
-            © 2024 All Rights Reserved Ayush
+            © 2024 All Rights Reserved Sri Krishna Ghee
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->
@@ -320,10 +343,45 @@
                             },
                         }
                     },
-                    'igst': {
+                    'cgst': {
                         validators: {
                             notEmpty: {
-                                message: 'Please enter IGST'
+                                message: 'Please enter CGST'
+                            }
+                        }
+                    },
+                    'sgst': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter SGST'
+                            }
+                        }
+                    },
+                    'purchase_prc': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter Purchase Price'
+                            }
+                        }
+                    },
+                    'mrp': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter MRP'
+                            }
+                        }
+                    },
+                    'sp': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter Selling Price'
+                            }
+                        }
+                    },
+                    'product_stock': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter Product Stock'
                             }
                         }
                     },
@@ -335,35 +393,37 @@
                 var formData = new FormData($form[0]);
                 // console.log(formData);
                 // Use AJAX to submit form data
-                // $.ajax({
-                //     url: "<?= base_url('admin/categories') ?>",
-                //     type: 'POST',
-                //     data: formData,
-                //     processData: false,
-                //     contentType: false,
-                //     success: function (response) {
-                //         // console.log(response);
-                //         if (response.status === 'success') {
-                //             $('input').val('');
-                //             $('.category_container').hide();
-                //             $.notify(response.message, "success");
-                //             table.ajax.reload(null, false);
-                //         } else {
-                //             $.notify(response.message, "error");
-                //         }
-                //     },
-                //     error: function (xhr, status, error) {
-                //         // Handle error
-                //         console.error(error);
-                //     }
-                // });
+                $.ajax({
+                    url: "<?= base_url('admin/products') ?>",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // console.log(response);
+                        if (response.status === 'success') {
+                            // ClassicEditor.instances.desc.setData('');
+                            $('input, select').val('');
+                            $('.category_container').hide();
+                            $.notify(response.message, "success");
+                            table.ajax.reload(null, false);
+                        } else {
+                            $.notify(response.message, "error");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error(error);
+                    }
+                });
             });
         });
 
-        // var table = $('#CategoryTable').DataTable({
+        // var table = $('#productTable').DataTable({
         //     processing: true,
         //     serverSide: true,
         //     paging: true,
+        //     order: [[1, 'desc']],
         //     "fnCreatedRow": function (row, data, index) {
         //         var pageInfo = table.page.info();
         //         var currentPage = pageInfo.page;
@@ -371,8 +431,11 @@
         //         var rowNumber = index + 1 + (currentPage * pageLength);
         //         $('td', row).eq(0).html(rowNumber);
         //     },
+        //     columnDefs: [
+        //         { targets: [0, 5, 10, 11, 12], orderable: false }
+        //     ],
         //     ajax: {
-        //         url: "<?= base_url('admin/fetchdata') ?>",
+        //         url: "<?= base_url('admin/fetchproducts') ?>",
         //         type: "GET",
         //         error: function (xhr, error, thrown) {
         //             // console.log("AJAX error:", xhr, error, thrown);

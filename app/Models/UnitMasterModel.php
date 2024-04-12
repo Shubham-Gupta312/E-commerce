@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class CategorizationModel extends Model
+class UnitMasterModel extends Model
 {
-  protected $table = 'categorization';
+  protected $table = 'unitmaster';
   protected $primaryKey = 'id';
   protected $protectFields = [];
 

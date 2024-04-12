@@ -276,26 +276,28 @@ class Home extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function Classification()
+    public function subCategory()
+    {
+        $ctm = new \App\Models\CategoryModel();
+        $data['category'] = $ctm->where('status', 1)->findAll();
+        return view('admin/subcategory', $data);
+    }
+
+    public function unitMaster()
     {
         if ($this->request->getMethod() == 'get') {
-            $cls = new \App\Models\CategoryModel();
-            $data['category'] = $cls->findAll();
-            // print_r($data);
-            return view('admin/classification', $data);
+            return view('admin/unitMaster');
         } elseif ($this->request->getMethod() == 'post') {
-            $cn = $this->request->getPost('cat_name');
-            $cv = $this->request->getPost('cat_var');
+            $un = $this->request->getPost('unit');
 
             $data = [
-                'cat_id' => esc($cn),
-                'cat_variant' => esc($cv)
+                'unit_name' => esc($un),
             ];
 
             // print_r($data);
-            $catModel = new \App\Models\CategorizationModel();
+            $untModel = new \App\Models\UnitMasterModel();
             try {
-                $query = $catModel->insert($data);
+                $query = $untModel->insert($data);
 
                 if ($query) {
                     $response = ['status' => 'success', 'message' => 'Categorization Added Successfully!'];
@@ -310,88 +312,10 @@ class Home extends BaseController
         }
     }
 
-    // public function fetchClassification()
-    // {
-    //     try {
-    //         $fetchCat = new \App\Models\CategorizationModel();
-
-    //         $draw = $_GET['draw'];
-    //         $start = $_GET['start'];
-    //         $length = $_GET['length'];
-    //         $searchValue = $_GET['search']['value'];
-    //         $orderColumnIndex = $_GET['order'][0]['column'];
-    //         $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
-    //         $orderDir = $_GET['order'][0]['dir'];
-
-    //         $fetchCat->select('categorization.*, category.cat_name');
-    //         $fetchCat->join('category', 'category.id = categorization.cat_id');
-
-
-
-
-    //         if (!empty($searchValue)) {
-    //             // $fetchCat->groupStart();
-    //             $fetchCat->orLike('category.cat_name', $searchValue);
-    //             $fetchCat->orLike('categorization.cat_variant', $searchValue);
-    //             // $fetchCat->groupEnd();
-    //         }
-
-    //         $fetchCat->orderBy($orderColumnName, $orderDir );
-
-    //         $data['classification'] = $fetchCat->findAll($length, $start);
-    //         $totalRecords = $fetchCat->countAll();
-    //         $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->where('category.cat_name', $searchValue)->countAllResults() : $totalRecords;
-    //         // $totalFilterRecords = $totalRecords;
-    //         $associativeArray = [];
-
-    //         foreach ($data['classification'] as $row) {
-    //             $status = $row['status'];
-
-    //             if ($status == 0) {
-    //                 $buttonCSSClass = 'btn-outline-danger';
-    //                 $buttonName = 'In-Active';
-    //             } elseif ($status == 1) {
-    //                 $buttonCSSClass = 'btn-outline-success';
-    //                 $buttonName = 'Active';
-    //             }
-    //             $associativeArray[] = array(
-    //                 0 => $row['id'],
-    //                 1 => ucfirst($row['cat_name']),
-    //                 2 => ucfirst($row['cat_variant']),
-    //                 3 => '<button class="btn ' . $buttonCSSClass . ' statusBtn">' . $buttonName . '</button>',
-    //                 4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
-    //                 <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
-    //             );
-    //         }
-
-
-    //         if (empty($data['classification'])) {
-    //             $output = array(
-    //                 'draw' => intval($draw),
-    //                 'recordsTotal' => 0,
-    //                 'recordsFiltered' => 0,
-    //                 'data' => []
-    //             );
-    //         } else {
-    //             $output = array(
-    //                 'draw' => intval($draw),
-    //                 'recordsTotal' => $totalRecords,
-    //                 'recordsFiltered' => $totalFilterRecords,
-    //                 'data' => $associativeArray
-    //             );
-    //         }
-    //         return $this->response->setJSON($output);
-    //     } catch (\Exception $e) { // Log the caught exception
-    //         log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
-    //         // Return an error response
-    //         return $this->response->setJSON(['error' => 'Internal Server Error']);
-    //     }
-    // }
-
-    public function fetchClassification()
+    public function fetchUnitMaster()
     {
         try {
-            $fetchCat = new \App\Models\CategorizationModel();
+            $fetchUnit = new \App\Models\UnitMasterModel();
 
             $draw = $_GET['draw'];
             $start = $_GET['start'];
@@ -401,26 +325,21 @@ class Home extends BaseController
             $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
             $orderDir = $_GET['order'][0]['dir'];
 
-            $fetchCat->select('categorization.*, category.cat_name');
-            $fetchCat->join('category', 'category.id = categorization.cat_id');
-
+            $fetchUnit->orderBy($orderColumnName, $orderDir);
 
             if (!empty($searchValue)) {
-                // $fetchCat->groupStart();
-                $fetchCat->orLike('category.cat_name', $searchValue);
-                $fetchCat->orLike('categorization.cat_variant', $searchValue);
-                // $fetchCat->groupEnd();
+                // $fetchUnit->groupStart();
+                $fetchUnit->orLike('unit_name', $searchValue);
+                // $fetchUnit->groupEnd();
             }
 
-            $fetchCat->orderBy($orderColumnName, $orderDir);
-
-            $data['classification'] = $fetchCat->findAll($length, $start);
-            $totalRecords = $fetchCat->countAll();
-            $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->fetchCatName('category', 'cat_name')->countAllResults() : $totalRecords;
+            $data['unit'] = $fetchUnit->findAll($length, $start);
+            $totalRecords = $fetchUnit->countAll();
+            $totalFilterRecords = (!empty($searchValue)) ? $fetchUnit->where('unit_name', $searchValue)->countAllResults() : $totalRecords;
             // $totalFilterRecords = $totalRecords;
             $associativeArray = [];
 
-            foreach ($data['classification'] as $row) {
+            foreach ($data['unit'] as $row) {
                 $status = $row['status'];
 
                 if ($status == 0) {
@@ -432,16 +351,15 @@ class Home extends BaseController
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
-                    1 => ucfirst($row['cat_name']),
-                    2 => ucfirst($row['cat_variant']),
-                    3 => '<button class="btn ' . $buttonCSSClass . '" id="toggle-status" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
-                    4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    1 => ucfirst($row['unit_name']),
+                    2 => '<button class="btn ' . $buttonCSSClass . '" id="toggle-status" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    3 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
             }
 
 
-            if (empty($data['classification'])) {
+            if (empty($data['unit'])) {
                 $output = array(
                     'draw' => intval($draw),
                     'recordsTotal' => 0,
@@ -467,7 +385,7 @@ class Home extends BaseController
     public function toggle_status()
     {
         try {
-            $md = new \App\Models\CategorizationModel();
+            $md = new \App\Models\UnitMasterModel();
             $id = $this->request->getPost('id');
             $st = $this->request->getPost('status');
             $dId = $this->request->getPost('dataId');
@@ -494,11 +412,11 @@ class Home extends BaseController
 
 
 
-    public function editCategorization()
+    public function editUnitMaster()
     {
         $id = $this->request->getPost('id');
 
-        $editCat = new \App\Models\CategorizationModel();
+        $editCat = new \App\Models\UnitMasterModel();
         $ed = $editCat->find($id);
 
         if ($ed) {
@@ -509,16 +427,14 @@ class Home extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function updateCategorization()
+    public function updateUnitMaster()
     {
-        $updateCat = new \App\Models\CategorizationModel();
+        $updateCat = new \App\Models\UnitMasterModel();
         $id = $this->request->getPost('id');
-        $cn = $this->request->getPost('edit_cat_name');
-        $cv = $this->request->getPost('edit_cat_var');
+        $un = $this->request->getPost('edit_unit_name');
 
         $data = [
-            'cat_id' => esc($cn),
-            'cat_variant' => esc($cv)
+            'unit_name' => esc($un),
         ];
         // print_r($data);
         $query = $updateCat->updateCategorization(esc($id), $data);
@@ -530,11 +446,11 @@ class Home extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function deleteCategorization()
+    public function deleteUnitMaster()
     {
         $id = $this->request->getPost('id');
 
-        $dct = new \App\Models\CategorizationModel();
+        $dct = new \App\Models\UnitMasterModel();
         $query = $dct->deleteCategorization($id);
         if ($query) {
             $response = ['status' => 'success', 'message' => 'Category Deleted Successfully!'];
@@ -546,9 +462,64 @@ class Home extends BaseController
 
     public function Products()
     {
-        $ct = new \App\Models\CategoryModel();
-        $data['category'] = $ct->findAll();
-        return view('admin/products', $data);
+        if ($this->request->getMethod() == 'get') {
+            $ct = new \App\Models\CategoryModel();
+            $data['category'] = $ct->where('status', 1)->findAll();
+            return view('admin/products', $data);
+        } elseif ($this->request->getMethod() == 'post') {
+            $cn = $this->request->getPost('cat_name');
+            $pn = $this->request->getPost('product_name');
+            $cvi = $this->request->getPost('cat_var');
+            $qt = $this->request->getPost('qty');
+            $pc = $this->request->getPost('product_code');
+            $pi = $this->request->getFile('product_image');
+            $igst = $this->request->getPost('igst');
+            $cgst = $this->request->getPost('cgst');
+            $sgst = $this->request->getPost('sgst');
+            $pp = $this->request->getPost('purchase_prc');
+            $mrp = $this->request->getPost('mrp');
+            $sp = $this->request->getPost('sp');
+            $ps = $this->request->getPost('product_stock');
+            $ds = $this->request->getPost('desc');
+
+            if ($pi->isValid() && !$pi->hasMoved()) {
+                $newImageName = $pi->getRandomName();
+                $pi->move("../public/assets/uploads/product/", $newImageName);
+
+                $data = [
+                    'cat_name_id' => esc($cn),
+                    'product_name' => esc($pn),
+                    'cat_var_id' => esc($cvi),
+                    'qty' => esc($qt),
+                    'product_code' => esc($pc),
+                    'product_image' => esc($newImageName),
+                    'igst' => esc($igst),
+                    'cgst' => esc($cgst),
+                    'sgst' => esc($sgst),
+                    'purchase_prc' => esc($pp),
+                    'mrp' => esc($mrp),
+                    'sell_p' => esc($sp),
+                    'product_stock' => esc($ps),
+                    'pr_desc' => esc($ds),
+                ];
+
+                $catModel = new \App\Models\ProductModel();
+                try {
+                    $query = $catModel->insert($data);
+
+                    if ($query) {
+                        $response = ['status' => 'success', 'message' => 'Product Added Successfully!'];
+                    } else {
+                        $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+                    }
+                    return $this->response->setJSON($response);
+                } catch (\Exception $e) {
+                    $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
+                    return $this->response->setStatusCode(500)->setJSON($response);
+                }
+            }
+
+        }
     }
 
     public function fetchcatvariant()
@@ -566,5 +537,89 @@ class Home extends BaseController
         return $this->response->setJSON($response);
     }
 
+    // public function fetchproducts()
+    // {
+    //     try {
+    //         $fetchProduct = new \App\Models\ProductModel();
 
+    //         $draw = $_GET['draw'];
+    //         $start = $_GET['start'];
+    //         $length = $_GET['length'];
+    //         $searchValue = $_GET['search']['value'];
+    //         $orderColumnIndex = $_GET['order'][0]['column'];
+    //         $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+    //         $orderDir = $_GET['order'][0]['dir'];
+
+    //         $fetchProduct->select('products.*, category.cat_name');
+    //         $fetchProduct->join('category', 'category.id = products.cat_name_id');
+
+    //         $fetchProduct->select('products.*, categorization.cat_variant');
+    //         $fetchProduct->join('categorization', 'categorization.id = products.cat_var_id');
+
+    //         $fetchProduct->orderBy($orderColumnName, $orderDir);
+
+    //         // if (!empty($searchValue)) {
+    //         //     $fetchProduct->groupStart();
+    //         //     $fetchProduct->orLike('cat_name', $searchValue);
+    //         //     $fetchProduct->groupEnd();
+    //         // }
+
+    //         $data['product'] = $fetchProduct->findAll($length, $start);
+    //         $totalRecords = $fetchProduct->countAll();
+    //         // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+    //         $totalFilterRecords = $totalRecords;
+    //         $associativeArray = [];
+
+    //         foreach ($data['product'] as $row) {
+    //             $status = $row['status'];
+
+    //             if ($status == 0) {
+    //                 $buttonCSSClass = 'btn-outline-danger';
+    //                 $buttonName = 'In-Active';
+    //             } elseif ($status == 1) {
+    //                 $buttonCSSClass = 'btn-outline-success';
+    //                 $buttonName = 'Active';
+    //             }
+    //             $associativeArray[] = array(
+    //                 0 => $row['id'],
+    //                 1 => ucfirst($row['product_name']),
+    //                 2 => $row['cat_name'],
+    //                 3 => $row['qty'] . ' ' . $row['cat_variant'],
+    //                 4 => $row['product_code'],
+    //                 5 => '<img src="../assets/uploads/product/' . $row['product_image'] . '" height="100px" width="100px">',
+    //                 6 => $row['purchase_prc'],
+    //                 7 => $row['mrp'],
+    //                 8 => $row['sell_p'],
+    //                 9 => $row['product_stock'],
+    //                 10 => html_entity_decode($row['pr_desc']),
+    //                 11 => '<button class="btn btn-outline-success" id="statusBtn" data-id="1" data-status="active">Active</button>',
+    //                 12 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+    //                 <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+    //             );
+    //         }
+
+
+    //         if (empty($data['product'])) {
+    //             $output = array(
+    //                 'draw' => intval($draw),
+    //                 'recordsTotal' => 0,
+    //                 'recordsFiltered' => 0,
+    //                 'data' => []
+    //             );
+    //         } else {
+    //             $output = array(
+    //                 'draw' => intval($draw),
+    //                 'recordsTotal' => $totalRecords,
+    //                 'recordsFiltered' => $totalFilterRecords,
+    //                 'data' => $associativeArray
+    //             );
+    //         }
+    //         return $this->response->setJSON($output);
+    //     } catch (\Exception $e) {
+    //         // Log the caught exception
+    //         log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+    //         // Return an error response
+    //         return $this->response->setJSON(['error' => 'Internal Server Error']);
+    //     }
+    // }
 }

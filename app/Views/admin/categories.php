@@ -119,7 +119,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer">
-            © 2024 All Rights Reserved Ayush
+            © 2024 All Rights Reserved Sri Krishna Ghee
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->
