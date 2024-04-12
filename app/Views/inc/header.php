@@ -151,7 +151,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/classification') ?>" aria-expanded="false">
                             <i class="mdi mdi-gauge"></i>
-                            <span class="hide-menu">Classification </span>
+                            <span class="hide-menu">Categorization</span>
                         </a>
                     </li>
                     <!-- Product -->

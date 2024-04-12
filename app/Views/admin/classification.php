@@ -114,7 +114,7 @@
                     <thead>
                         <th>Sl. no.</th>
                         <th>Category Name</th>
-                        <th>Category Image</th>
+                        <th>Category Variant</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -214,6 +214,9 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
+            columnDefs: [
+                { targets: [0, 3, 4], orderable: false }
+            ],
             ajax: {
                 url: "<?= base_url('admin/fetchClassification') ?>",
                 type: "GET",
@@ -223,39 +226,44 @@
             },
             drawCallback: function (settings) {
                 // console.log('Table redrawn:', settings);
-            }
+            },
+            "order": [[1, 'desc'], [2, 'desc']],
         });
 
-        // function setButtonStyles(button, newStatus) {
-        //     if (newStatus === 0) {
-        //         button.removeClass('btn-outline-success').addClass('btn-outline-danger').text('In-Active');
-        //     } else if (newStatus === 1) {
-        //         button.removeClass('btn-outline-danger').addClass('btn-outline-success').text('Active');
-        //     }
-        // }
-        // var table = $('#CategoryTable').DataTable();
-        // $(document).on('click', '.statusBtn', function (e) {
-        //     e.preventDefault();
-        //     var button = $(this);
-        //     var data = table.row(button.closest('tr')).data();
-        //     var catId = data[0];
-        //     // console.log(catId);
-        //     $.ajax({
-        //         method: "POST",
-        //         url: "<?= base_url('admin/catStatus') ?>",
-        //         data: {
-        //             'id': catId
-        //         },
-        //         success: function (response) {
-        //             console.log(response);
-        //             if (response.status === 'true') {
-        //                 var newStatus = response.newStatus;
-        //                 setButtonStyles(button, newStatus);
-        //             }
-        //         }
-        //     });
-        // });
 
+        $(document).on('click', '#toggle-status', function () {
+            var button = $(this);
+            var data = table.row(button.closest('tr')).data();
+            var catId = data[0];
+            var status = $(this).data('status');
+            var dataID = $(this).data('id');
+            // console.log(catId, status, dataID);
+            // Send AJAX request to the controller
+            $.ajax({
+                url: "<?= base_url('admin/toggle_status') ?>",
+                type: 'POST',
+                data: {
+                    'id': catId,
+                    'status': status,
+                    'dataId': dataID
+                },
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status === 1) {
+                        button.data('status', 'active').text('Active');
+                        button.removeClass('btn-outline-danger').addClass('btn-outline-success');
+                    } else {
+                        button.data('status', 'inactive').text('In-Active');
+                        button.removeClass('btn-outline-success').addClass('btn-outline-danger');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                }
+            });
+        });
+
+        
         $(document).on('click', '#editCat', function (e) {
             e.preventDefault();
             var button = $(this);
@@ -294,9 +302,9 @@
                     },
                     'edit_cat_var': {
                         validators: {
-                           notEmpty: {
-                            message: "Please select One variant"
-                           }
+                            notEmpty: {
+                                message: "Please select One variant"
+                            }
                         }
                     },
                 },

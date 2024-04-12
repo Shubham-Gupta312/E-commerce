@@ -203,6 +203,7 @@
             processing: true,
             serverSide: true,
             paging: true,
+            order: [[1, 'desc']],
             "fnCreatedRow": function (row, data, index) {
                 var pageInfo = table.page.info();
                 var currentPage = pageInfo.page;
@@ -210,6 +211,9 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
+            columnDefs: [
+                { targets: [0, 2, 3, 4], orderable: false }
+            ],
             ajax: {
                 url: "<?= base_url('admin/fetchdata') ?>",
                 type: "GET",
@@ -230,24 +234,35 @@
             }
         }
         var table = $('#CategoryTable').DataTable();
-        $(document).on('click', '.statusBtn', function (e) {
+        $(document).on('click', '#statusBtn', function (e) {
             e.preventDefault();
             var button = $(this);
             var data = table.row(button.closest('tr')).data();
             var catId = data[0];
-            // console.log(catId);
+            var status = $(this).data('status');
+            var dataID = $(this).data('id');
+            // console.log(catId, status, dataID);
+            // Send AJAX request to the controller
             $.ajax({
-                method: "POST",
                 url: "<?= base_url('admin/catStatus') ?>",
+                type: 'POST',
                 data: {
-                    'id': catId
+                    'id': catId,
+                    'status': status,
+                    'dataId': dataID
                 },
                 success: function (response) {
-                    console.log(response);
-                    if (response.status === 'true') {
-                        var newStatus = response.newStatus;
-                        setButtonStyles(button, newStatus);
+                    // console.log(response);
+                    if (response.status === 1) {
+                        button.data('status', 'active').text('Active');
+                        button.removeClass('btn-outline-danger').addClass('btn-outline-success');
+                    } else {
+                        button.data('status', 'inactive').text('In-Active');
+                        button.removeClass('btn-outline-success').addClass('btn-outline-danger');
                     }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
                 }
             });
         });

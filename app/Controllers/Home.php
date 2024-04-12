@@ -47,6 +47,74 @@ class Home extends BaseController
         }
     }
 
+    // public function fetchCategories()
+    // {
+    //     try {
+    //         $fetchCat = new \App\Models\CategoryModel();
+
+    //         $draw = $_GET['draw'];
+    //         $start = $_GET['start'];
+    //         $length = $_GET['length'];
+    //         $searchValue = $_GET['search']['value'];
+
+    //         $fetchCat->orderBy('id', 'DESC');
+
+    //         if (!empty($searchValue)) {
+    //             $fetchCat->groupStart();
+    //             $fetchCat->orLike('cat_name', $searchValue);
+    //             $fetchCat->groupEnd();
+    //         }
+
+    //         $data['cat'] = $fetchCat->findAll($length, $start);
+    //         $totalRecords = $fetchCat->countAll();
+    //         $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+    //         $associativeArray = [];
+
+    //         foreach ($data['cat'] as $row) {
+    //             $status = $row['status'];
+
+    //             if ($status == 0) {
+    //                 $buttonCSSClass = 'btn-outline-danger';
+    //                 $buttonName = 'In-Active';
+    //             } elseif ($status == 1) {
+    //                 $buttonCSSClass = 'btn-outline-success';
+    //                 $buttonName = 'Active';
+    //             }
+    //             $associativeArray[] = array(
+    //                 0 => $row['id'],
+    //                 1 => ucfirst($row['cat_name']),
+    //                 2 => '<img src="../assets/uploads/' . $row['cat_image'] . '" height="100px" width="100px">',
+    //                 3 => '<button class="btn ' . $buttonCSSClass . ' statusBtn">' . $buttonName . '</button>',
+    //                 4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+    //                 <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+    //             );
+    //         }
+
+
+    //         if (empty($data['cat'])) {
+    //             $output = array(
+    //                 'draw' => intval($draw),
+    //                 'recordsTotal' => 0,
+    //                 'recordsFiltered' => 0,
+    //                 'data' => []
+    //             );
+    //         } else {
+    //             $output = array(
+    //                 'draw' => intval($draw),
+    //                 'recordsTotal' => $totalRecords,
+    //                 'recordsFiltered' => $totalFilterRecords,
+    //                 'data' => $associativeArray
+    //             );
+    //         }
+    //         return $this->response->setJSON($output);
+    //     } catch (\Exception $e) {
+    //         // Log the caught exception
+    //         log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+    //         // Return an error response
+    //         return $this->response->setJSON(['error' => 'Internal Server Error']);
+    //     }
+    // }
+
     public function fetchCategories()
     {
         try {
@@ -56,8 +124,11 @@ class Home extends BaseController
             $start = $_GET['start'];
             $length = $_GET['length'];
             $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
 
-            $fetchCat->orderBy('id', 'DESC');
+            $fetchCat->orderBy($orderColumnName, $orderDir);
 
             if (!empty($searchValue)) {
                 $fetchCat->groupStart();
@@ -84,7 +155,7 @@ class Home extends BaseController
                     0 => $row['id'],
                     1 => ucfirst($row['cat_name']),
                     2 => '<img src="../assets/uploads/' . $row['cat_image'] . '" height="100px" width="100px">',
-                    3 => '<button class="btn ' . $buttonCSSClass . ' statusBtn">' . $buttonName . '</button>',
+                    3 =>  '<button class="btn '.$buttonCSSClass.'" id="statusBtn" data-id="' . $status . '" data-status="active">'. $buttonName .'</button>',
                     4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -114,24 +185,31 @@ class Home extends BaseController
             return $this->response->setJSON(['error' => 'Internal Server Error']);
         }
     }
-
     public function CatStatus()
     {
-        $catStatus = new \App\Models\CategoryModel();
-        $id = $this->request->getPost('id');
-
-        $cs = $catStatus->getStatus(esc($id));
-        $ns = ($cs == 1) ? 0 : 1;
-
-        $us = $catStatus->updateStatus(esc($id), $ns);
-
-        if ($us) {
-            $response = ['status' => 'true', 'newStatus' => $ns];
-        } else {
-            $response = ['status' => 'false', 'newStatus' => 'Failed to Update Status!'];
+        try {
+            $md = new \App\Models\CategoryModel();
+            $id = $this->request->getPost('id');
+            $st = $this->request->getPost('status');
+            $dId = $this->request->getPost('dataId');
+    
+            if ($dId == 1 && $st == 'active') {
+                $status = 0;
+            } else {
+                $status = 1;
+            }
+    
+            $result = $md->updateStatus($id, $status);
+    
+            if ($result) {
+                return $this->response->setJSON(['status' => $status]);
+            } else {
+                return $this->response->setJSON(['error' => 'Failed to update status']);
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Error in toggle_status: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
         }
-
-        return $this->response->setJSON($response);
     }
 
 
@@ -228,6 +306,84 @@ class Home extends BaseController
         }
     }
 
+    // public function fetchClassification()
+    // {
+    //     try {
+    //         $fetchCat = new \App\Models\CategorizationModel();
+
+    //         $draw = $_GET['draw'];
+    //         $start = $_GET['start'];
+    //         $length = $_GET['length'];
+    //         $searchValue = $_GET['search']['value'];
+    //         $orderColumnIndex = $_GET['order'][0]['column'];
+    //         $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+    //         $orderDir = $_GET['order'][0]['dir'];
+
+    //         $fetchCat->select('categorization.*, category.cat_name');
+    //         $fetchCat->join('category', 'category.id = categorization.cat_id');
+
+
+
+
+    //         if (!empty($searchValue)) {
+    //             // $fetchCat->groupStart();
+    //             $fetchCat->orLike('category.cat_name', $searchValue);
+    //             $fetchCat->orLike('categorization.cat_variant', $searchValue);
+    //             // $fetchCat->groupEnd();
+    //         }
+
+    //         $fetchCat->orderBy($orderColumnName, $orderDir );
+
+    //         $data['classification'] = $fetchCat->findAll($length, $start);
+    //         $totalRecords = $fetchCat->countAll();
+    //         $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->where('category.cat_name', $searchValue)->countAllResults() : $totalRecords;
+    //         // $totalFilterRecords = $totalRecords;
+    //         $associativeArray = [];
+
+    //         foreach ($data['classification'] as $row) {
+    //             $status = $row['status'];
+
+    //             if ($status == 0) {
+    //                 $buttonCSSClass = 'btn-outline-danger';
+    //                 $buttonName = 'In-Active';
+    //             } elseif ($status == 1) {
+    //                 $buttonCSSClass = 'btn-outline-success';
+    //                 $buttonName = 'Active';
+    //             }
+    //             $associativeArray[] = array(
+    //                 0 => $row['id'],
+    //                 1 => ucfirst($row['cat_name']),
+    //                 2 => ucfirst($row['cat_variant']),
+    //                 3 => '<button class="btn ' . $buttonCSSClass . ' statusBtn">' . $buttonName . '</button>',
+    //                 4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+    //                 <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+    //             );
+    //         }
+
+
+    //         if (empty($data['classification'])) {
+    //             $output = array(
+    //                 'draw' => intval($draw),
+    //                 'recordsTotal' => 0,
+    //                 'recordsFiltered' => 0,
+    //                 'data' => []
+    //             );
+    //         } else {
+    //             $output = array(
+    //                 'draw' => intval($draw),
+    //                 'recordsTotal' => $totalRecords,
+    //                 'recordsFiltered' => $totalFilterRecords,
+    //                 'data' => $associativeArray
+    //             );
+    //         }
+    //         return $this->response->setJSON($output);
+    //     } catch (\Exception $e) { // Log the caught exception
+    //         log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+    //         // Return an error response
+    //         return $this->response->setJSON(['error' => 'Internal Server Error']);
+    //     }
+    // }
+
     public function fetchClassification()
     {
         try {
@@ -237,12 +393,13 @@ class Home extends BaseController
             $start = $_GET['start'];
             $length = $_GET['length'];
             $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
 
             $fetchCat->select('categorization.*, category.cat_name');
             $fetchCat->join('category', 'category.id = categorization.cat_id');
 
-            
-        
 
             if (!empty($searchValue)) {
                 // $fetchCat->groupStart();
@@ -251,13 +408,14 @@ class Home extends BaseController
                 // $fetchCat->groupEnd();
             }
 
-            $fetchCat->orderBy('categorization.id', 'DESC');
+            $fetchCat->orderBy($orderColumnName, $orderDir);
 
             $data['classification'] = $fetchCat->findAll($length, $start);
             $totalRecords = $fetchCat->countAll();
-            $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->where('category.cat_name', $searchValue)->countAllResults() : $totalRecords;
-            // $totalFilterRecords = $totalRecords;
-            $associativeArray = [];
+            // $totalFilterRecords = (!empty($searchValue)) ? $fetchCat->countAllResults() : $totalRecords;
+            $totalFilterRecords =
+                // $totalFilterRecords = $totalRecords;
+                $associativeArray = [];
 
             foreach ($data['classification'] as $row) {
                 $status = $row['status'];
@@ -273,7 +431,7 @@ class Home extends BaseController
                     0 => $row['id'],
                     1 => ucfirst($row['cat_name']),
                     2 => ucfirst($row['cat_variant']),
-                    3 => '<button class="btn ' . $buttonCSSClass . ' statusBtn">' . $buttonName . '</button>',
+                    3 => '<button class="btn '.$buttonCSSClass.'" id="toggle-status" data-id="' . $status . '" data-status="active">'. $buttonName .'</button>',
                     4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -302,6 +460,36 @@ class Home extends BaseController
             return $this->response->setJSON(['error' => 'Internal Server Error']);
         }
     }
+
+    public function toggle_status()
+    {
+        try {
+            $md = new \App\Models\CategorizationModel();
+            $id = $this->request->getPost('id');
+            $st = $this->request->getPost('status');
+            $dId = $this->request->getPost('dataId');
+    
+            if ($dId == 1 && $st == 'active') {
+                $status = 0;
+            } else {
+                $status = 1;
+            }
+    
+            $result = $md->updateStatus($id, $status);
+    
+            if ($result) {
+                return $this->response->setJSON(['status' => $status]);
+            } else {
+                return $this->response->setJSON(['error' => 'Failed to update status']);
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Error in toggle_status: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+    }
+    
+
+
 
     public function editCategorization()
     {
@@ -361,17 +549,19 @@ class Home extends BaseController
     }
 
     public function fetchcatvariant()
-    {   
+    {
         $id = $this->request->getPost('id');
 
         $cl = new \App\Models\CategorizationModel();
         $vr = $cl->where('cat_id', esc($id))->findAll();
         // print_r($vr);
-        if($vr){
+        if ($vr) {
             $response = ['status' => 'success', 'message' => $vr];
-        }else{
+        } else {
             $response = ['status' => 'error', 'message' => 'Please choose a correct Category'];
         }
         return $this->response->setJSON($response);
     }
+
+
 }

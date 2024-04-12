@@ -27,6 +27,7 @@ $routes->group('admin', static function ($routes) {
     $routes->get('classification', 'Home::Classification');
     $routes->post('categorization', 'Home::Classification');
     $routes->get('fetchClassification', 'Home::fetchClassification');
+    $routes->post('toggle_status', 'Home::toggle_status');
     $routes->post('editCategorization', 'Home::editCategorization');
     $routes->post('updateCategorization', 'Home::updateCategorization');
     $routes->post('deleteCategorization', 'Home::deleteCategorization');
