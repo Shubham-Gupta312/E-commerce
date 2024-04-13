@@ -278,9 +278,102 @@ class Home extends BaseController
 
     public function subCategory()
     {
-        $ctm = new \App\Models\CategoryModel();
-        $data['category'] = $ctm->where('status', 1)->findAll();
-        return view('admin/subcategory', $data);
+        if ($this->request->getMethod() == 'get') {
+            $ctm = new \App\Models\CategoryModel();
+            $data['category'] = $ctm->where('status', 1)->findAll();
+            return view('admin/subcategory', $data);
+        } else if ($this->request->getMethod() == 'post') {
+            $ct = $this->request->getPost('cat');
+            $sct = $this->request->getPost('sub_cat');
+
+            $data = [
+                'cat_name_id' => esc($ct),
+                'sub_cat' => esc($sct),
+            ];
+
+            $smdl = new \App\Models\SubCatModel();
+            $q = $smdl->insert($data);
+            if ($q) {
+                $response = ['status' => 'success', 'message' => 'Sub-Category Added Successfully!'];
+            } else {
+                $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+            }
+            return $this->response->setJSON($response);
+        }
+    }
+
+    public function fetchSubCategory()
+    {
+        try {
+            $fetchSubCat = new \App\Models\SubCatModel();
+
+            $draw = $_GET['draw'];
+            $start = $_GET['start'];
+            $length = $_GET['length'];
+            $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
+
+            $fetchSubCat->select('sub_category.*, category.cat_name');
+            $fetchSubCat->join('category', 'category.id = sub_category.cat_name_id');
+
+            $fetchSubCat->orderBy($orderColumnName, $orderDir);
+
+            if (!empty($searchValue)) {
+                // $fetchSubCat->groupStart();
+                $fetchSubCat->Like('sub_cat', $searchValue);
+                $fetchSubCat->orLike('cat_name', $searchValue);
+                // $fetchSubCat->groupEnd();
+            }
+
+            $data['subcat'] = $fetchSubCat->findAll($length, $start);
+            $totalRecords = $fetchSubCat->countAll();
+            // $totalFilterRecords = (!empty($searchValue)) ? $fetchSubCat->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+            $totalFilterRecords = $totalRecords;
+            $associativeArray = [];
+
+            foreach ($data['subcat'] as $row) {
+                $status = $row['status'];
+
+                if ($status == 0) {
+                    $buttonCSSClass = 'btn-outline-danger';
+                    $buttonName = 'In-Active';
+                } elseif ($status == 1) {
+                    $buttonCSSClass = 'btn-outline-success';
+                    $buttonName = 'Active';
+                }
+                $associativeArray[] = array(
+                    0 => $row['id'],
+                    1 => ucfirst($row['cat_name']),
+                    2 => ucfirst($row['sub_cat']),
+                    3 => '<button class="btn ' . $buttonCSSClass . '" id="toggle-status" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+                );
+            }
+
+
+            if (empty($data['subcat'])) {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'data' => []
+                );
+            } else {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => $totalRecords,
+                    'recordsFiltered' => $totalFilterRecords,
+                    'data' => $associativeArray
+                );
+            }
+            return $this->response->setJSON($output);
+        } catch (\Exception $e) {
+            // log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
     }
 
     public function unitMaster()
@@ -375,9 +468,8 @@ class Home extends BaseController
                 );
             }
             return $this->response->setJSON($output);
-        } catch (\Exception $e) { // Log the caught exception
+        } catch (\Exception $e) { 
             log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
-            // Return an error response
             return $this->response->setJSON(['error' => 'Internal Server Error']);
         }
     }
@@ -622,4 +714,5 @@ class Home extends BaseController
     //         return $this->response->setJSON(['error' => 'Internal Server Error']);
     //     }
     // }
+
 }

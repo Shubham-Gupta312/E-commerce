@@ -25,6 +25,8 @@ $routes->group('admin', static function ($routes) {
     $routes->post('deleteCategory', 'Home::deleteCategory');
 
     $routes->get('subCategory', 'Home::subCategory');
+    $routes->post('subCategory', 'Home::subCategory');
+    $routes->get('fetchSubCategory', 'Home::fetchSubCategory');
 
     $routes->get('unitMaster', 'Home::unitMaster');
     $routes->post('unitMaster', 'Home::unitMaster');

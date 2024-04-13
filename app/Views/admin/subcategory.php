@@ -33,7 +33,7 @@
             <!-- Categories Form -->
             <div class="category-from">
                 <div class="category_container" style="display: none;">
-                    <form id="CategoryForm" enctype="multipart/form-data">
+                    <form id="subCategoryForm" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
                                 <label for="cat name">Category Name</label><span class="text-danger">*</span>
@@ -108,11 +108,11 @@
             </div> -->
             <!-- Edit Categories Form  End -->
             <div class="table-responsive">
-                <table class="table table-bordered" id="CategoryTable" style="width: 1100px;">
+                <table class="table table-bordered" id="subCategoryTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
                         <th>Category Name</th>
-                        <th>Category Image</th>
+                        <th>Sub-Category Name</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -152,25 +152,19 @@
         });
 
         jQuery(document).ready(function (e) {
-            $('#CategoryForm').bootstrapValidator({
+            $('#subCategoryForm').bootstrapValidator({
                 fields: {
-                    'catname': {
+                    'cat': {
                         validators: {
                             notEmpty: {
-                                message: "Please enter Order Number"
+                                message: "Please Select Category"
                             },
                         }
                     },
-                    'image': {
+                    'sub_cat': {
                         validators: {
                             notEmpty: {
-                                message: "Please Choose Image File"
-                            },
-                            file: {
-                                extension: 'jpeg,jpg,png',
-                                type: 'image/jpeg,image/png',
-                                maxSize: 1024 * 1024,
-                                message: 'The selected file is not valid or exceeds 1 MB in size',
+                                message: "Please Enter Sub-Category Name"
                             },
                         }
                     },
@@ -179,60 +173,58 @@
                 e.preventDefault();
                 var $form = $(e.target);
                 var bv = $form.data('bootstrapValidator');
-                var formData = new FormData($form[0]);
-                console.log(formData);
+                var formData = $form.serialize();
+                // console.log(formData);
                 // Use AJAX to submit form data
-                // $.ajax({
-                //     url: "<?= base_url('admin/categories') ?>",
-                //     type: 'POST',
-                //     data: formData,
-                //     processData: false,
-                //     contentType: false,
-                //     success: function (response) {
-                //         // console.log(response);
-                //         if (response.status === 'success') {
-                //             $('input').val('');
-                //             $('.category_container').hide();
-                //             $.notify(response.message, "success");
-                //             table.ajax.reload(null, false);
-                //         } else {
-                //             $.notify(response.message, "error");
-                //         }
-                //     },
-                //     error: function (xhr, status, error) {
-                //         // Handle error
-                //         console.error(error);
-                //     }
-                // });
+                $.ajax({
+                    url: "<?= base_url('admin/subCategory') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        // console.log(response);
+                        if (response.status === 'success') {
+                            $('input, select').val('');
+                            $('.category_container').hide();
+                            $.notify(response.message, "success");
+                            table.ajax.reload(null, false);
+                        } else {
+                            $.notify(response.message, "error");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error(error);
+                    }
+                });
             });
         });
 
-        // var table = $('#CategoryTable').DataTable({
-        //     processing: true,
-        //     serverSide: true,
-        //     paging: true,
-        //     order: [[1, 'desc']],
-        //     "fnCreatedRow": function (row, data, index) {
-        //         var pageInfo = table.page.info();
-        //         var currentPage = pageInfo.page;
-        //         var pageLength = pageInfo.length;
-        //         var rowNumber = index + 1 + (currentPage * pageLength);
-        //         $('td', row).eq(0).html(rowNumber);
-        //     },
-        //     columnDefs: [
-        //         { targets: [0, 2, 3, 4], orderable: false }
-        //     ],
-        //     ajax: {
-        //         url: "<?= base_url('admin/fetchdata') ?>",
-        //         type: "GET",
-        //         error: function (xhr, error, thrown) {
-        //             // console.log("AJAX error:", xhr, error, thrown);
-        //         }
-        //     },
-        //     drawCallback: function (settings) {
-        //         // console.log('Table redrawn:', settings);
-        //     }
-        // });
+        var table = $('#subCategoryTable').DataTable({
+            processing: true,
+            serverSide: true,
+            paging: true,
+            order: [[1, 'desc']],
+            "fnCreatedRow": function (row, data, index) {
+                var pageInfo = table.page.info();
+                var currentPage = pageInfo.page;
+                var pageLength = pageInfo.length;
+                var rowNumber = index + 1 + (currentPage * pageLength);
+                $('td', row).eq(0).html(rowNumber);
+            },
+            columnDefs: [
+                { targets: [0, 2, 3, 4], orderable: false }
+            ],
+            ajax: {
+                url: "<?= base_url('admin/fetchSubCategory') ?>",
+                type: "GET",
+                error: function (xhr, error, thrown) {
+                    // console.log("AJAX error:", xhr, error, thrown);
+                }
+            },
+            drawCallback: function (settings) {
+                // console.log('Table redrawn:', settings);
+            }
+        });
 
         // function setButtonStyles(button, newStatus) {
         //     if (newStatus === 0) {
