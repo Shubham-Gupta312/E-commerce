@@ -1,4 +1,4 @@
-# CodeIgniter 4 Application Starter
+# CodeIgniter 4 E-Commerce Application
 
 ## What is CodeIgniter?
 
