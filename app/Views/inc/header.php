@@ -48,7 +48,7 @@
                 <ul class="navbar-nav mr-auto float-left">
                     <!-- This is  -->
                     <li class="nav-item"> <a class="nav-link sidebartoggler d-none d-md-block waves-effect waves-dark"
-                            href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                            href="javascript:void(0)"><i class="fa-solid fa-bars"></i></a> </li>
                     <!-- ============================================================== -->
                     <!-- ============================================================== -->
                 </ul>
@@ -120,7 +120,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/dashboard') ?>"
                             aria-expanded="false">
-                            <i class="mdi mdi-gauge"></i>
+                            <i class="fa-solid fa-gauge-high"></i>
                             <span class="hide-menu">Dashboard </span>
                         </a>
                     </li>
@@ -128,13 +128,12 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"
                             aria-expanded="false">
-                            <i class="fas fa-home"></i>
+                            <i class="fa-solid fa-house"></i>
                             <span class="hide-menu">Home </span>
                         </a>
                         <ul aria-expanded="false" class="collapse  first-level">
                             <li class="sidebar-item">
                                 <a href="#" class="sidebar-link">
-                                    <i class="mdi mdi-adjust"></i>
                                     <span class="hide-menu"> Banner </span>
                                 </a>
                             </li>
@@ -142,29 +141,34 @@
                     </li>
                     <!-- Category -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/categories') ?>" aria-expanded="false">
-                            <i class="fas fa-list"></i>
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/categories') ?>"
+                            aria-expanded="false">
+                            <!-- <i class="fa-solid fa-list"></i> -->
+                            <i class="fa-solid fa-layer-group"></i>
                             <span class="hide-menu">Category </span>
                         </a>
                     </li>
                     <!-- Sub-Category -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/subCategory') ?>" aria-expanded="false">
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/subCategory') ?>"
+                            aria-expanded="false">
                             <i class="fas fa-list-alt"></i>
                             <span class="hide-menu">Sub-Category </span>
                         </a>
                     </li>
-                     <!-- Product -->
-                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/products') ?>" aria-expanded="false">
+                    <!-- Product -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/products') ?>"
+                            aria-expanded="false">
                             <i class="fas fa-shopping-basket "></i>
                             <span class="hide-menu">Products </span>
                         </a>
                     </li>
                     <!-- Weight / Size -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/unitMaster') ?>" aria-expanded="false">
-                            <i class="mdi mdi-gauge"></i>
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/unitMaster') ?>"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-maximize"></i>
                             <span class="hide-menu">Unit Master</span>
                         </a>
                     </li>
@@ -178,14 +182,14 @@
                     <!-- User -->
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="#" aria-expanded="false">
-                            <i class="mdi mdi-content-paste"></i>
+                            <i class="fa-solid fa-users"></i>
                             <span class="hide-menu">User Details </span>
                         </a>
                     </li>
                     <!-- Ordered Products -->
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="#" aria-expanded="false">
-                            <i class="mdi mdi-gradient"></i>
+                            <i class="fa-solid fa-truck-fast"></i>
                             <span class="hide-menu">Ordered Product</span>
                         </a>
                     </li>
@@ -226,4 +230,4 @@
         <!-- End Sidebar scroll-->
     </aside>
 
-<!-- </div> -->
+    <!-- </div> -->

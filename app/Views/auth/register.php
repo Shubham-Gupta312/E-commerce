@@ -12,7 +12,7 @@
     <title>Sri Krishna Ghee</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
     <!-- Custom CSS -->
-    <link href="../../dist/css/style.min.css" rel="stylesheet">
+    <link href="<?= ASSET_URL ?>public/dist/css/style.min.css" rel="stylesheet">
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="form-group mb-0 mt-2 ">
                                     <div class="col-sm-12 text-center ">
-                                        Already have an account? <a href="<?= base_url('login') ?>"
+                                        Already have an account? <a href="<?= base_url('admin/login') ?>"
                                             class="text-info ml-1 ">Sign In</a>
                                     </div>
                                 </div>
@@ -115,8 +115,8 @@
     <script>
 
     </script>
-    <script src="../assets/libs/popper.js/dist/umd/popper.min.js "></script>
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.min.js "></script>
+    <script src="<?= ASSET_URL ?>public/assets/libs/popper.js/dist/umd/popper.min.js "></script>
+    <script src="<?= ASSET_URL ?>public/assets/libs/bootstrap/dist/js/bootstrap.min.js "></script>
     <!-- jquery Validation Plugin -->
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>

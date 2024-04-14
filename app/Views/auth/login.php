@@ -11,7 +11,7 @@
     <title>Sri Krishna Ghee</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
     <!-- Custom CSS -->
-    <link href="../../dist/css/style.min.css" rel="stylesheet">
+    <link href="<?= ASSET_URL ?>public/dist/css/style.min.css" rel="stylesheet">
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -39,7 +39,7 @@
         <!-- Login box.scss -->
         <!-- ============================================================== -->
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
-            style="background:url(../assets/images/background/login-register.jpg) no-repeat center center; background-size: cover;">
+            style="background:url(<?= ASSET_URL ?>public/assets/images/background/login-register.jpg) no-repeat center center; background-size: cover;">
             <div class="auth-box p-4 bg-white rounded">
                 <div>
                     <div class="logo">
@@ -108,8 +108,8 @@
     <script>
 
     </script>
-    <script src="../assets/libs/popper.js/dist/umd/popper.min.js "></script>
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.min.js "></script>
+    <script src="<?= ASSET_URL ?>public/assets/libs/popper.js/dist/umd/popper.min.js "></script>
+    <script src="<?= ASSET_URL ?>public/assets/libs/bootstrap/dist/js/bootstrap.min.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- jquery Validation Plugin -->
     <script
