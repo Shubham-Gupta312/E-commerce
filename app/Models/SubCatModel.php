@@ -6,21 +6,21 @@ use CodeIgniter\Model;
 
 class SubCatModel extends Model
 {
-  protected $table = 'sub_category';
+  protected $table = 'subcategory';
   protected $primaryKey = 'id';
   protected $protectFields = [];
 
-//   public function updateStatus($id, $ns)
-//   {
-//     return $this->set(['status' => $ns])->where('id', $id)->update();
-//   }
-//   public function updateCategory($id, $data)
-//   {
-//     return $this->update($id, $data);
-//   }
-//   public function deleteCategory($id)
-//   {
-//     return $this->where('id', $id)->delete();
-//   }
+  public function updateStatus($id, $st)
+  {
+    return $this->set(['status' => $st])->where('id', $id)->update();
+  }
+  public function updateSubCategory($id, $data)
+  {
+    return $this->update($id, $data);
+  }
+  public function deleteSubCategory($id)
+  {
+    return $this->where('id', $id)->delete();
+  }
 
 }

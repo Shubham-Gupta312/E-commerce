@@ -13,8 +13,16 @@ $routes->get('admin/login', 'AuthController::login');
 $routes->post('admin/login', 'AuthController::login');
 $routes->get('admin/logout', 'AuthController::logout');
 
-$routes->group('admin', static function ($routes) {
+$routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) {
     $routes->get('dashboard', 'Home::dashboard');
+
+    $routes->get('brand', 'Home::brand');
+    $routes->post('brand', 'Home::brand');
+    $routes->get('fetchBrandData', 'Home::fetchBrand');
+    $routes->post('brandStatus', 'Home::brandStatus');
+    $routes->post('editBrand', 'Home::editBrand');
+    $routes->post('updateBrand', 'Home::updateBrand');
+    $routes->post('deleteBrand', 'Home::deleteBrand');
 
     $routes->get('categories', 'Home::categories');
     $routes->post('categories', 'Home::categories');
@@ -27,6 +35,10 @@ $routes->group('admin', static function ($routes) {
     $routes->get('subCategory', 'Home::subCategory');
     $routes->post('subCategory', 'Home::subCategory');
     $routes->get('fetchSubCategory', 'Home::fetchSubCategory');
+    $routes->post('subCatStatus', 'Home::subCatStatus');
+    $routes->post('editSubCategory', 'Home::editSubCategory');
+    $routes->post('updateSubCategory', 'Home::updateSubCategory');
+    $routes->post('deleteSubCategory', 'Home::deleteSubCategory');
 
     $routes->get('unitMaster', 'Home::unitMaster');
     $routes->post('unitMaster', 'Home::unitMaster');
@@ -38,6 +50,6 @@ $routes->group('admin', static function ($routes) {
     
     $routes->get('products', 'Home::Products');
     $routes->post('products', 'Home::Products');
-    $routes->post('fetchcatvariant', 'Home::fetchcatvariant');
+    $routes->post('fetchSubCategoryData', 'Home::fetchSubCategoryData');
     $routes->get('fetchproducts', 'Home::fetchproducts');
 });

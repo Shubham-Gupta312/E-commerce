@@ -139,6 +139,15 @@
                             </li>
                         </ul>
                     </li>
+                    <!-- Brand -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/brand') ?>"
+                            aria-expanded="false">
+                            <!-- <i class="fa-solid fa-list"></i> -->
+                            <i class="fa-solid fa-ring"></i>
+                            <span class="hide-menu">Brand </span>
+                        </a>
+                    </li>
                     <!-- Category -->
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/categories') ?>"

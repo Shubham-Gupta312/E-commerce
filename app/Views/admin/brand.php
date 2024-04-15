@@ -21,45 +21,28 @@
             <div class="row">
                 <!-- <div class="col-lg-3 col-md-6"> -->
                 <div class="col-lg-6">
-                    <h1>Sub-Category</h1>
+                    <h1>Brand</h1>
                 </div>
                 <div class="col-lg-6 text-lg-right">
-                    <button class="btn btn-outline-primary" title="Add Category" id="add_category"><i
-                            class="fas fa-plus"></i> Add Sub-Category</button>
+                    <button class="btn btn-outline-primary" title="Add Brand" id="add_brand"><i class="fas fa-plus"></i>
+                        Add Brand</button>
                 </div>
                 <!-- </div> -->
                 <!-- Column -->
             </div>
-            <!-- Categories Form -->
+            <!-- Brand Form -->
             <div class="category-from">
                 <div class="category_container" style="display: none;">
-                    <form id="subCategoryForm" enctype="multipart/form-data">
+                    <form id="BrandForm" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
-                                <label for="cat name">Category Name</label><span class="text-danger">*</span>
-                                <!-- <input type="text" class="form-control onlychars" id="catname" name="catname"
-                                    placeholder="Enter Category Name"> -->
-                                <select class="form-control" name="cat" id="cat">
-                                    <option value="" selected="selected">Please Choose one option</option>
-                                    <?php foreach ($category as $option): ?>
-                                        <option value="<?php echo $option['id']; ?>"><?= $option['cname'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <label for="brand name">Brand Name</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlychars" id="bname" name="bname"
+                                    placeholder="Enter Brand Name">
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="Sub-Category">Sub-Ctaegory Name</label><span
-                                        class="text-danger">*</span>
-                                    <input type="text" class="form-control onlychars" id="sub_cat" name="sub_cat"
-                                        placeholder="Enter Sub-Category Name">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label for="SubCategory Image">Sub-Ctaegory Image</label><span
-                                        class="text-danger">*</span>
+                                    <label for="Brand Image">Brand Image</label><span class="text-danger">*</span>
                                     <input type="file" class="form-control" id="image" name="image"
                                         accept=".jpg, .png, jpeg">
                                 </div>
@@ -73,41 +56,28 @@
                     </form>
                 </div>
             </div>
-            <!-- End Categories Form -->
-            <!-- Edit Sub-Categories Form  -->
+            <!-- End Brand Form -->
+            <!-- Edit brand Form  -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Categories Data</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Brand Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="editSubCategoryForm" enctype="multipart/form-data">
+                            <form id="editBrandForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <input type="hidden" name="id" id="catId" val="">
                                     <div class="col-lg-12 col-md-6">
-                                        <label for="cat name">Category Name</label><span class="text-danger">*</span>
-                                        <select class="form-control" name="edit_cat" id="edit_cat">
-                                            <option value="" selected="selected">Please Choose one option</option>
-                                            <?php foreach ($category as $option): ?>
-                                                <option value="<?php echo $option['id']; ?>"><?= $option['cname'] ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-12 col-md-6 mt-3">
-                                        <div class="form-group">
-                                            <label for="Sub-Category">Sub-Ctaegory Name</label><span
-                                                class="text-danger">*</span>
-                                            <input type="text" class="form-control onlychars" id="edit_sub_cat"
-                                                name="edit_sub_cat" placeholder="Enter Sub-Category Name">
-                                        </div>
+                                        <label for="brand name">Brand Name</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlychars" id="editbname"
+                                            name="editbname" placeholder="Enter Brand Name">
                                     </div>
                                     <div class="col-lg-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="SubCategory Image">Sub-Ctaegory Image</label><span
+                                            <label for="Brand Image">Brand Image</label><span
                                                 class="text-danger">*</span>
                                             <input type="file" class="form-control" id="eimage" name="eimage"
                                                 accept=".jpg, .png, jpeg">
@@ -128,14 +98,13 @@
                     </div>
                 </div>
             </div>
-            <!-- Edit Sub-Categories Form  End -->
+            <!-- Edit Categories Form  End -->
             <div class="table-responsive">
-                <table class="table table-bordered" id="subCategoryTable" style="width: 1100px;">
+                <table class="table table-bordered" id="brandTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <th>Category Name</th>
-                        <th>Sub-Category Name</th>
-                        <th>Sub-Category Image</th>
+                        <th>Brand Name</th>
+                        <th>Brand Image</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -162,32 +131,26 @@
 </div>
 </div>
 
+
 <script>
     $(document).ready(function () {
         $('body').on('keyup', ".onlychars", function (event) {
             this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
         });
 
-        $('#add_category').click(function (e) {
+        $('#add_brand').click(function (e) {
             e.preventDefault();
             // console.log('clicked');
             $(".category_container").show();
         });
 
         jQuery(document).ready(function (e) {
-            $('#subCategoryForm').bootstrapValidator({
+            $('#BrandForm').bootstrapValidator({
                 fields: {
-                    'cat': {
+                    'bname': {
                         validators: {
                             notEmpty: {
-                                message: "Please Select Category"
-                            },
-                        }
-                    },
-                    'sub_cat': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please Enter Sub-Category Name"
+                                message: "Please enter Brand Name"
                             },
                         }
                     },
@@ -209,11 +172,11 @@
                 e.preventDefault();
                 var $form = $(e.target);
                 var bv = $form.data('bootstrapValidator');
-                var formData = new FormData($form[0]);;
+                var formData = new FormData($form[0]);
                 // console.log(formData);
                 // Use AJAX to submit form data
                 $.ajax({
-                    url: "<?= base_url('admin/subCategory') ?>",
+                    url: "<?= base_url('admin/brand') ?>",
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -221,10 +184,10 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status === 'success') {
-                            $('input, select').val('');
+                            $('input').val('');
                             $('.category_container').hide();
-                            $.notify(response.message, "success");
                             table.ajax.reload(null, false);
+                            $.notify(response.message, "success");
                         } else {
                             $.notify(response.message, "error");
                         }
@@ -237,7 +200,7 @@
             });
         });
 
-        var table = $('#subCategoryTable').DataTable({
+        var table = $('#brandTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
@@ -250,10 +213,10 @@
                 $('td', row).eq(0).html(rowNumber);
             },
             columnDefs: [
-                { targets: [0, 3, 4], orderable: false }
+                { targets: [0, 2, 3, 4], orderable: false }
             ],
             ajax: {
-                url: "<?= base_url('admin/fetchSubCategory') ?>",
+                url: "<?= base_url('admin/fetchBrandData') ?>",
                 type: "GET",
                 error: function (xhr, error, thrown) {
                     // console.log("AJAX error:", xhr, error, thrown);
@@ -264,7 +227,8 @@
             }
         });
 
-        var table = $('#subCategoryTable').DataTable();
+
+        var table = $('#brandTable').DataTable();
         $(document).on('click', '#statusBtn', function (e) {
             e.preventDefault();
             var button = $(this);
@@ -273,8 +237,9 @@
             var status = $(this).data('status');
             var dataID = $(this).data('id');
             // console.log(catId, status, dataID);
+            // Send AJAX request to the controller
             $.ajax({
-                url: "<?= base_url('admin/subCatStatus') ?>",
+                url: "<?= base_url('admin/brandStatus') ?>",
                 type: 'POST',
                 data: {
                     'id': catId,
@@ -306,15 +271,14 @@
             $('#catId').val(catId);
             $.ajax({
                 method: 'POST',
-                url: "<?= base_url('admin/editSubCategory') ?>",
+                url: "<?= base_url('admin/editBrand') ?>",
                 data: {
                     'id': catId
                 },
                 success: function (response) {
                     // console.log(response);
                     if (response.status == 'true') {
-                        $('#edit_cat').val(response.message.cat_id);
-                        $('#edit_sub_cat').val(response.message.sname);
+                        $('#editbname').val(response.message.name);
                     } else {
                         $.notify(response.message, "error");
                     }
@@ -323,30 +287,13 @@
         });
 
         $(document).on('click', '#updatebtn', function () {
-            var $form = $('#editSubCategoryForm');
+            var $form = $('#editBrandForm');
             $form.bootstrapValidator({
                 fields: {
-                    'edit_cat': {
+                    'editbname': {
                         validators: {
                             notEmpty: {
-                                message: 'Please Select Category Name'
-                            },
-                        }
-                    },
-                    'edit_sub_cat': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please Enter Sub-Category Name'
-                            }
-                        }
-                    },
-                    'eimage': {
-                        validators: {
-                            file: {
-                                extension: 'jpeg,jpg,png',
-                                type: 'image/jpeg,image/png',
-                                maxSize: 1024 * 1024, // 1 MB in bytes
-                                message: 'The selected file is not valid or exceeds 1 MB in size',
+                                message: 'The Brand Name is required'
                             },
                         }
                     },
@@ -357,7 +304,7 @@
                 var formData = new FormData($form[0]);
                 $.ajax({
                     method: "POST",
-                    url: "<?= base_url('admin/updateSubCategory') ?>",
+                    url: "<?= base_url('admin/updateBrand') ?>",
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -376,27 +323,27 @@
         });
 
         $(document).on('click', '#deleteCat', function () {
-            // console.log('clicked');
-            var button = $(this);
-            var data = table.row(button.closest('tr')).data();
-            var catId = data[0];
-            // console.log(catId);
-            $.ajax({
-                method: "POST",
-                url: "<?= base_url('admin/deleteSubCategory') ?>",
-                data: {
-                    'id': catId
-                },
-                success: function (response) {
-                    // console.log(response);
-                    if (response.status == 'success') {
-                        $.notify(response.message, "success");
-                        table.ajax.reload();
-                    } else {
-                        $.notify(response.message, "error");
-                    }
+        // console.log('clicked');
+        var button = $(this);
+        var data = table.row(button.closest('tr')).data();
+        var catId = data[0];
+        // console.log(catId);
+        $.ajax({
+            method: "POST",
+            url: "<?= base_url('admin/deleteBrand') ?>",
+            data: {
+                'id': catId
+            },
+            success: function (response) {
+                // console.log(response);
+                if (response.status == 'success') {
+                    $.notify(response.message, "success");
+                    table.ajax.reload();
+                } else {
+                    $.notify(response.message, "error");
                 }
-            });
+            }
+        });
         });
 
     });

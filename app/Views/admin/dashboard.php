@@ -37,6 +37,24 @@
                     </div>
                 </div>
                 <!-- Column -->
+                <!-- Column -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-row">
+                                <div
+                                    class="round round-lg text-white d-inline-block text-center rounded-circle bg-info">
+                                    <i class="ti-wallet"></i>
+                                </div>
+                                <div class="ml-2 align-self-center">
+                                    <h3 class="mb-0 font-weight-light">32</h3>
+                                    <h5 class="text-muted mb-0">Sub-Category</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
                 <div class="col-lg-3 col-md-6">
                     <div class="card">
                         <div class="card-body">
@@ -47,7 +65,7 @@
                                 </div>
                                 <div class="ml-2 align-self-center">
                                     <h3 class="mb-0 font-weight-light">32</h3>
-                                    <h5 class="text-muted mb-0">Weight / Size</h5>
+                                    <h5 class="text-muted mb-0">Unit Master</h5>
                                 </div>
                             </div>
                         </div>

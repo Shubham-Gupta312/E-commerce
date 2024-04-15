@@ -30,18 +30,25 @@
                 <!-- </div> -->
                 <!-- Column -->
             </div>
-            <!-- Categories Form -->
+            <!-- Product Form -->
             <div class="category-from">
                 <div class="category_container" style="display: none;">
                     <form id="productsForm" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <div class="form-group">
+                                    <label for="product_name">Product Name</label><span class="text-danger">*</span>
+                                    <input type="text" class="form-control onlychars" name="product_name"
+                                        id="product_name" placeholder="Enter Product Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="form-group">
                                     <label for="cat_name">Category Name</label><span class="text-danger">*</span>
                                     <select name="cat_name" class="form-control" id="cat_name">
                                         <option value="" selected="selected">Please choose an option</option>
                                         <?php foreach ($category as $option): ?>
-                                            <option value="<?php echo $option['id']; ?>"><?php echo $option['cat_name']; ?>
+                                            <option value="<?php echo $option['id']; ?>"><?php echo $option['cname']; ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -51,15 +58,8 @@
                                 <label for="sub_cat">Sub-Category</label><span class="text-danger">*</span>
                                 <select class="form-control" name="sub_cat" id="sub_cat">
                                     <option value="" selected="selected">Please choose an option</option>
-                                    <option value="">Option 1</option>
+
                                 </select>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="form-group">
-                                    <label for="product_name">Product Name</label><span class="text-danger">*</span>
-                                    <input type="text" class="form-control onlychars" name="product_name"
-                                        id="product_name" placeholder="Enter Product Name">
-                                </div>
                             </div>
                         </div>
 
@@ -69,17 +69,20 @@
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
                                             <label for="unit_type">Weight / Size</label>
-                                            <input type="text" class="form-control" name="unit_type"
-                                                placeholder="Enter Weight / Size">
+                                            <input type="text" class="form-control onlynum" id="unit_type"
+                                                name="unit_type" placeholder="Enter Weight / Size">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
                                             <label for="unit">Unit</label>
-                                            <select class="form-control" name="unit">
-                                                <option value="option1">Option 1</option>
-                                                <option value="option2">Option 2</option>
-                                                <option value="option3">Option 3</option>
+                                            <select class="form-control" name="unit" id="unit">
+                                                <option value="" selected="selected">Please choose an option</option>
+                                                <?php foreach ($unit as $option): ?>
+                                                    <option value="<?php echo $option['s_id']; ?>">
+                                                        <?= $option['sname']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -91,24 +94,34 @@
                                     id="product_code" placeholder="Enter Product Code">
                             </div>
                             <div class="col-lg-4 col-md-6">
+                                <label for="Brand">Brand Name</label><span class="text-danger">*</span>
+                                <select class="form-control" name="brand" id="brand">
+                                    <option value="" selected="selected">Please choose an option</option>
+                                    <?php foreach ($brand as $option): ?>
+                                        <option value="<?php echo $option['id']; ?>">
+                                            <?= $option['name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-4 col-md-6">
+                                <label for="tax">Tax %</label>
+                                <input type="text" class="form-control onlynum" name="tax" id="tax"
+                                    placeholder="Enter Tax">
+                            </div>
+                            <div class="col-lg-4 col-md-6">
                                 <div class="form-group">
                                     <label for="primg">Product Image</label><span class="text-danger">*</span>
-                                    <input type="file" class="form-control" name="product_image" id="product_image"
+                                    <input type="file" class="form-control" name="product_image" multiple id="product_image"
                                         accept=".jpg, ,.png, .jpeg">
                                 </div>
                                 <div class="note_form">
                                     <small>Less than or equal to 1Mb </small>
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-lg-4 col-md-6">
-                                <label for="igst">iGST %</label>
-                                <input type="text" class="form-control onlynum" name="igst" id="igst"
-                                    placeholder="Enter iGST">
-                            </div>
-                            <div class="col-lg-4 col-md-6">
+                            <!-- <div class="col-lg-4 col-md-6">
                                 <label for="cgst">cGST %</label><span class="text-danger">*</span>
                                 <input type="text" class="form-control onlynum" name="cgst" id="cgst"
                                     placeholder="Enter cGST">
@@ -117,7 +130,7 @@
                                 <label for="sgst">sGST %</label><span class="text-danger">*</span>
                                 <input type="text" class="form-control onlynum" name="sgst" id="sgst"
                                     placeholder="Enter sGST">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-4 col-md-6">
@@ -145,7 +158,8 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-12 col-md-6">
-                                <label for="desc">Product Description</label><span class="text-danger">*</span>
+                                <label for="desc">Product Description</label>
+                                <!-- <span class="text-danger">*</span> -->
                                 <textarea name="desc" class="form-control" id="desc" cols="50"></textarea>
                             </div>
                         </div>
@@ -245,7 +259,7 @@
             this.value = this.value.replace(/[^[0-9]]*/gi, '');
         });
         $('body').on('keyup', ".onlyalphanum", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z0-9 ]]*/gi, '');
+            this.value = this.value.replace(/[^[A-Za-z0-9]]*/gi, '');
         });
 
         $('#add_category').click(function (e) {
@@ -262,33 +276,32 @@
 
         $('#cat_name').change(function () {
             var catID = $(this).val();
-            // console.log(catID);
             if (catID != '') {
                 $.ajax({
                     method: "POST",
-                    url: "<?= base_url('admin/fetchcatvariant') ?>",
+                    url: "<?= base_url('admin/fetchSubCategoryData') ?>",
                     data: {
                         'id': catID
                     },
                     success: function (res) {
-                        // console.log(res);
-                        // for (var i = 0; i < res.message.length; i++) {
-                        //     console.log(res.message[i].cat_variant);
-                        // }
                         if (res.status == 'success') {
                             var options = '<option value="">Please choose an option</option>';
                             $.each(res.message, function (index, value) {
-                                options += '<option value="' + value.id + '">' + value.cat_variant + '</option>';
+                                options += '<option value="' + value.id + '">' + value.sname + '</option>';
                             });
-                            $('#cat_var').html(options);
+                            $('#sub_cat').html(options);
                         } else {
-                            $('#cat_var').html('<option value="">No variants found</option>');
+                            $('#sub_cat').html('<option value="">No variants found</option>');
                         }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching subcategories:", error);
+                        $('#sub_cat').html('<option value="">Error fetching subcategories</option>');
                     }
                 });
             } else {
-                $.notify(response.message, "error");
-                $('#cat_var').html('<option value="">Please choose a category first</option>');
+                $.notify("Please choose a category first", "error");
+                $('#sub_cat').html('<option value="">Please choose a category first</option>');
             }
         });
 
@@ -309,10 +322,10 @@
                             },
                         }
                     },
-                    'cat_var': {
+                    'sub_cat': {
                         validators: {
                             notEmpty: {
-                                message: 'Please select Category Variant'
+                                message: 'Please select Sub-Category'
                             }
                         }
                     },

@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class UnitMasterModel extends Model
 {
-  protected $table = 'unitmaster';
-  protected $primaryKey = 'id';
+  protected $table = 'sizes';
+  protected $primaryKey = 's_id';
   protected $protectFields = [];
 
   public function updateStatus($id, $status)
   {
-    return $this->set(['status' => $status])->where('id', $id)->update();
+    return $this->set(['status' => $status])->where('s_id', $id)->update();
   }
   public function updateCategorization($id, $data)
   {
@@ -20,7 +20,7 @@ class UnitMasterModel extends Model
   }
   public function deleteCategorization($id)
   {
-    return $this->where('id', $id)->delete();
+    return $this->where('s_id', $id)->delete();
   }
 
 }

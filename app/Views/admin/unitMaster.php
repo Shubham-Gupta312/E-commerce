@@ -37,9 +37,9 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
                                 <label for="cat_name">Unit Name</label><span class="text-danger">*</span>
-                                <!-- <input type="text" class="form-control onlychars" name="unit" id="unit"
-                                    placeholder="Enter Unit (kg, gms)"> -->
-                                <select name="unit" class="form-control" id="unit">
+                                <input type="text" class="form-control onlychars" name="unit" id="unit"
+                                    placeholder="Enter Size (kg, gms)">
+                                <!-- <select name="unit" class="form-control" id="unit">
                                     <option value="" selected="selected">Please Choose one</option>
                                     <option value="kg">Kg</option>
                                     <option value="grm">Grm</option>
@@ -48,7 +48,7 @@
                                     <option value="pck">Packet</option>
                                     <option value="mltr">Mililitre</option>
                                     <option value="bx">Box</option>
-                                </select>
+                                </select> -->
                             </div>
                         </div>
                         <button type="submit" id="save" name="save" class="btn btn-primary mt-2">Submit</button>
@@ -72,16 +72,8 @@
                                     <input type="hidden" name="id" id="catId" val="">
                                     <div class="col-lg-12 col-md-6">
                                         <label for="unit name">Unit Name</label><span class="text-danger">*</span>
-                                        <select name="edit_unit_name" class="form-control" id="edit_unit_name">
-                                            <option value="" selected="selected">Please choose a option</option>
-                                            <option value="kg">Kg</option>
-                                            <option value="grm">Grm</option>
-                                            <option value="ltr">Ltr</option>
-                                            <option value="pcs">Peice</option>
-                                            <option value="pck">Packet</option>
-                                            <option value="mltr">Mlltr</option>
-                                            <option value="bx">Box</option>
-                                        </select>
+                                        <input type="text" class="form-control onlychars" name="edit_unit_name" id="edit_unit_name"
+                                            placeholder="Enter Size (kg, gms)">
                                     </div>
                                 </div>
                             </form>
@@ -99,7 +91,7 @@
                 <table class="table table-bordered" id="CategorizationTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <th>Unit Name</th>
+                        <th>Size Name</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -146,7 +138,7 @@
                     'unit': {
                         validators: {
                             notEmpty: {
-                                message: "Please Select Unit"
+                                message: "Please Enter Size"
                             },
                         }
                     },
@@ -185,6 +177,7 @@
             processing: true,
             serverSide: true,
             paging: true,
+            order: [[1, 'desc']],
             "fnCreatedRow": function (row, data, index) {
                 var pageInfo = table.page.info();
                 var currentPage = pageInfo.page;
@@ -192,9 +185,9 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
-            // columnDefs: [
-            //     { targets: [0, 3, 4], orderable: false }
-            // ],
+            columnDefs: [
+                { targets: [0, 2, 3], orderable: false }
+            ],
             ajax: {
                 url: "<?= base_url('admin/fetchUnitMaster') ?>",
                 type: "GET",
@@ -205,7 +198,6 @@
             drawCallback: function (settings) {
                 // console.log('Table redrawn:', settings);
             },
-            "order": [[1, 'desc']],
         });
 
 
@@ -258,7 +250,7 @@
                 success: function (response) {
                     // console.log(response);
                     if (response.status == 'true') {
-                        $('#edit_unit_name').val(response.message.unit_name);
+                        $('#edit_unit_name').val(response.message.sname);
                     } else {
                         $.notify(response.message, "error");
                     }
@@ -273,7 +265,7 @@
                     'edit_unit_name': {
                         validators: {
                             notEmpty: {
-                                message: 'Please select Unit Name'
+                                message: 'Please Enter Unit Name'
                             },
                         }
                     },

@@ -52,6 +52,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <label for="Order Number">Order Number</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlynum" id="orderno" name="orderno"
+                                    placeholder="Enter Order Number">
+                            </div>
+                        </div>
                         <button type="submit" id="save" name="save" class="btn btn-primary mt-2">Submit</button>
                     </form>
                 </div>
@@ -87,6 +94,11 @@
                                             <small class="float-end">Supported format: Jpeg,Jpg, Png</small>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-md-6">
+                                        <label for="Order Number">Order Number</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlynum" id="eorderno" name="eorderno"
+                                            placeholder="Enter Order Number">
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -103,6 +115,7 @@
                 <table class="table table-bordered" id="CategoryTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
+                        <th>Order Number</th>
                         <th>Category Name</th>
                         <th>Category Image</th>
                         <th>Status</th>
@@ -136,6 +149,9 @@
         $('body').on('keyup', ".onlychars", function (event) {
             this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
         });
+        $('body').on('keyup', ".onlynum", function (event) {
+            this.value = this.value.replace(/[^[0-9]]*/gi, '');
+        });
 
         $('#add_category').click(function (e) {
             e.preventDefault();
@@ -147,6 +163,13 @@
             $('#CategoryForm').bootstrapValidator({
                 fields: {
                     'catname': {
+                        validators: {
+                            notEmpty: {
+                                message: "Please enter Category Name"
+                            },
+                        }
+                    },
+                    'orderno': {
                         validators: {
                             notEmpty: {
                                 message: "Please enter Order Number"
@@ -173,7 +196,6 @@
                 var bv = $form.data('bootstrapValidator');
                 var formData = new FormData($form[0]);
                 // console.log(formData);
-                // Use AJAX to submit form data
                 $.ajax({
                     url: "<?= base_url('admin/categories') ?>",
                     type: 'POST',
@@ -226,13 +248,7 @@
             }
         });
 
-        function setButtonStyles(button, newStatus) {
-            if (newStatus === 0) {
-                button.removeClass('btn-outline-success').addClass('btn-outline-danger').text('In-Active');
-            } else if (newStatus === 1) {
-                button.removeClass('btn-outline-danger').addClass('btn-outline-success').text('Active');
-            }
-        }
+
         var table = $('#CategoryTable').DataTable();
         $(document).on('click', '#statusBtn', function (e) {
             e.preventDefault();
@@ -283,7 +299,8 @@
                 success: function (response) {
                     // console.log(response);
                     if (response.status == 'true') {
-                        $('#editcat').val(response.message.cat_name);
+                        $('#editcat').val(response.message.cname);
+                        $('#eorderno').val(response.message.orderno);
                     } else {
                         $.notify(response.message, "error");
                     }
