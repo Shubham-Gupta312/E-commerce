@@ -21,13 +21,11 @@
             <div class="row">
                 <!-- <div class="col-lg-3 col-md-6"> -->
                 <div class="col-lg-6">
-                    <h1>Products</h1>
+                    <h1>Products Image</h1>
                 </div>
                 <div class="col-lg-6 text-lg-right">
-                    <button class="btn btn-outline-primary" title="Add Category" id="add_category"><i
-                            class="fas fa-plus"></i> Add Products</button>
-                    <!-- <button class="btn btn-outline-warning ml-2" title="Add Image" id="add_image"><i
-                            class="fas fa-plus"></i> Add Image</button> -->
+                    <button class="btn btn-outline-warning ml-2" title="Add Image" id="add_image"><i
+                            class="fas fa-plus"></i> Add Image</button>
                 </div>
                 <!-- </div> -->
                 <!-- Column -->
@@ -35,77 +33,42 @@
             <!-- Product Form -->
             <div class="category-from">
                 <div class="category_container" style="display: none;">
-                    <form id="productsForm" enctype="multipart/form-data">
+                    <form id="productsImageForm" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-lg-4 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
                                     <label for="product_name">Product Name</label><span class="text-danger">*</span>
-                                    <input type="text" class="form-control onlychars" name="product_name"
-                                        id="product_name" placeholder="Enter Product Name">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="form-group">
-                                    <label for="cat_name">Category Name</label><span class="text-danger">*</span>
-                                    <select name="cat_name" class="form-control" id="cat_name">
-                                        <option value="" selected="selected">Please choose an option</option>
-                                        <?php foreach ($category as $option): ?>
-                                            <option value="<?php echo $option['id']; ?>"><?php echo $option['cname']; ?>
+                                    <select class="form-control" name="prod_name" id="prod_name">
+                                        <option value="" selected="selected">Please select product</option>
+                                        <?php foreach ($products as $option): ?>
+                                            <option value="<?php echo $option['id']; ?>">
+                                                <?= $option['ptitle']; ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="sub_cat">Sub-Category</label><span class="text-danger">*</span>
-                                <select class="form-control" name="sub_cat" id="sub_cat">
-                                    <option value="" selected="selected">Please choose an option</option>
-
-                                </select>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="primg">Product Image</label><span class="text-danger">*</span>
+                                    <!-- <input type="file" class="form-control" name="product_image[]" multiple
+                                        id="product_image" accept=".jpg, .png, .jpeg"> -->
+                                    <input type="file" class="form-control" name="product_image" multiple
+                                        id="product_image" accept=".jpg, .png, .jpeg">
+                                </div>
+                                <div class="note_form">
+                                    <small>Less than or equal to 1Mb </small>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                                <label for="prcode">Product Code</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlyalphanum" name="product_code"
-                                    id="product_code" placeholder="Enter Product Code">
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="Brand">Brand Name</label><span class="text-danger">*</span>
-                                <select class="form-control" name="brand" id="brand">
-                                    <option value="" selected="selected">Please choose an option</option>
-                                    <?php foreach ($brand as $option): ?>
-                                        <option value="<?php echo $option['id']; ?>">
-                                            <?= $option['name']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="tax">Tax %</label>
-                                <input type="text" class="form-control onlynum" name="tax" id="tax"
-                                    placeholder="Enter Tax">
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-lg-4 col-md-6">
-                                <label for="orderno">Order Number</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlynum" name="orderno" id="orderno"
-                                    placeholder="Enter Product Order number">
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-lg-12 col-md-6">
-                                <label for="desc">Product Description</label>
-                                <!-- <span class="text-danger">*</span> -->
-                                <textarea name="desc" class="form-control" id="desc" cols="50"></textarea>
-                            </div>
-                        </div>
+                        <div id="additionalImages"></div>
+                        <!-- <button type="button" id="add_more" name="add_more" class="btn btn-outline-info mt-2">Add More
+                            Image</button> -->
                         <button type="submit" id="save" name="save" class="btn btn-primary mt-2">Submit</button>
                     </form>
                 </div>
             </div>
+
             <!-- End Categories Form -->
             <!-- Edit Categories Form  -->
             <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -150,21 +113,11 @@
             </div> -->
             <!-- Edit Categories Form  End -->
             <div class="table-responsive">
-                <table class="table table-bordered" id="productTable" style="width: 1100px;">
+                <table class="table table-bordered" id="productImageTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <th>Order Number</th>
                         <th>Product Name</th>
-                        <th>Category Name</th>
-                        <th>Sub Category Name</th>
-                        <th>Product Code</th>
-                        <th>Brand Name</th>
-                        <th>Tax</th>
-                        <th>Product Description</th> 
-                        <!-- <th>Product MRP</th>
-                        <th>Product Selling Price</th>
-                        <th>Product Stock</th> -->
-                        <th>Status</th>
+                        <th>Product Image</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
@@ -192,124 +145,91 @@
 
 <script>
     $(document).ready(function () {
-        $('body').on('keyup', ".onlychars", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
-        });
-        $('body').on('keyup', ".onlynum", function (event) {
-            this.value = this.value.replace(/[^[0-9]]*/gi, '');
-        });
-        $('body').on('keyup', ".onlyalphanum", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z0-9]]*/gi, '');
-        });
 
-        $('#add_category').click(function (e) {
+        $('#add_image').click(function (e) {
             e.preventDefault();
             // console.log('clicked');
             $(".category_container").show();
         });
 
-        ClassicEditor
-            .create(document.querySelector('#desc'))
-            .catch(error => {
-                console.error(error);
-            });
 
-        $('#cat_name').change(function () {
-            var catID = $(this).val();
-            if (catID != '') {
-                $.ajax({
-                    method: "POST",
-                    url: "<?= base_url('admin/fetchSubCategoryData') ?>",
-                    data: {
-                        'id': catID
-                    },
-                    success: function (res) {
-                        if (res.status == 'success') {
-                            var options = '<option value="">Please choose an option</option>';
-                            $.each(res.message, function (index, value) {
-                                options += '<option value="' + value.id + '">' + value.sname + '</option>';
-                            });
-                            $('#sub_cat').html(options);
-                        } else {
-                            $('#sub_cat').html('<option value="">No variants found</option>');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Error fetching subcategories:", error);
-                        $('#sub_cat').html('<option value="">Error fetching subcategories</option>');
-                    }
-                });
-            } else {
-                $.notify("Please choose a category first", "error");
-                $('#sub_cat').html('<option value="">Please choose a category first</option>');
-            }
-        });
+        // var maxImages = 5;
+        // var count = 0; 
+
+        // $('#add_more').click(function () {
+        //     if (count < maxImages) {
+        //         var newInput = '<div class="form-group">' +
+        //             '<div class="row">' +
+        //             '<div class="col-md-6">' +
+        //             '<label for="primg">Product Image</label><span class="text-danger">*</span>' +
+        //             '<input type="file" class="form-control product-image" name="product_image[]" multiple accept=".jpg, .png, .jpeg">' +
+        //             '</div>' +
+        //             '<div class="col-md-2 mt-4">' +
+        //             '<button type="button" class="btn btn-outline-danger btn-sm remove-image"><i class="fa-solid fa-xmark"></i></button>' +
+        //             '</div>' +
+        //             '</div>' +
+        //             '</div>';
+        //         $('#additionalImages').append(newInput);
+        //         $('#additionalImages .form-group:last-child input[type="file"]').change(function () {
+        //             var file = this.files[0];
+        //             if (file) {
+        //                 var fileSize = file.size / 1024 / 1024;
+        //                 if (fileSize > 1) {
+        //                     $.notify('File size exceeds 1MB limit.');
+        //                     $(this).val('');
+        //                 }
+        //             }
+        //         });
+        //         count++;
+        //     } else {
+        //         // alert('Maximum ' + maxImages + ' additional images allowed.');
+        //         $.notify('Maximum ' + maxImages + ' additional images allowed.');
+        //     }
+        // });
+
+        // $('#additionalImages').on('click', '.remove-image', function () {
+        //     $(this).closest('.form-group').remove();
+        //     // console.log('click');
+        // });
+        
 
         jQuery(document).ready(function (e) {
-            $('#productsForm').bootstrapValidator({
+            $('#productsImageForm').bootstrapValidator({
                 fields: {
-                    'cat_name': {
+                    'prod_name': {
                         validators: {
                             notEmpty: {
-                                message: "Please choose Category of product"
+                                message: "Please Select Product Name"
                             },
                         }
                     },
-                    'product_name': {
+                    'product_image': {
                         validators: {
                             notEmpty: {
-                                message: "Please Enter Product Name"
+                                message: "Please Choose Image File"
+                            },
+                            file: {
+                                extension: 'jpeg,jpg,png',
+                                type: 'image/jpeg,image/png',
+                                maxSize: 1024 * 1024,
+                                message: 'The selected file is not valid or exceeds 1 MB in size',
                             },
                         }
                     },
-                    'sub_cat': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please select Sub-Category'
-                            }
-                        }
-                    },
-                    'product_code': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please enter Product Code'
-                            }
-                        }
-                    },
-                    'brand': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please select Brand Name"
-                            }
-                        }
-                    },
-                    'tax': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please enter Tax'
-                            }
-                        }
-                    },
-                    'orderno': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please enter product Order Number'
-                            }
-                        }
-                    },
-                },
+                }
             }).on('success.form.bv', function (e) {
                 e.preventDefault();
                 var $form = $(e.target);
                 var bv = $form.data('bootstrapValidator');
-                // var formData = new FormData($form[0]);
-                var formData = $form.serialize();
+                var formData = new FormData($form[0]);
+                // var formData = $form.serialize();
                 // console.log(formData);
-                // Use AJAX to submit form data
                 $.ajax({
-                    url: "<?= base_url('admin/products') ?>",
+                    url: "<?= base_url('admin/productImage') ?>",
                     type: 'POST',
                     data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         // console.log(response);
                         if (response.status === 'success') {
@@ -330,7 +250,8 @@
             });
         });
 
-        var table = $('#productTable').DataTable({
+
+        var table = $('#productImageTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
@@ -342,8 +263,11 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
+            // columnDefs: [
+            //     { targets: [0, 5, 10, 11, 12], orderable: false }
+            // ],
             ajax: {
-                url: "<?= base_url('admin/fetchproducts') ?>",
+                url: "<?= base_url('admin/fetchproductImage') ?>",
                 type: "GET",
                 error: function (xhr, error, thrown) {
                     // console.log("AJAX error:", xhr, error, thrown);

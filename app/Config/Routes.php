@@ -50,6 +50,15 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     
     $routes->get('products', 'Home::Products');
     $routes->post('products', 'Home::Products');
-    $routes->post('fetchSubCategoryData', 'Home::fetchSubCategoryData');
     $routes->get('fetchproducts', 'Home::fetchproducts');
+
+    $routes->get('productImage', 'Home::productImage');
+    $routes->post('productImage', 'Home::productImage');
+    $routes->get('fetchproductImage', 'Home::fetchproductImage');
+
+    $routes->get('productDetail', 'Home::productDetail');
+    $routes->post('productDetail', 'Home::productDetail');
+    $routes->get('fetchproductDetail', 'Home::fetchproductDetail');
+
+    $routes->post('fetchSubCategoryData', 'Home::fetchSubCategoryData');
 });

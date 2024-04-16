@@ -21,13 +21,11 @@
             <div class="row">
                 <!-- <div class="col-lg-3 col-md-6"> -->
                 <div class="col-lg-6">
-                    <h1>Products</h1>
+                    <h1>Products Details</h1>
                 </div>
                 <div class="col-lg-6 text-lg-right">
-                    <button class="btn btn-outline-primary" title="Add Category" id="add_category"><i
-                            class="fas fa-plus"></i> Add Products</button>
-                    <!-- <button class="btn btn-outline-warning ml-2" title="Add Image" id="add_image"><i
-                            class="fas fa-plus"></i> Add Image</button> -->
+                    <button class="btn btn-outline-primary ml-2" title="Add Detail" id="add_detail"><i
+                            class="fas fa-plus"></i> Add Product Detail</button>
                 </div>
                 <!-- </div> -->
                 <!-- Column -->
@@ -35,71 +33,54 @@
             <!-- Product Form -->
             <div class="category-from">
                 <div class="category_container" style="display: none;">
-                    <form id="productsForm" enctype="multipart/form-data">
+                    <form id="productsDetailsForm" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-lg-4 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
                                     <label for="product_name">Product Name</label><span class="text-danger">*</span>
-                                    <input type="text" class="form-control onlychars" name="product_name"
-                                        id="product_name" placeholder="Enter Product Name">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="form-group">
-                                    <label for="cat_name">Category Name</label><span class="text-danger">*</span>
-                                    <select name="cat_name" class="form-control" id="cat_name">
-                                        <option value="" selected="selected">Please choose an option</option>
-                                        <?php foreach ($category as $option): ?>
-                                            <option value="<?php echo $option['id']; ?>"><?php echo $option['cname']; ?>
+                                    <select class="form-control" name="prod_name" id="prod_name">
+                                        <option value="" selected="selceted">Please select product</option>
+                                        <?php foreach ($product as $option): ?>
+                                            <option value="<?php echo $option['id']; ?>">
+                                                <?= $option['ptitle']; ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="sub_cat">Sub-Category</label><span class="text-danger">*</span>
-                                <select class="form-control" name="sub_cat" id="sub_cat">
-                                    <option value="" selected="selected">Please choose an option</option>
-
-                                </select>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="prosize">Product Size</label><span class="text-danger">*</span>
+                                    <!-- <input type="" class="form-control" name="product_size" multiple
+                                        id="product_size"> -->
+                                    <select class="form-control" name="product_size" id="product_size">
+                                        <option value="" selected="selected">Please Choose Product Size</option>
+                                        <?php foreach ($size as $option): ?>
+                                            <option value="<?php echo $option['s_id']; ?>">
+                                                <?= $option['sname']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-
                         <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                                <label for="prcode">Product Code</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlyalphanum" name="product_code"
-                                    id="product_code" placeholder="Enter Product Code">
+                            <div class="col-lg-6 col-md-6">
+                                <label for="mrp">MRP (In Rs)</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlynum" name="mrp" id="mrp"
+                                    placeholder="Enter MRP">
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="Brand">Brand Name</label><span class="text-danger">*</span>
-                                <select class="form-control" name="brand" id="brand">
-                                    <option value="" selected="selected">Please choose an option</option>
-                                    <?php foreach ($brand as $option): ?>
-                                        <option value="<?php echo $option['id']; ?>">
-                                            <?= $option['name']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="tax">Tax %</label>
-                                <input type="text" class="form-control onlynum" name="tax" id="tax"
-                                    placeholder="Enter Tax">
+                            <div class="col-lg-6 col-md-6">
+                                <label for="sp">Selling Price (In Rs)</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlynum" name="sp" id="sp"
+                                    placeholder="Enter Selling Price">
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-lg-4 col-md-6">
-                                <label for="orderno">Order Number</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlynum" name="orderno" id="orderno"
-                                    placeholder="Enter Product Order number">
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-lg-12 col-md-6">
-                                <label for="desc">Product Description</label>
-                                <!-- <span class="text-danger">*</span> -->
-                                <textarea name="desc" class="form-control" id="desc" cols="50"></textarea>
+                            <div class="col-lg-6 col-md-6">
+                                <label for="prstck">Product Stock</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlynum" name="product_stock" id="product_stock"
+                                    placeholder="Enter Product Stock">
                             </div>
                         </div>
                         <button type="submit" id="save" name="save" class="btn btn-primary mt-2">Submit</button>
@@ -150,21 +131,14 @@
             </div> -->
             <!-- Edit Categories Form  End -->
             <div class="table-responsive">
-                <table class="table table-bordered" id="productTable" style="width: 1100px;">
+                <table class="table table-bordered" id="productDetailTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <th>Order Number</th>
                         <th>Product Name</th>
-                        <th>Category Name</th>
-                        <th>Sub Category Name</th>
-                        <th>Product Code</th>
-                        <th>Brand Name</th>
-                        <th>Tax</th>
-                        <th>Product Description</th> 
-                        <!-- <th>Product MRP</th>
+                        <th>Product Size</th>
+                        <th>Product MRP</th>
                         <th>Product Selling Price</th>
-                        <th>Product Stock</th> -->
-                        <th>Status</th>
+                        <th>Product Stock</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
@@ -192,112 +166,56 @@
 
 <script>
     $(document).ready(function () {
-        $('body').on('keyup', ".onlychars", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
-        });
+
         $('body').on('keyup', ".onlynum", function (event) {
             this.value = this.value.replace(/[^[0-9]]*/gi, '');
         });
-        $('body').on('keyup', ".onlyalphanum", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z0-9]]*/gi, '');
-        });
 
-        $('#add_category').click(function (e) {
+        $('#add_detail').click(function (e) {
             e.preventDefault();
             // console.log('clicked');
             $(".category_container").show();
         });
 
-        ClassicEditor
-            .create(document.querySelector('#desc'))
-            .catch(error => {
-                console.error(error);
-            });
-
-        $('#cat_name').change(function () {
-            var catID = $(this).val();
-            if (catID != '') {
-                $.ajax({
-                    method: "POST",
-                    url: "<?= base_url('admin/fetchSubCategoryData') ?>",
-                    data: {
-                        'id': catID
-                    },
-                    success: function (res) {
-                        if (res.status == 'success') {
-                            var options = '<option value="">Please choose an option</option>';
-                            $.each(res.message, function (index, value) {
-                                options += '<option value="' + value.id + '">' + value.sname + '</option>';
-                            });
-                            $('#sub_cat').html(options);
-                        } else {
-                            $('#sub_cat').html('<option value="">No variants found</option>');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Error fetching subcategories:", error);
-                        $('#sub_cat').html('<option value="">Error fetching subcategories</option>');
-                    }
-                });
-            } else {
-                $.notify("Please choose a category first", "error");
-                $('#sub_cat').html('<option value="">Please choose a category first</option>');
-            }
-        });
-
         jQuery(document).ready(function (e) {
-            $('#productsForm').bootstrapValidator({
+            $('#productsDetailsForm').bootstrapValidator({
                 fields: {
-                    'cat_name': {
+                    'prod_name': {
                         validators: {
                             notEmpty: {
-                                message: "Please choose Category of product"
+                                message: "Please Select Product Name"
                             },
                         }
                     },
-                    'product_name': {
+                    'product_size': {
                         validators: {
                             notEmpty: {
-                                message: "Please Enter Product Name"
+                                message: "Please Choose Product Size"
                             },
                         }
                     },
-                    'sub_cat': {
+                    'mrp': {
                         validators: {
                             notEmpty: {
-                                message: 'Please select Sub-Category'
-                            }
+                                message: "Please Enter MRP"
+                            },
                         }
                     },
-                    'product_code': {
+                    'sp': {
                         validators: {
                             notEmpty: {
-                                message: 'Please enter Product Code'
-                            }
+                                message: "Please Enter Selling Price"
+                            },
                         }
                     },
-                    'brand': {
+                    'product_stock': {
                         validators: {
                             notEmpty: {
-                                message: "Please select Brand Name"
-                            }
+                                message: "Please Enter Product Stock"
+                            },
                         }
                     },
-                    'tax': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please enter Tax'
-                            }
-                        }
-                    },
-                    'orderno': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please enter product Order Number'
-                            }
-                        }
-                    },
-                },
+                }
             }).on('success.form.bv', function (e) {
                 e.preventDefault();
                 var $form = $(e.target);
@@ -305,15 +223,13 @@
                 // var formData = new FormData($form[0]);
                 var formData = $form.serialize();
                 // console.log(formData);
-                // Use AJAX to submit form data
                 $.ajax({
-                    url: "<?= base_url('admin/products') ?>",
+                    url: "<?= base_url('admin/productDetail') ?>",
                     type: 'POST',
                     data: formData,
                     success: function (response) {
                         // console.log(response);
                         if (response.status === 'success') {
-                            // ClassicEditor.instances.desc.setData('');
                             $('input, select').val('');
                             $('.category_container').hide();
                             $.notify(response.message, "success");
@@ -330,7 +246,8 @@
             });
         });
 
-        var table = $('#productTable').DataTable({
+
+        var table = $('#productDetailTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
@@ -342,8 +259,11 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
+            // columnDefs: [
+            //     { targets: [0, 5, 10, 11, 12], orderable: false }
+            // ],
             ajax: {
-                url: "<?= base_url('admin/fetchproducts') ?>",
+                url: "<?= base_url('admin/fetchproductDetail') ?>",
                 type: "GET",
                 error: function (xhr, error, thrown) {
                     // console.log("AJAX error:", xhr, error, thrown);
@@ -354,7 +274,7 @@
             }
         });
 
-
+      
 
         // $(document).on('click', '#editCat', function (e) {
         //     e.preventDefault();

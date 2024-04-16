@@ -809,46 +809,273 @@ class Home extends BaseController
         } elseif ($this->request->getMethod() == 'post') {
             $cn = $this->request->getPost('cat_name');
             $pn = $this->request->getPost('product_name');
-            $cvi = $this->request->getPost('cat_var');
-            $qt = $this->request->getPost('qty');
+            $sc = $this->request->getPost('sub_cat');
             $pc = $this->request->getPost('product_code');
-            $pi = $this->request->getFile('product_image');
-            $igst = $this->request->getPost('igst');
-            $cgst = $this->request->getPost('cgst');
-            $sgst = $this->request->getPost('sgst');
-            $pp = $this->request->getPost('purchase_prc');
+            $br = $this->request->getPost('brand');
+            $tax = $this->request->getPost('tax');
+            $on = $this->request->getPost('orderno');
+            $ds = $this->request->getPost('desc');
+
+            // if ($pi->isValid() && !$pi->hasMoved()) {
+            //     $newImageName = $pi->getRandomName();
+            //     $pi->move("../public/assets/uploads/product/", $newImageName);
+
+            $data = [
+                'cat_id' => esc($cn),
+                'subcat_id' => esc($sc),
+                'brand_id' => esc($br),
+                'ptitle' => esc($pn),
+                'pcode' => strtoupper(esc($pc)),
+                'overview' => esc($ds),
+                'title' => esc($pn),
+                'tax' => esc($tax),
+                'orderno' => esc($on),
+            ];
+
+            $catModel = new \App\Models\ProductModel();
+            try {
+                $query = $catModel->insert($data);
+
+                if ($query) {
+                    $response = ['status' => 'success', 'message' => 'Product Added Successfully!'];
+                } else {
+                    $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+                }
+                return $this->response->setJSON($response);
+            } catch (\Exception $e) {
+                $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
+                return $this->response->setStatusCode(500)->setJSON($response);
+            }
+        }
+    }
+
+    public function fetchproducts()
+    {
+        try {
+            $fetchProduct = new \App\Models\ProductModel();
+
+            $draw = $_GET['draw'];
+            $start = $_GET['start'];
+            $length = $_GET['length'];
+            $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
+
+            $fetchProduct->select('products.*, category.cname');
+            $fetchProduct->join('category', 'category.id = products.cat_id');
+
+            $fetchProduct->select('products.*, subcategory.sname');
+            $fetchProduct->join('subcategory', 'subcategory.id = products.subcat_id');
+
+            $fetchProduct->select('products.*, brand.name');
+            $fetchProduct->join('brand', 'brand.id = products.brand_id');
+
+            $fetchProduct->orderBy($orderColumnName, $orderDir);
+
+            // if (!empty($searchValue)) {
+            //     $fetchProduct->groupStart();
+            //     $fetchProduct->orLike('cat_name', $searchValue);
+            //     $fetchProduct->groupEnd();
+            // }
+
+            $data['product'] = $fetchProduct->findAll($length, $start);
+            $totalRecords = $fetchProduct->countAll();
+            // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+            $totalFilterRecords = $totalRecords;
+            $associativeArray = [];
+
+            foreach ($data['product'] as $row) {
+                $status = $row['status'];
+
+                if ($status == 0) {
+                    $buttonCSSClass = 'btn-outline-danger';
+                    $buttonName = 'In-Active';
+                } elseif ($status == 1) {
+                    $buttonCSSClass = 'btn-outline-success';
+                    $buttonName = 'Active';
+                }
+                $associativeArray[] = array(
+                    0 => $row['id'],
+                    1 => $row['orderno'],
+                    2 => ucfirst($row['ptitle']),
+                    3 => ucfirst($row['cname']),
+                    4 => ucfirst($row['sname']),
+                    5 => $row['pcode'],
+                    6 => ucfirst($row['name']),
+                    7 => $row['tax'] . "%",
+                    8 => html_entity_decode($row['overview']),
+                    9 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    10 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+                );
+            }
+
+
+            if (empty($data['product'])) {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'data' => []
+                );
+            } else {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => $totalRecords,
+                    'recordsFiltered' => $totalFilterRecords,
+                    'data' => $associativeArray
+                );
+            }
+            return $this->response->setJSON($output);
+        } catch (\Exception $e) {
+            // Log the caught exception
+            log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+            // Return an error response
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+    }
+
+    public function productDetail()
+    {
+        if ($this->request->getMethod() == 'get') {
+            $pr = new \App\Models\ProductModel();
+            $ps = new \App\Models\UnitMasterModel();
+
+            $data['product'] = $pr->where('status', 1)->findAll();
+            $data['size'] = $ps->where('status', 1)->findAll();
+            return view('admin/productDetail', $data);
+        } elseif ($this->request->getMethod() == 'post') {
+            $prn = $this->request->getPost('prod_name');
+            $prs = $this->request->getPost('product_size');
             $mrp = $this->request->getPost('mrp');
             $sp = $this->request->getPost('sp');
-            $ps = $this->request->getPost('product_stock');
-            $ds = $this->request->getPost('desc');
+            $prst = $this->request->getPost('product_stock');
+
+            $data = [
+                'pid' => esc($prn),
+                'sid' => esc($prs),
+                'mrp' => esc($mrp),
+                'selling_price' => esc($sp),
+                'stock' => esc($prst)
+            ];
+
+            $prd = new \App\Models\ProductDetailModel();
+            try {
+                $query = $prd->insert($data);
+
+                if ($query) {
+                    $response = ['status' => 'success', 'message' => 'Product Details Added Successfully!'];
+                } else {
+                    $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+                }
+                return $this->response->setJSON($response);
+            } catch (\Exception $e) {
+                $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
+                return $this->response->setStatusCode(500)->setJSON($response);
+            }
+
+        }
+    }
+
+    public function fetchproductDetail()
+    {
+        try {
+            $fetchProduct = new \App\Models\ProductDetailModel();
+
+            $draw = $_GET['draw'];
+            $start = $_GET['start'];
+            $length = $_GET['length'];
+            $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
+
+            $fetchProduct->select('product_size.*, products.ptitle');
+            $fetchProduct->join('products', 'products.id = product_size.pid');
+
+            $fetchProduct->select('product_size.*, sizes.sname');
+            $fetchProduct->join('sizes', 'sizes.s_id = product_size.sid');
+
+
+            $fetchProduct->orderBy($orderColumnName, $orderDir);
+
+            // if (!empty($searchValue)) {
+            //     $fetchProduct->groupStart();
+            //     $fetchProduct->orLike('cat_name', $searchValue);
+            //     $fetchProduct->groupEnd();
+            // }
+
+            $data['product'] = $fetchProduct->findAll($length, $start);
+            $totalRecords = $fetchProduct->countAll();
+            // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+            $totalFilterRecords = $totalRecords;
+            $associativeArray = [];
+
+            foreach ($data['product'] as $row) {
+
+                $associativeArray[] = array(
+                    0 => $row['pro_size'],
+                    1 => ucfirst($row['ptitle']),
+                    2 => ucfirst($row['sname']),
+                    3 => ucfirst($row['mrp']),
+                    4 => ucfirst($row['selling_price']),
+                    5 => $row['stock'],
+                    6 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+                );
+            }
+
+
+            if (empty($data['product'])) {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'data' => []
+                );
+            } else {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => $totalRecords,
+                    'recordsFiltered' => $totalFilterRecords,
+                    'data' => $associativeArray
+                );
+            }
+            return $this->response->setJSON($output);
+        } catch (\Exception $e) {
+            // Log the caught exception
+            log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+            // Return an error response
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+    }
+    public function productImage()
+    {
+        if ($this->request->getMethod() == 'get') {
+            $prm = new \App\Models\ProductModel();
+
+            $data['products'] = $prm->where('status', 1)->findAll();
+            return view('admin/productImage', $data);
+        } elseif ($this->request->getMethod() == 'post') {
+            $pn = $this->request->getPost('prod_name');
+            $pi = $this->request->getFile('product_image');
 
             if ($pi->isValid() && !$pi->hasMoved()) {
                 $newImageName = $pi->getRandomName();
                 $pi->move("../public/assets/uploads/product/", $newImageName);
 
                 $data = [
-                    'cat_name_id' => esc($cn),
-                    'product_name' => esc($pn),
-                    'cat_var_id' => esc($cvi),
-                    'qty' => esc($qt),
-                    'product_code' => esc($pc),
-                    'product_image' => esc($newImageName),
-                    'igst' => esc($igst),
-                    'cgst' => esc($cgst),
-                    'sgst' => esc($sgst),
-                    'purchase_prc' => esc($pp),
-                    'mrp' => esc($mrp),
-                    'sell_p' => esc($sp),
-                    'product_stock' => esc($ps),
-                    'pr_desc' => esc($ds),
+                    'pid' => esc($pn),
+                    'p_image' => esc($newImageName),
                 ];
 
-                $catModel = new \App\Models\ProductModel();
+                $catModel = new \App\Models\ProductImageModel();
                 try {
                     $query = $catModel->insert($data);
 
                     if ($query) {
-                        $response = ['status' => 'success', 'message' => 'Product Added Successfully!'];
+                        $response = ['status' => 'success', 'message' => 'Product Image Added Successfully!'];
                     } else {
                         $response = ['status' => 'error', 'message' => 'Something went wrong!'];
                     }
@@ -858,95 +1085,72 @@ class Home extends BaseController
                     return $this->response->setStatusCode(500)->setJSON($response);
                 }
             }
-
         }
     }
 
+    public function fetchproductImage()
+    {
+        try {
+            $fetchProduct = new \App\Models\ProductImageModel();
 
-    // public function fetchproducts()
-    // {
-    //     try {
-    //         $fetchProduct = new \App\Models\ProductModel();
+            $draw = $_GET['draw'];
+            $start = $_GET['start'];
+            $length = $_GET['length'];
+            $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
 
-    //         $draw = $_GET['draw'];
-    //         $start = $_GET['start'];
-    //         $length = $_GET['length'];
-    //         $searchValue = $_GET['search']['value'];
-    //         $orderColumnIndex = $_GET['order'][0]['column'];
-    //         $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
-    //         $orderDir = $_GET['order'][0]['dir'];
-
-    //         $fetchProduct->select('products.*, category.cat_name');
-    //         $fetchProduct->join('category', 'category.id = products.cat_name_id');
-
-    //         $fetchProduct->select('products.*, categorization.cat_variant');
-    //         $fetchProduct->join('categorization', 'categorization.id = products.cat_var_id');
-
-    //         $fetchProduct->orderBy($orderColumnName, $orderDir);
-
-    //         // if (!empty($searchValue)) {
-    //         //     $fetchProduct->groupStart();
-    //         //     $fetchProduct->orLike('cat_name', $searchValue);
-    //         //     $fetchProduct->groupEnd();
-    //         // }
-
-    //         $data['product'] = $fetchProduct->findAll($length, $start);
-    //         $totalRecords = $fetchProduct->countAll();
-    //         // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
-    //         $totalFilterRecords = $totalRecords;
-    //         $associativeArray = [];
-
-    //         foreach ($data['product'] as $row) {
-    //             $status = $row['status'];
-
-    //             if ($status == 0) {
-    //                 $buttonCSSClass = 'btn-outline-danger';
-    //                 $buttonName = 'In-Active';
-    //             } elseif ($status == 1) {
-    //                 $buttonCSSClass = 'btn-outline-success';
-    //                 $buttonName = 'Active';
-    //             }
-    //             $associativeArray[] = array(
-    //                 0 => $row['id'],
-    //                 1 => ucfirst($row['product_name']),
-    //                 2 => $row['cat_name'],
-    //                 3 => $row['qty'] . ' ' . $row['cat_variant'],
-    //                 4 => $row['product_code'],
-    //                 5 => '<img src="../assets/uploads/product/' . $row['product_image'] . '" height="100px" width="100px">',
-    //                 6 => $row['purchase_prc'],
-    //                 7 => $row['mrp'],
-    //                 8 => $row['sell_p'],
-    //                 9 => $row['product_stock'],
-    //                 10 => html_entity_decode($row['pr_desc']),
-    //                 11 => '<button class="btn btn-outline-success" id="statusBtn" data-id="1" data-status="active">Active</button>',
-    //                 12 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
-    //                 <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
-    //             );
-    //         }
+            $fetchProduct->select('product_images.*, products.ptitle');
+            $fetchProduct->join('products', 'products.id = product_images.pid');
 
 
-    //         if (empty($data['product'])) {
-    //             $output = array(
-    //                 'draw' => intval($draw),
-    //                 'recordsTotal' => 0,
-    //                 'recordsFiltered' => 0,
-    //                 'data' => []
-    //             );
-    //         } else {
-    //             $output = array(
-    //                 'draw' => intval($draw),
-    //                 'recordsTotal' => $totalRecords,
-    //                 'recordsFiltered' => $totalFilterRecords,
-    //                 'data' => $associativeArray
-    //             );
-    //         }
-    //         return $this->response->setJSON($output);
-    //     } catch (\Exception $e) {
-    //         // Log the caught exception
-    //         log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
-    //         // Return an error response
-    //         return $this->response->setJSON(['error' => 'Internal Server Error']);
-    //     }
-    // }
+            $fetchProduct->orderBy($orderColumnName, $orderDir);
+
+            // if (!empty($searchValue)) {
+            //     $fetchProduct->groupStart();
+            //     $fetchProduct->orLike('cat_name', $searchValue);
+            //     $fetchProduct->groupEnd();
+            // }
+
+            $data['product'] = $fetchProduct->findAll($length, $start);
+            $totalRecords = $fetchProduct->countAll();
+            // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+            $totalFilterRecords = $totalRecords;
+            $associativeArray = [];
+
+            foreach ($data['product'] as $row) {
+
+                $associativeArray[] = array(
+                    0 => $row['id'],
+                    1 => ucfirst($row['ptitle']),
+                    2 => '<img src="../assets/uploads/product/' . $row['p_image'] . '" height="100px" width="100px">',
+                    3 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+                );
+            }
+
+
+            if (empty($data['product'])) {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'data' => []
+                );
+            } else {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => $totalRecords,
+                    'recordsFiltered' => $totalFilterRecords,
+                    'data' => $associativeArray
+                );
+            }
+            return $this->response->setJSON($output);
+        } catch (\Exception $e) {
+            log_message('error', 'Error in fetch_Product Image: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+    }
 
 }
