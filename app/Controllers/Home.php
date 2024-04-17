@@ -816,10 +816,6 @@ class Home extends BaseController
             $on = $this->request->getPost('orderno');
             $ds = $this->request->getPost('desc');
 
-            // if ($pi->isValid() && !$pi->hasMoved()) {
-            //     $newImageName = $pi->getRandomName();
-            //     $pi->move("../public/assets/uploads/product/", $newImageName);
-
             $data = [
                 'cat_id' => esc($cn),
                 'subcat_id' => esc($sc),

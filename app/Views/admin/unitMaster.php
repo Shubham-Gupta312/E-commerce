@@ -37,7 +37,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
                                 <label for="cat_name">Unit Name</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlychars" name="unit" id="unit"
+                                <input type="text" class="form-control alhpanum" name="unit" id="unit"
                                     placeholder="Enter Size (kg, gms)">
                                 <!-- <select name="unit" class="form-control" id="unit">
                                     <option value="" selected="selected">Please Choose one</option>
@@ -72,7 +72,7 @@
                                     <input type="hidden" name="id" id="catId" val="">
                                     <div class="col-lg-12 col-md-6">
                                         <label for="unit name">Unit Name</label><span class="text-danger">*</span>
-                                        <input type="text" class="form-control onlychars" name="edit_unit_name" id="edit_unit_name"
+                                        <input type="text" class="form-control alhpanum" name="edit_unit_name" id="edit_unit_name"
                                             placeholder="Enter Size (kg, gms)">
                                     </div>
                                 </div>
@@ -120,8 +120,8 @@
 
 <script>
     $(document).ready(function () {
-        $('body').on('keyup', ".onlychars", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z]]*/gi, '');
+        $('body').on('keyup', ".alhpanum", function (event) {
+            this.value = this.value.replace(/[^[A-Za-z0-9 ]]*/gi, '');
         });
 
         $('#add_category').click(function (e) {
