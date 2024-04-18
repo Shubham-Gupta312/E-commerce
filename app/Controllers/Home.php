@@ -32,7 +32,7 @@ class Home extends BaseController
                 $bi->move("../public/assets/uploads/brand/", $newImageName);
 
                 $data = [
-                    'name' => esc($bn),
+                    'name' => ucwords(esc($bn)),
                     'brand_img' => esc($newImageName)
                 ];
 
@@ -175,7 +175,7 @@ class Home extends BaseController
         $ebi = $this->request->getFile('eimage');
 
         $data = [
-            'name' => esc($ebn),
+            'name' => ucwords(esc($ebn)),
         ];
 
         if ($ebi && $ebi->isValid() && !$ebi->hasMoved()) {
@@ -223,7 +223,7 @@ class Home extends BaseController
                 $newImageName = $catImg->getRandomName();
                 $catImg->move("../public/assets/uploads/category/", $newImageName);
                 $data = [
-                    'cname' => esc($catName),
+                    'cname' => ucwords(esc($catName)),
                     'image' => esc($newImageName),
                     'orderno' => esc($order),
                 ];
@@ -369,7 +369,7 @@ class Home extends BaseController
         $on = $this->request->getPost('eorderno');
 
         $data = [
-            'cname' => esc($cn),
+            'cname' => ucwords(esc($cn)),
             'orderno' => esc($on),
         ];
 
@@ -423,7 +423,7 @@ class Home extends BaseController
                 $data = [
                     'cat_id' => esc($ct),
                     'sub_img' => esc($newImageName),
-                    'sname' => esc($sct),
+                    'sname' => ucwords(esc($sct)),
                 ];
 
                 $catModel = new \App\Models\SubCatModel();
@@ -573,7 +573,7 @@ class Home extends BaseController
 
         $data = [
             'cat_id' => esc($edc),
-            'sname' => esc($edsc),
+            'sname' => ucwords(esc($edsc)),
         ];
 
         if ($edsi && $edsi->isValid() && !$edsi->hasMoved()) {
@@ -616,7 +616,7 @@ class Home extends BaseController
             $un = $this->request->getPost('unit');
 
             $data = [
-                'sname' => esc($un),
+                'sname' => ucwords(esc($un)),
             ];
 
             // print_r($data);
@@ -755,7 +755,7 @@ class Home extends BaseController
         $un = $this->request->getPost('edit_unit_name');
 
         $data = [
-            'sname' => esc($un),
+            'sname' => ucwords(esc($un)),
         ];
         // print_r($data);
         $query = $updateCat->updateCategorization(esc($id), $data);
@@ -820,10 +820,10 @@ class Home extends BaseController
                 'cat_id' => esc($cn),
                 'subcat_id' => esc($sc),
                 'brand_id' => esc($br),
-                'ptitle' => esc($pn),
+                'ptitle' => ucwords(esc($pn)),
                 'pcode' => strtoupper(esc($pc)),
                 'overview' => esc($ds),
-                'title' => esc($pn),
+                'title' => ucwords(esc($pn)),
                 'tax' => esc($tax),
                 'orderno' => esc($on),
             ];
