@@ -48,9 +48,11 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     $routes->post('updateUnitMaster', 'Home::updateUnitMaster');
     $routes->post('deleteUnitMaster', 'Home::deleteUnitMaster');
     
+    $routes->get('validateProductCode', 'Home::validate_ProductCode');
     $routes->get('products', 'Home::Products');
     $routes->post('products', 'Home::Products');
     $routes->get('fetchproducts', 'Home::fetchproducts');
+    $routes->post('productStatus', 'Home::productStatus');
 
     $routes->get('productImage', 'Home::productImage');
     $routes->post('productImage', 'Home::productImage');

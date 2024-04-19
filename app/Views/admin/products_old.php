@@ -107,54 +107,46 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-12 col-md-12 text-right">
-                                <button type="button" class="btn btn-outline-info" id="add_size">Add Size</button>
+                                <button class="btn btn-outline-info" id="add_size">Add Size</button>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-3 col-md-4">
                                 <label for="Sizes">Sizes</label><span class="text-danger">*</span>
-                                <select class="form-control" name="product_size[]" id="product_size">
+                                <select class="form-control" name="product_size" id="product_size">
                                     <option value="" selected="selected">Please choose an option</option>
-                                    <?php foreach ($unit as $option): ?>
-                                        <option value="<?php echo $option['s_id']; ?>">
-                                            <?= $option['sname']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
+                                    <option value="option 1">option 1</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-4">
                                 <label for="mrp">MRP (In Rs)</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlynum" name="mrp[]" id="mrp"
+                                <input type="text" class="form-control onlynum" name="mrp" id="mrp"
                                     placeholder="Enter MRP (Eg. 1000)">
                             </div>
                             <div class="col-lg-3 col-md-4">
                                 <label for="sp">Selling Price (In Rs)</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlynum" name="sp[]" id="sp"
+                                <input type="text" class="form-control onlynum" name="sp" id="sp"
                                     placeholder="Enter Selling Price (Eg. 1000)">
                             </div>
                             <div class="col-lg-3 col-md-4">
                                 <label for="prstck">Product Stock</label>
-                                <input type="text" class="form-control onlynum" name="product_stock[]"
-                                    id="product_stock" placeholder="Enter Product Stock (Eg. 10)">
+                                <input type="text" class="form-control onlynum" name="product_stock" id="product_stock"
+                                    placeholder="Enter Product Stock (Eg. 10)">
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div id="additionalSize"></div>
-                        </div>
-
-                        <div class="row mt-2">
                             <div class="col-lg-12 col-md-12 text-right">
-                                <button type="button" class="btn btn-outline-warning" id="add_image">Add Image</button>
+                                <button class="btn btn-outline-warning" id="add_image">Add Image</button>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
                                     <label for="primg">Product Image</label><span class="text-danger">*</span>
-                                    <input type="file" class="form-control" name="product_image[]" id="product_image"
-                                        accept=".jpg, .png, .jpeg">
-                                    <!-- <input type="file" class="form-control" name="product_image" id="product_image"
-                                        accept=".jpg, .png, .jpeg"> -->
+                                    <!-- <input type="file" class="form-control" name="product_image[]" multiple
+                                        id="product_image" accept=".jpg, .png, .jpeg"> -->
+                                    <input type="file" class="form-control" name="product_image" multiple
+                                        id="product_image" accept=".jpg, .png, .jpeg">
                                 </div>
                                 <div class="note_form">
                                     <small>Less than or equal to 1Mb </small>
@@ -165,28 +157,21 @@
                                 <input type="url" name="ylink" id="ylink" class="form-control"
                                     placeholder="Eg : https://www.youtube.com/watch?v=y0D1cluPbsQ">
                             </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div id="additionalImages"></div>
-                            </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-6 col-md-6">
                                 <label for="meta_title">Meta Title </label><small class="text-danger">(Maximum 60
                                     characters
                                     are allowed)</small>
-                                <textarea name="meta_title" id="meta_title" class="form-control onlyalphanumhyp"
-                                    cols="30" placeholder="Enter Meta Title" data-bv-stringlength="true"
-                                    data-bv-stringlength-max="60"
-                                    data-bv-stringlength-message="The meta title must be less than or equal to 60 characters"></textarea>
+                                <textarea name="meta_title" id="meta_title" class="form-control" cols="30"
+                                    placeholder="Enter Meta Title"></textarea>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <label for="meta_desc">Meta Description </label><small class="text-danger">(Maximum 160
                                     characters
                                     are allowed)</small>
-                                <textarea name="meta_desc" id="meta_desc" class="form-control onlyalphanumhyp" cols="30"
-                                    placeholder="Enter Meta Description" data-bv-stringlength="true"
-                                    data-bv-stringlength-max="160"
-                                    data-bv-stringlength-message="The meta description must be less than or equal to 160 characters"></textarea>
+                                <textarea name="meta_desc" id="meta_desc" class="form-control" cols="30"
+                                    placeholder="Enter Meta Description"></textarea>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -247,14 +232,14 @@
                 <table class="table table-bordered" id="productTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <!-- <th>Order Number</th> -->
+                        <th>Order Number</th>
                         <th>Product Name</th>
                         <th>Category Name</th>
                         <th>Sub Category Name</th>
                         <th>Product Code</th>
                         <th>Brand Name</th>
-                        <!-- <th>Tax</th> -->
-                        <!-- <th>Product Description</th> -->
+                        <th>Tax</th>
+                        <th>Product Description</th>
                         <!-- <th>Product MRP</th>
                         <th>Product Selling Price</th>
                         <th>Product Stock</th> -->
@@ -295,10 +280,6 @@
         $('body').on('keyup', ".onlyalphanum", function (event) {
             this.value = this.value.replace(/[^[A-Za-z0-9]]*/gi, '');
         });
-        $('body').on('keyup', ".onlyalphanumhyp", function (event) {
-            this.value = this.value.replace(/[^a-zA-Z0-9,\-]/g, '');
-        });
-
 
         $('#add_category').click(function (e) {
             e.preventDefault();
@@ -348,103 +329,6 @@
             }
         });
 
-        var maxSizes = 5;
-        var countSize = 0;
-
-        $('#add_size').click(function (e) {
-            e.preventDefault();
-            // console.log('clicked');
-            if (countSize < maxSizes) {
-                var newSize = '<div class="row">' + // Start a new row
-                    '<div class="col-lg-3 col-md-3">' +
-                    '<div class="form-group">' +
-                    '<label for="Size">Size</label>' +
-                    '<select class="form-control" name="product_size[]" id="product_size">' +
-                    '<option value="" selected="selected">Please choose an option</option>' +
-                    '<?php foreach ($unit as $option): ?>' +
-                        '<option value="<?php echo $option['s_id']; ?>">' +
-                        '<?php echo $option['sname']; ?>' +
-                        '</option>' +
-                        '<?php endforeach; ?>' +
-                    '</select>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-lg-3 col-md-3">' +
-                    '<div class="form-group">' +
-                    '<label for="mrp">MRP (In Rs)</label>' +
-                    '<input type="text" class="form-control onlynum" name="mrp[]" id="mrp" placeholder="Enter MRP (Eg. 1000)">' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-lg-2 col-md-3">' +
-                    '<div class="form-group">' +
-                    '<label for="sp">Selling Price (In Rs)</label>' +
-                    '<input type="text" class="form-control onlynum" name="sp[]" id="sp" placeholder="Enter Selling Price (Eg. 1000)">' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-lg-3 col-md-3">' +
-                    '<div class="form-group">' +
-                    '<label for="prstck">Product Stock</label>' +
-                    '<input type="text" class="form-control onlynum" name="product_stock[]" id="product_stock" placeholder="Enter Product Stock (Eg. 10)">' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-md-1 mt-4">' +
-                    '<button type="button" class="btn btn-outline-danger btn-sm remove-size"><i class="fa-solid fa-xmark"></i></button>' +
-                    '</div>' +
-                    '</div>'; // End of new row
-                $('#additionalSize').append(newSize);
-                countSize++;
-            } else {
-                $.notify('Maximum ' + maxSizes + ' additional sizes allowed.');
-            }
-        });
-
-        $('#additionalSize').on('click', '.remove-size', function () {
-            $(this).closest('.row').remove();
-            countSize--;
-            // console.log('click');
-        });
-
-
-        var maxImages = 5;
-        var count = 0;
-
-        $('#add_image').click(function () {
-            if (count < maxImages) {
-                var newInput =
-                    '<div class="form-group">' +
-                    '<div class="row">' +
-                    '<div class="col-lg-6 col-md-6">' +
-                    '<label for="primg">Image</label>' +
-                    '<input type="file" class="form-control product-image" name="product_image[]" accept=".jpg, .png, .jpeg">' +
-                    '</div>' +
-                    '<div class="col-md-2 mt-4">' +
-                    '<button type="button" class="btn btn-outline-danger btn-sm remove-image"><i class="fa-solid fa-xmark"></i></button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
-                $('#additionalImages').append(newInput);
-                $('#additionalImages .form-group:last-child input[type="file"]').change(function () {
-                    var file = this.files[0];
-                    if (file) {
-                        var fileSize = file.size / 1024 / 1024;
-                        if (fileSize > 1) {
-                            $.notify('File size exceeds 1MB limit.');
-                            $(this).val('');
-                        }
-                    }
-                });
-                count++;
-            } else {
-                // alert('Maximum ' + maxImages + ' additional images allowed.');
-                $.notify('Maximum ' + maxImages + ' additional images allowed.');
-            }
-        });
-
-        $('#additionalImages').on('click', '.remove-image', function () {
-            $(this).closest('.form-group').remove();
-            // console.log('click');
-        });
-
         jQuery(document).ready(function (e) {
             $('#productsForm').bootstrapValidator({
                 fields: {
@@ -458,7 +342,7 @@
                     'product_name': {
                         validators: {
                             notEmpty: {
-                                message: "Please Enter Product Title"
+                                message: "Please Enter Product Name"
                             },
                         }
                     },
@@ -487,6 +371,13 @@
                             }
                         }
                     },
+                    'tax': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter Tax'
+                            }
+                        }
+                    },
                     'orderno': {
                         validators: {
                             notEmpty: {
@@ -494,60 +385,19 @@
                             }
                         }
                     },
-                    'desc': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please Enter Product Description',
-                            }
-                        }
-                    },
-                    'product_size[]': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please choose size"
-                            }
-                        }
-                    },
-                    'mrp[]': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please Enter MRP of the Product"
-                            }
-                        }
-                    },
-                    'sp[]': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please Enter Selling Price"
-                            }
-                        }
-                    },
-                    'product_image[]': {
-                        validators: {
-                            notEmpty: {
-                                message: "Please Choose Image File"
-                            },
-                            file: {
-                                extension: 'jpeg,jpg,png',
-                                type: 'image/jpeg,image/png',
-                                maxSize: 1024 * 1024,
-                                message: 'The selected file is not valid or exceeds 1 MB in size',
-                            },
-                        }
-                    },
                 },
             }).on('success.form.bv', function (e) {
                 e.preventDefault();
                 var $form = $(e.target);
                 var bv = $form.data('bootstrapValidator');
-                var formData = new FormData($form[0]);
-                console.log(formData);
+                // var formData = new FormData($form[0]);
+                var formData = $form.serialize();
+                // console.log(formData);
+                // Use AJAX to submit form data
                 $.ajax({
                     url: "<?= base_url('admin/products') ?>",
                     type: 'POST',
                     data: formData,
-                    processData: false,
-                    contentType: false,
                     success: function (response) {
                         // console.log(response);
                         if (response.status === 'success') {
@@ -592,27 +442,27 @@
             }
         });
 
-        // $(document).on('click', '#statusBtn', function (e) {
-        //     e.preventDefault();
-        //     var button = $(this);
-        //     var data = table.row(button.closest('tr')).data();
-        //     var prdId = data[0];
-        //     var status = $(this).data('status');
-        //     var dataID = $(this).data('id');
-        //     // console.log(prdId, dataID, status);
-        //     $.ajax({
-        //         method: 'POST',
-        //         url: "<?= base_url('admin/productStatus') ?>",
-        //         data: {
-        //             'id': prdId,
-        //             'sts': status,
-        //             'dataId': dataID
-        //         },
-        //         success: function (res) {
-        //             console.log(res);
-        //         }
-        //     });
-        // });
+        $(document).on('click', '#statusBtn', function (e) {
+            e.preventDefault();
+            var button = $(this);
+            var data = table.row(button.closest('tr')).data();
+            var prdId = data[0];
+            var status = $(this).data('status');
+            var dataID = $(this).data('id');
+            // console.log(prdId, dataID, status);
+            $.ajax({
+                method: 'POST',
+                url: "<?= base_url('admin/productStatus') ?>",
+                data: {
+                    'id': prdId,
+                    'sts': status,
+                    'dataId': dataID
+                },
+                success: function (res) {
+                    console.log(res);
+                }
+            });
+        });
 
 
         // $(document).on('click', '#editCat', function (e) {

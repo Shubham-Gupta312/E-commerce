@@ -166,7 +166,7 @@
                         </a>
                     </li>
                     <!-- Product -->
-                    <li class="sidebar-item">
+                    <!-- <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"
                             aria-expanded="false">
                             <i class="fas fa-shopping-basket "></i>
@@ -189,14 +189,14 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <!-- <li class="sidebar-item">
+                    </li> -->
+                    <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/products') ?>"
                             aria-expanded="false">
                             <i class="fas fa-shopping-basket "></i>
-                            <span class="hide-menu"> </span>
+                            <span class="hide-menu"> Products</span>
                         </a>
-                    </li> -->
+                    </li>
                     <!-- Weight / Size -->
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/unitMaster') ?>"

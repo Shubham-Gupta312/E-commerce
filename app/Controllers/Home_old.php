@@ -795,21 +795,18 @@ class Home extends BaseController
         }
         return $this->response->setJSON($response);
     }
-
     public function Products()
     {
         if ($this->request->getMethod() == 'get') {
-            $ctModel = new \App\Models\CategoryModel();
-            $brModel = new \App\Models\BrandModel();
-            $utModel = new \App\Models\UnitMasterModel();
+            $ct = new \App\Models\CategoryModel();
+            $br = new \App\Models\BrandModel();
+            $ut = new \App\Models\UnitMasterModel();
 
-            $data['category'] = $ctModel->where('status', 1)->findAll();
-            $data['brand'] = $brModel->where('status', 1)->findAll();
-            $data['unit'] = $utModel->where('status', 1)->findAll();
-
+            $data['category'] = $ct->where('status', 1)->findAll();
+            $data['brand'] = $br->where('status', 1)->findAll();
+            $data['unit'] = $ut->where('status', 1)->findAll();
             return view('admin/products', $data);
         } elseif ($this->request->getMethod() == 'post') {
-
             $cn = $this->request->getPost('cat_name');
             $pn = $this->request->getPost('product_name');
             $sc = $this->request->getPost('sub_cat');
@@ -819,20 +816,7 @@ class Home extends BaseController
             $on = $this->request->getPost('orderno');
             $ds = $this->request->getPost('desc');
 
-            $spcs = $this->request->getPost('specs');
-            $size = $this->request->getPost('product_size');
-            $mrp = $this->request->getPost('mrp');
-            $sp = $this->request->getPost('sp');
-            $stck = $this->request->getPost('product_stock');
-
-            $primg = $this->request->getFileMultiple('product_image');
-            $yt = $this->request->getPost('ylink');
-
-            $mttl = $this->request->getPost('meta_title');
-            $mdes = $this->request->getPost('meta_desc');
-            $mkwrd = $this->request->getPost('meta_keywrds');
-
-            $data1 = [
+            $data = [
                 'cat_id' => esc($cn),
                 'subcat_id' => esc($sc),
                 'brand_id' => esc($br),
@@ -842,49 +826,17 @@ class Home extends BaseController
                 'title' => ucwords(esc($pn)),
                 'tax' => esc($tax),
                 'orderno' => esc($on),
-                'pspec' => esc($spcs),
-                'meta_title' => esc($mttl),
-                'meta_keywords' => esc($mkwrd),
-                'meta_description' => esc($mdes),
-                'youtubelink' => esc($yt)
             ];
 
             $catModel = new \App\Models\ProductModel();
-            $ImgModel = new \App\Models\ProductImageModel();
-            $sizModel = new \App\Models\ProductDetailModel();
-
             try {
-                $query = $catModel->insert($data1);
-                $lastInsertId = $catModel->insertID();
+                $query = $catModel->insert($data);
 
-                if ($lastInsertId) {
-                    foreach ($primg as $image) {
-                        if ($image->isValid() && !$image->hasMoved()) {
-                            $newImageName = $image->getRandomName();
-                            $image->move("../public/assets/uploads/product/", $newImageName);
-
-                            $data2 = [
-                                'pid' => $lastInsertId,
-                                'p_image' => $newImageName
-                            ];
-                            $ImgModel->insert($data2);
-                        }
-                    }
-
-                    foreach ($size as $key => $value) {
-                        $data3 = [
-                            'pid' => $lastInsertId,
-                            'sid' => esc($value),
-                            'mrp' => esc($mrp[$key]),
-                            'selling_price' => esc($sp[$key]),
-                            'stock' => esc($stck[$key])
-                        ];
-                        $sizModel->insert($data3);
-                    }
+                if ($query) {
+                    $response = ['status' => 'success', 'message' => 'Product Added Successfully!'];
+                } else {
+                    $response = ['status' => 'error', 'message' => 'Something went wrong!'];
                 }
-
-                $response = ($query) ? ['status' => 'success', 'message' => 'Product Added Successfully!'] : ['status' => 'error', 'message' => 'Something went wrong!'];
-
                 return $this->response->setJSON($response);
             } catch (\Exception $e) {
                 $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
@@ -892,8 +844,6 @@ class Home extends BaseController
             }
         }
     }
-
-
 
     function validate_ProductCode()
     {
@@ -927,9 +877,6 @@ class Home extends BaseController
             $fetchProduct->select('products.*, brand.name');
             $fetchProduct->join('brand', 'brand.id = products.brand_id');
 
-            // $fetchProduct->select('products.*, sid, mrp, selling_price, stock');
-            // $fetchProduct->join('product_size', 'product_size.pro_size = products.id');
-
             $fetchProduct->orderBy($orderColumnName, $orderDir);
 
             // if (!empty($searchValue)) {
@@ -956,16 +903,16 @@ class Home extends BaseController
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
-                    // 1 => $row['orderno'],
-                    1 => ucfirst($row['ptitle']),
-                    2 => ucfirst($row['cname']),
-                    3 => ucfirst($row['sname']),
-                    4 => $row['pcode'],
-                    5 => ucfirst($row['name']),
-                    // 7 => $row['tax'] . "%",
-                    // 8 => html_entity_decode($row['overview']),
-                    6 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
-                    7 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    1 => $row['orderno'],
+                    2 => ucfirst($row['ptitle']),
+                    3 => ucfirst($row['cname']),
+                    4 => ucfirst($row['sname']),
+                    5 => $row['pcode'],
+                    6 => ucfirst($row['name']),
+                    7 => $row['tax'] . "%",
+                    8 => html_entity_decode($row['overview']),
+                    9 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    10 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
             }
