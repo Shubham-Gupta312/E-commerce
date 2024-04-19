@@ -12,7 +12,8 @@
     <link rel="canonical" href="https://www.wrappixel.com/templates/xtremeadmin/" />
     <link href="<?= ASSET_URL ?>public/assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
     <link href="<?= ASSET_URL ?>public/dist/js/pages/chartist/chartist-init.css" rel="stylesheet">
-    <link href="<?= ASSET_URL ?>public/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="<?= ASSET_URL ?>public/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css"
+        rel="stylesheet">
     <link href="<?= ASSET_URL ?>public/assets/libs/c3/c3.min.css" rel="stylesheet">
     <!-- Vector CSS -->
     <link href="<?= ASSET_URL ?>public/assets/libs/jvectormap/jquery-jvectormap.css" rel="stylesheet" />
@@ -68,6 +69,18 @@
         .float-end {
             float: right;
         }
+
+        #BrandForm,
+        #CategoryForm,
+        #subCategoryForm,
+        #productsForm,
+        #categorizationForm input::placeholder {
+            color: #b7bcc1;
+        }
+
+        #productsForm textarea::placeholder {
+            color: #b7bcc1;
+        }
     </style>
 
 </head>
@@ -116,7 +129,8 @@
     <!--This page JavaScript -->
     <!-- chartist chart -->
     <script src="<?= ASSET_URL ?>public/assets/libs/chartist/dist/chartist.min.js"></script>
-    <script src="<?= ASSET_URL ?>public/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script
+        src="<?= ASSET_URL ?>public/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
     <!--c3 JavaScript -->
     <script src="<?= ASSET_URL ?>public/assets/libs/d3/dist/d3.min.js"></script>
     <script src="<?= ASSET_URL ?>public/assets/libs/c3/c3.min.js"></script>
