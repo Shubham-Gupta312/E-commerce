@@ -918,17 +918,17 @@ class Home extends BaseController
             $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
             $orderDir = $_GET['order'][0]['dir'];
 
-            $fetchProduct->select('products.*, category.cname');
-            $fetchProduct->join('category', 'category.id = products.cat_id');
-
-            $fetchProduct->select('products.*, subcategory.sname');
-            $fetchProduct->join('subcategory', 'subcategory.id = products.subcat_id');
-
-            $fetchProduct->select('products.*, brand.name');
+            $fetchProduct->select('products.*, category.cname, subcategory.sname, brand.name, p_image, mrp, selling_price, stock');
             $fetchProduct->join('brand', 'brand.id = products.brand_id');
+            $fetchProduct->join('subcategory', 'subcategory.id = products.subcat_id');
+            $fetchProduct->join('category', 'category.id = products.cat_id');
+            $fetchProduct->join('product_size', 'product_size.pid = products.id');
+            $fetchProduct->groupBy('products.id');
 
-            // $fetchProduct->select('products.*, sid, mrp, selling_price, stock');
-            // $fetchProduct->join('product_size', 'product_size.pro_size = products.id');
+            $fetchProduct->join('(SELECT pid, MIN(id) AS min_id FROM product_images GROUP BY pid) AS first_image', 'first_image.pid = products.id', 'left');
+            $fetchProduct->join('product_images', 'product_images.id = first_image.min_id', 'left');
+
+
 
             $fetchProduct->orderBy($orderColumnName, $orderDir);
 
@@ -956,16 +956,14 @@ class Home extends BaseController
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
-                    // 1 => $row['orderno'],
-                    1 => ucfirst($row['ptitle']),
-                    2 => ucfirst($row['cname']),
-                    3 => ucfirst($row['sname']),
-                    4 => $row['pcode'],
-                    5 => ucfirst($row['name']),
-                    // 7 => $row['tax'] . "%",
-                    // 8 => html_entity_decode($row['overview']),
-                    6 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
-                    7 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    1 => '<img src="../assets/uploads/product/' . $row['p_image'] . '" height="100px" width="100px">',
+                    2 => ucfirst($row['ptitle']),
+                    3 => ucfirst($row['cname']),
+                    4 => ucfirst($row['sname']),
+                    5 => $row['pcode'],
+                    6 => ucfirst($row['name']),
+                    7 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    8 => '<button class="btn btn-outline-warning" id="editProd" data-bs-toggle="modal" data-bs-target="#ProductModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
             }
@@ -995,230 +993,25 @@ class Home extends BaseController
         }
     }
 
-    // public function productStatus()
-    // {
-    //     $id = $this->request->getPost('id');
-    //     $sts = $this->request->getPost('sts');
-    //     $dId = $this->request->getPost('dataId');
-
-    //     $stmdl = $new
-    // }
-
-    public function productDetail()
+    public function editProductData()
     {
-        if ($this->request->getMethod() == 'get') {
-            $pr = new \App\Models\ProductModel();
-            $ps = new \App\Models\UnitMasterModel();
+        $id = $this->request->getPost('id');
 
-            $data['product'] = $pr->where('status', 1)->findAll();
-            $data['size'] = $ps->where('status', 1)->findAll();
-            return view('admin/productDetail', $data);
-        } elseif ($this->request->getMethod() == 'post') {
-            $prn = $this->request->getPost('prod_name');
-            $prs = $this->request->getPost('product_size');
-            $mrp = $this->request->getPost('mrp');
-            $sp = $this->request->getPost('sp');
-            $prst = $this->request->getPost('product_stock');
+        $ProductModel = new \App\Models\ProductModel();
+        $ProductSize = new \App\Models\ProductDetailModel();
+        $ProductImage = new \App\Models\ProductImageModel();
+        $ed = $ProductModel->find($id);
+        $psd = $ProductSize->where('pid', $id)->findAll();
+        $pI = $ProductImage->where('pid', $id)->findAll();
 
-            $data = [
-                'pid' => esc($prn),
-                'sid' => esc($prs),
-                'mrp' => esc($mrp),
-                'selling_price' => esc($sp),
-                'stock' => esc($prst)
-            ];
-
-            $prd = new \App\Models\ProductDetailModel();
-            try {
-                $query = $prd->insert($data);
-
-                if ($query) {
-                    $response = ['status' => 'success', 'message' => 'Product Details Added Successfully!'];
-                } else {
-                    $response = ['status' => 'error', 'message' => 'Something went wrong!'];
-                }
-                return $this->response->setJSON($response);
-            } catch (\Exception $e) {
-                $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
-                return $this->response->setStatusCode(500)->setJSON($response);
-            }
-
+        if ($ed) {
+            $response = ['status' => 'true', 'message' => [$ed, $psd, $pI]];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Data not Found!'];
         }
+        return $this->response->setJSON($response);
     }
 
-    public function fetchproductDetail()
-    {
-        try {
-            $fetchProduct = new \App\Models\ProductDetailModel();
 
-            $draw = $_GET['draw'];
-            $start = $_GET['start'];
-            $length = $_GET['length'];
-            $searchValue = $_GET['search']['value'];
-            $orderColumnIndex = $_GET['order'][0]['column'];
-            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
-            $orderDir = $_GET['order'][0]['dir'];
-
-            $fetchProduct->select('product_size.*, products.ptitle');
-            $fetchProduct->join('products', 'products.id = product_size.pid');
-
-            $fetchProduct->select('product_size.*, sizes.sname');
-            $fetchProduct->join('sizes', 'sizes.s_id = product_size.sid');
-
-
-            $fetchProduct->orderBy($orderColumnName, $orderDir);
-
-            // if (!empty($searchValue)) {
-            //     $fetchProduct->groupStart();
-            //     $fetchProduct->orLike('cat_name', $searchValue);
-            //     $fetchProduct->groupEnd();
-            // }
-
-            $data['product'] = $fetchProduct->findAll($length, $start);
-            $totalRecords = $fetchProduct->countAll();
-            // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
-            $totalFilterRecords = $totalRecords;
-            $associativeArray = [];
-
-            foreach ($data['product'] as $row) {
-
-                $associativeArray[] = array(
-                    0 => $row['pro_size'],
-                    1 => ucfirst($row['ptitle']),
-                    2 => ucfirst($row['sname']),
-                    3 => ucfirst($row['mrp']),
-                    4 => ucfirst($row['selling_price']),
-                    5 => $row['stock'],
-                    6 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
-                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
-                );
-            }
-
-
-            if (empty($data['product'])) {
-                $output = array(
-                    'draw' => intval($draw),
-                    'recordsTotal' => 0,
-                    'recordsFiltered' => 0,
-                    'data' => []
-                );
-            } else {
-                $output = array(
-                    'draw' => intval($draw),
-                    'recordsTotal' => $totalRecords,
-                    'recordsFiltered' => $totalFilterRecords,
-                    'data' => $associativeArray
-                );
-            }
-            return $this->response->setJSON($output);
-        } catch (\Exception $e) {
-            // Log the caught exception
-            log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
-            // Return an error response
-            return $this->response->setJSON(['error' => 'Internal Server Error']);
-        }
-    }
-    public function productImage()
-    {
-        if ($this->request->getMethod() == 'get') {
-            $prm = new \App\Models\ProductModel();
-
-            $data['products'] = $prm->where('status', 1)->findAll();
-            return view('admin/productImage', $data);
-        } elseif ($this->request->getMethod() == 'post') {
-            $pn = $this->request->getPost('prod_name');
-            $pi = $this->request->getFile('product_image');
-
-            if ($pi->isValid() && !$pi->hasMoved()) {
-                $newImageName = $pi->getRandomName();
-                $pi->move("../public/assets/uploads/product/", $newImageName);
-
-                $data = [
-                    'pid' => esc($pn),
-                    'p_image' => esc($newImageName),
-                ];
-
-                $catModel = new \App\Models\ProductImageModel();
-                try {
-                    $query = $catModel->insert($data);
-
-                    if ($query) {
-                        $response = ['status' => 'success', 'message' => 'Product Image Added Successfully!'];
-                    } else {
-                        $response = ['status' => 'error', 'message' => 'Something went wrong!'];
-                    }
-                    return $this->response->setJSON($response);
-                } catch (\Exception $e) {
-                    $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
-                    return $this->response->setStatusCode(500)->setJSON($response);
-                }
-            }
-        }
-    }
-
-    public function fetchproductImage()
-    {
-        try {
-            $fetchProduct = new \App\Models\ProductImageModel();
-
-            $draw = $_GET['draw'];
-            $start = $_GET['start'];
-            $length = $_GET['length'];
-            $searchValue = $_GET['search']['value'];
-            $orderColumnIndex = $_GET['order'][0]['column'];
-            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
-            $orderDir = $_GET['order'][0]['dir'];
-
-            $fetchProduct->select('product_images.*, products.ptitle');
-            $fetchProduct->join('products', 'products.id = product_images.pid');
-
-
-            $fetchProduct->orderBy($orderColumnName, $orderDir);
-
-            // if (!empty($searchValue)) {
-            //     $fetchProduct->groupStart();
-            //     $fetchProduct->orLike('cat_name', $searchValue);
-            //     $fetchProduct->groupEnd();
-            // }
-
-            $data['product'] = $fetchProduct->findAll($length, $start);
-            $totalRecords = $fetchProduct->countAll();
-            // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
-            $totalFilterRecords = $totalRecords;
-            $associativeArray = [];
-
-            foreach ($data['product'] as $row) {
-
-                $associativeArray[] = array(
-                    0 => $row['id'],
-                    1 => ucfirst($row['ptitle']),
-                    2 => '<img src="../assets/uploads/product/' . $row['p_image'] . '" height="100px" width="100px">',
-                    3 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
-                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
-                );
-            }
-
-
-            if (empty($data['product'])) {
-                $output = array(
-                    'draw' => intval($draw),
-                    'recordsTotal' => 0,
-                    'recordsFiltered' => 0,
-                    'data' => []
-                );
-            } else {
-                $output = array(
-                    'draw' => intval($draw),
-                    'recordsTotal' => $totalRecords,
-                    'recordsFiltered' => $totalFilterRecords,
-                    'data' => $associativeArray
-                );
-            }
-            return $this->response->setJSON($output);
-        } catch (\Exception $e) {
-            log_message('error', 'Error in fetch_Product Image: ' . $e->getMessage());
-            return $this->response->setJSON(['error' => 'Internal Server Error']);
-        }
-    }
 
 }

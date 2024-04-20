@@ -83,7 +83,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-4 col-md-6">
-                                <label for="tax">Tax %</label>
+                                <label for="tax">Tax %</label><span class="text-danger">*</span>
                                 <input type="text" class="form-control onlynum" name="tax" id="tax"
                                     placeholder="Enter Tax">
                             </div>
@@ -138,9 +138,9 @@
                                     id="product_stock" placeholder="Enter Product Stock (Eg. 10)">
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div id="additionalSize"></div>
-                        </div>
+                        <!-- <div class="row mt-2"> -->
+                        <div id="additionalSize"></div>
+                        <!-- </div> -->
 
                         <div class="row mt-2">
                             <div class="col-lg-12 col-md-12 text-right">
@@ -201,35 +201,145 @@
                 </div>
             </div>
             <!-- End Categories Form -->
-            <!-- Edit Categories Form  -->
-            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <!-- Edit Product Form  -->
+            <div class="modal fade" id="ProductModal" tabindex="-1" aria-labelledby="ProductModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Categories Data</h5>
+                            <h5 class="modal-title" id="ProductModalLabel">Edit Categories Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="editCategoryForm" enctype="multipart/form-data">
                                 <div class="row">
-                                    <input type="hidden" name="id" id="catId" val="">
-                                    <div class="col-lg-12 col-md-6">
-                                        <label for="title">Category Name</label><span class="text-danger">*</span>
-                                        <input type="text" class="form-control onlychars" required id="editcat"
-                                            name="editcat" placeholder="Enter Category Name">
-                                    </div>
-                                    <div class="col-lg-12 col-md-6 mt-3">
+                                    <input type="hidden" name="id" id="productId" val="">
+                                    <div class="col-lg-4 col-md-6">
                                         <div class="form-group">
-                                            <label for="Category Image">Category Image</label><span
+                                            <label for="product_name">Product Title</label><span
                                                 class="text-danger">*</span>
-                                            <input type="file" class="form-control" id="editimage" name="editimage"
-                                                accept=".jpg, .png, jpeg">
+                                            <input type="text" class="form-control onlychars" name="eproduct_name"
+                                                id="eproduct_name" placeholder="Enter Product Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="cat_name">Category Name</label><span
+                                                class="text-danger">*</span>
+                                            <select name="ecat_name" class="form-control" id="ecat_name">
+                                                <option value="" selected="selected">Please choose an option</option>
+                                                <?php foreach ($category as $option): ?>
+                                                    <option value="<?php echo $option['id']; ?>">
+                                                        <?php echo $option['cname']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <label for="sub_cat">Sub-Category</label><span class="text-danger">*</span>
+                                        <select class="form-control" name="esub_cat" id="esub_cat">
+                                            <option value="" selected="selected">Please choose an option</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6">
+                                        <label for="prcode">Product Code</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlyalphanum" name="eproduct_code"
+                                            id="eproduct_code" placeholder="Enter Product Code (Eg. GHEE9389)">
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <label for="Brand">Brand Name</label><span class="text-danger">*</span>
+                                        <select class="form-control" name="ebrand" id="ebrand">
+                                            <option value="" selected="selected">Please choose an option</option>
+                                            <?php foreach ($brand as $option): ?>
+                                                <option value="<?php echo $option['id']; ?>">
+                                                    <?= $option['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <label for="tax">Tax %</label>
+                                        <input type="text" class="form-control onlynum" name="etax" id="etax"
+                                            placeholder="Enter Tax">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-lg-4 col-md-6">
+                                        <label for="orderno">Order Number</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlynum" name="eorderno" id="eorderno"
+                                            placeholder="Enter Product Order number">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="desc">Product Description</label><span class="text-danger">*</span>
+                                        <textarea name="edesc" class="form-control" id="edesc" cols="50"></textarea>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="desc">Product Specification</label>
+                                        <textarea name="especs" class="form-control" id="especs" cols="50"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-lg-12 col-md-12 text-right">
+                                        <button type="button" class="btn btn-outline-info" id="eadd_size">Add
+                                            Size</button>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="Sizes">Sizes</label><span class="text-danger">*</span>
+                                        <select class="form-control" name="eproduct_size[]" id="eproduct_size">
+                                            <option value="" selected="selected">Please choose an option</option>
+                                            <?php foreach ($unit as $option): ?>
+                                                <option value="<?php echo $option['s_id']; ?>">
+                                                    <?= $option['sname']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="mrp">MRP (In Rs)</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlynum" name="emrp[]" id="emrp"
+                                            placeholder="Enter MRP (Eg. 1000)">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="sp">Selling Price (In Rs)</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlynum" name="esp[]" id="esp"
+                                            placeholder="Enter Selling Price (Eg. 1000)">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="prstck">Product Stock</label>
+                                        <input type="text" class="form-control onlynum" name="eproduct_stock[]"
+                                            id="eproduct_stock" placeholder="Enter Product Stock (Eg. 10)">
+                                    </div>
+                                </div>
+                                <!-- <div class="row mt-2"> -->
+                                <div id="eadditionalSize"></div>
+                                <!-- </div> -->
+                                <div class="row mt-2">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="primg">Product Image</label><span class="text-danger">*</span>
+                                            <input type="file" class="form-control" name="eproduct_image[]"
+                                                id="eproduct_image" accept=".jpg, .png, .jpeg">
+                                            <!-- <input type="file" class="form-control" name="product_image" id="product_image"
+                                        accept=".jpg, .png, .jpeg"> -->
                                         </div>
                                         <div class="note_form">
                                             <small>Less than or equal to 1Mb </small>
-                                            <small class="float-end">Supported format: Jpeg,Jpg, Png</small>
                                         </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 text-right mt-4">
+                                        <button type="button" class="btn btn-outline-warning" id="eadd_image">Add
+                                            Image</button>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div id="eadditionalImages"></div>
                                     </div>
                                 </div>
                             </form>
@@ -241,23 +351,19 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
-            <!-- Edit Categories Form  End -->
+            </div>
+            <!-- Edit Product Form  End -->
             <div class="table-responsive">
                 <table class="table table-bordered" id="productTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
                         <!-- <th>Order Number</th> -->
+                        <th>Image</th>
                         <th>Product Name</th>
                         <th>Category Name</th>
                         <th>Sub Category Name</th>
                         <th>Product Code</th>
                         <th>Brand Name</th>
-                        <!-- <th>Tax</th> -->
-                        <!-- <th>Product Description</th> -->
-                        <!-- <th>Product MRP</th>
-                        <th>Product Selling Price</th>
-                        <th>Product Stock</th> -->
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -355,7 +461,7 @@
             e.preventDefault();
             // console.log('clicked');
             if (countSize < maxSizes) {
-                var newSize = '<div class="row">' + // Start a new row
+                var newSize = '<div class="row mt-2">' + // Start a new row
                     '<div class="col-lg-3 col-md-3">' +
                     '<div class="form-group">' +
                     '<label for="Size">Size</label>' +
@@ -377,7 +483,7 @@
                     '</div>' +
                     '<div class="col-lg-2 col-md-3">' +
                     '<div class="form-group">' +
-                    '<label for="sp">Selling Price (In Rs)</label>' +
+                    '<label for="sp">Selling Price</label>' +
                     '<input type="text" class="form-control onlynum" name="sp[]" id="sp" placeholder="Enter Selling Price (Eg. 1000)">' +
                     '</div>' +
                     '</div>' +
@@ -413,7 +519,7 @@
                 var newInput =
                     '<div class="form-group">' +
                     '<div class="row">' +
-                    '<div class="col-lg-6 col-md-6">' +
+                    '<div class="col-lg-10 col-md-6">' +
                     '<label for="primg">Image</label>' +
                     '<input type="file" class="form-control product-image" name="product_image[]" accept=".jpg, .png, .jpeg">' +
                     '</div>' +
@@ -522,6 +628,13 @@
                             }
                         }
                     },
+                    'tax':{
+                        validators: {
+                            notEmpty: {
+                                message: 'Please Enter Tax'
+                            }
+                        }
+                    },
                     'product_image[]': {
                         validators: {
                             notEmpty: {
@@ -615,29 +728,29 @@
         // });
 
 
-        // $(document).on('click', '#editCat', function (e) {
-        //     e.preventDefault();
-        //     var button = $(this);
-        //     var data = table.row(button.closest('tr')).data();
-        //     var catId = data[0];
-        //     // console.log(catId);
-        //     $('#catId').val(catId);
-        //     $.ajax({
-        //         method: 'POST',
-        //         url: "<?= base_url('admin/editCategory') ?>",
-        //         data: {
-        //             'id': catId
-        //         },
-        //         success: function (response) {
-        //             // console.log(response);
-        //             if (response.status == 'true') {
-        //                 $('#editcat').val(response.message.cat_name);
-        //             } else {
-        //                 $.notify(response.message, "error");
-        //             }
-        //         }
-        //     });
-        // });
+        $(document).on('click', '#editProd', function (e) {
+            e.preventDefault();
+            var button = $(this);
+            var data = table.row(button.closest('tr')).data();
+            var prId = data[0];
+            console.log(prId);
+            $('#productId').val(prId);
+            $.ajax({
+                method: 'POST',
+                url: "<?= base_url('admin/editProductData') ?>",
+                data: {
+                    'id': prId
+                },
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 'true') {
+                        $('#editcat').val(response.message.cat_name);
+                    } else {
+                        $.notify(response.message, "error");
+                    }
+                }
+            });
+        });
 
         // $(document).on('click', '#updatebtn', function () {
         //     var $form = $('#editCategoryForm');

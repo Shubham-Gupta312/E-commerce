@@ -70,17 +70,36 @@
             float: right;
         }
 
-        #BrandForm,
-        #CategoryForm,
-        #subCategoryForm,
-        #productsForm,
-        #categorizationForm input::placeholder {
+        #BrandForm input::placeholder {
+            color: #b7bcc1;
+        }
+
+        #productsForm input::placeholder {
             color: #b7bcc1;
         }
 
         #productsForm textarea::placeholder {
             color: #b7bcc1;
         }
+
+        #CategoryForm input::placeholder {
+            color: #b7bcc1;
+        }
+
+        #subCategoryForm input::placeholder {
+            color: #b7bcc1;
+        }
+
+        #categorizationForm input::placeholder {
+            color: #b7bcc1;
+        }
+
+        @media (min-width: 576px) {
+    #ProductModal .modal-dialog {
+        max-width: 1100px; /* Sets the maximum width of the modal dialog within #ProductModal to 500 pixels */
+        margin: 1.75rem auto; /* Sets the top and bottom margin to 1.75rem and horizontally centers the modal dialog */
+    }
+}
     </style>
 
 </head>

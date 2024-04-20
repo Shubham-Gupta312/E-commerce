@@ -49,18 +49,21 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     $routes->post('deleteUnitMaster', 'Home::deleteUnitMaster');
     
     $routes->get('validateProductCode', 'Home::validate_ProductCode');
+    $routes->post('fetchSubCategoryData', 'Home::fetchSubCategoryData');
+
     $routes->get('products', 'Home::Products');
     $routes->post('products', 'Home::Products');
     $routes->get('fetchproducts', 'Home::fetchproducts');
     $routes->post('productStatus', 'Home::productStatus');
+    $routes->post('editProductData', 'Home::editProductData');
 
-    $routes->get('productImage', 'Home::productImage');
-    $routes->post('productImage', 'Home::productImage');
-    $routes->get('fetchproductImage', 'Home::fetchproductImage');
 
-    $routes->get('productDetail', 'Home::productDetail');
-    $routes->post('productDetail', 'Home::productDetail');
-    $routes->get('fetchproductDetail', 'Home::fetchproductDetail');
+    // $routes->get('productImage', 'Home::productImage');
+    // $routes->post('productImage', 'Home::productImage');
+    // $routes->get('fetchproductImage', 'Home::fetchproductImage');
 
-    $routes->post('fetchSubCategoryData', 'Home::fetchSubCategoryData');
+    // $routes->get('productDetail', 'Home::productDetail');
+    // $routes->post('productDetail', 'Home::productDetail');
+    // $routes->get('fetchproductDetail', 'Home::fetchproductDetail');
+
 });

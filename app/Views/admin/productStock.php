@@ -21,11 +21,11 @@
             <div class="row">
                 <!-- <div class="col-lg-3 col-md-6"> -->
                 <div class="col-lg-6">
-                    <h1>Unit Master</h1>
+                    <h1>Categories</h1>
                 </div>
                 <div class="col-lg-6 text-lg-right">
                     <button class="btn btn-outline-primary" title="Add Category" id="add_category"><i
-                            class="fas fa-plus"></i> Add Unit</button>
+                            class="fas fa-plus"></i> Add Categories</button>
                 </div>
                 <!-- </div> -->
                 <!-- Column -->
@@ -33,17 +33,34 @@
             <!-- Categories Form -->
             <div class="category-from">
                 <div class="category_container" style="display: none;">
-                    <form id="categorizationForm">
+                    <form id="CategoryForm" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
-                                <label for="cat_name">Unit Name</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control alhpanum" name="unit" id="unit"
-                                    placeholder="Enter Size (kg, gms)">
+                                <label for="cat name">Category Name</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlychars" id="catname" name="catname"
+                                    placeholder="Enter Category Name">
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="Category Image">Ctaegory Image</label><span class="text-danger">*</span>
+                                    <input type="file" class="form-control" id="image" name="image"
+                                        accept=".jpg, .png, jpeg">
+                                </div>
+                                <div class="note_form">
+                                    <small>Less than or equal to 1Mb </small>
+                                    <small class="float-end">Supported format: Jpeg,Jpg, Png</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <label for="Order Number">Order Number</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlynum" id="orderno" name="orderno"
+                                    placeholder="Enter Order Number">
                             </div>
                         </div>
                         <button type="submit" id="save" name="save" class="btn btn-primary mt-2">Submit</button>
                     </form>
-
                 </div>
             </div>
             <!-- End Categories Form -->
@@ -61,9 +78,26 @@
                                 <div class="row">
                                     <input type="hidden" name="id" id="catId" val="">
                                     <div class="col-lg-12 col-md-6">
-                                        <label for="unit name">Unit Name</label><span class="text-danger">*</span>
-                                        <input type="text" class="form-control alhpanum" name="edit_unit_name" id="edit_unit_name"
-                                            placeholder="Enter Size (kg, gms)">
+                                        <label for="title">Category Name</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlychars" required id="editcat"
+                                            name="editcat" placeholder="Enter Category Name">
+                                    </div>
+                                    <div class="col-lg-12 col-md-6 mt-3">
+                                        <div class="form-group">
+                                            <label for="Category Image">Category Image</label><span
+                                                class="text-danger">*</span>
+                                            <input type="file" class="form-control" id="editimage" name="editimage"
+                                                accept=".jpg, .png, jpeg">
+                                        </div>
+                                        <div class="note_form">
+                                            <small>Less than or equal to 1Mb </small>
+                                            <small class="float-end">Supported format: Jpeg,Jpg, Png</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-6">
+                                        <label for="Order Number">Order Number</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control onlynum" id="eorderno" name="eorderno"
+                                            placeholder="Enter Order Number">
                                     </div>
                                 </div>
                             </form>
@@ -78,10 +112,12 @@
             </div>
             <!-- Edit Categories Form  End -->
             <div class="table-responsive">
-                <table class="table table-bordered" id="CategorizationTable" style="width: 1100px;">
+                <table class="table table-bordered" id="CategoryTable" style="width: 1100px;">
                     <thead>
                         <th>Sl. no.</th>
-                        <th>Size Name</th>
+                        <th>Order Number</th>
+                        <th>Category Name</th>
+                        <th>Category Image</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -108,10 +144,13 @@
 </div>
 </div>
 
-<script>
+<!-- <script>
     $(document).ready(function () {
-        $('body').on('keyup', ".alhpanum", function (event) {
-            this.value = this.value.replace(/[^[A-Za-z0-9 ]]*/gi, '');
+        $('body').on('keyup', ".onlychars", function (event) {
+            this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
+        });
+        $('body').on('keyup', ".onlynum", function (event) {
+            this.value = this.value.replace(/[^[0-9]]*/gi, '');
         });
 
         $('#add_category').click(function (e) {
@@ -120,15 +159,33 @@
             $(".category_container").show();
         });
 
-
-
         jQuery(document).ready(function (e) {
-            $('#categorizationForm').bootstrapValidator({
+            $('#CategoryForm').bootstrapValidator({
                 fields: {
-                    'unit': {
+                    'catname': {
                         validators: {
                             notEmpty: {
-                                message: "Please Enter Size"
+                                message: "Please enter Category Name"
+                            },
+                        }
+                    },
+                    'orderno': {
+                        validators: {
+                            notEmpty: {
+                                message: "Please enter Order Number"
+                            },
+                        }
+                    },
+                    'image': {
+                        validators: {
+                            notEmpty: {
+                                message: "Please Choose Image File"
+                            },
+                            file: {
+                                extension: 'jpeg,jpg,png',
+                                type: 'image/jpeg,image/png',
+                                maxSize: 1024 * 1024,
+                                message: 'The selected file is not valid or exceeds 1 MB in size',
                             },
                         }
                     },
@@ -137,13 +194,14 @@
                 e.preventDefault();
                 var $form = $(e.target);
                 var bv = $form.data('bootstrapValidator');
-                var formData = $form.serialize();
+                var formData = new FormData($form[0]);
                 // console.log(formData);
-                // Use AJAX to submit form data
                 $.ajax({
-                    url: "<?= base_url('admin/unitMaster') ?>",
+                    url: "<?= base_url('admin/categories') ?>",
                     type: 'POST',
                     data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         // console.log(response);
                         if (response.status === 'success') {
@@ -163,7 +221,7 @@
             });
         });
 
-        var table = $('#CategorizationTable').DataTable({
+        var table = $('#CategoryTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
@@ -176,10 +234,10 @@
                 $('td', row).eq(0).html(rowNumber);
             },
             columnDefs: [
-                { targets: [0, 2, 3], orderable: false }
+                { targets: [0, 2, 3, 4], orderable: false }
             ],
             ajax: {
-                url: "<?= base_url('admin/fetchUnitMaster') ?>",
+                url: "<?= base_url('admin/fetchdata') ?>",
                 type: "GET",
                 error: function (xhr, error, thrown) {
                     // console.log("AJAX error:", xhr, error, thrown);
@@ -187,11 +245,13 @@
             },
             drawCallback: function (settings) {
                 // console.log('Table redrawn:', settings);
-            },
+            }
         });
 
 
-        $(document).on('click', '#toggle-status', function () {
+        var table = $('#CategoryTable').DataTable();
+        $(document).on('click', '#statusBtn', function (e) {
+            e.preventDefault();
             var button = $(this);
             var data = table.row(button.closest('tr')).data();
             var catId = data[0];
@@ -200,7 +260,7 @@
             // console.log(catId, status, dataID);
             // Send AJAX request to the controller
             $.ajax({
-                url: "<?= base_url('admin/toggle_status') ?>",
+                url: "<?= base_url('admin/catStatus') ?>",
                 type: 'POST',
                 data: {
                     'id': catId,
@@ -223,7 +283,6 @@
             });
         });
 
-
         $(document).on('click', '#editCat', function (e) {
             e.preventDefault();
             var button = $(this);
@@ -233,14 +292,15 @@
             $('#catId').val(catId);
             $.ajax({
                 method: 'POST',
-                url: "<?= base_url('admin/editUnitMaster') ?>",
+                url: "<?= base_url('admin/editCategory') ?>",
                 data: {
                     'id': catId
                 },
                 success: function (response) {
                     // console.log(response);
                     if (response.status == 'true') {
-                        $('#edit_unit_name').val(response.message.sname);
+                        $('#editcat').val(response.message.cname);
+                        $('#eorderno').val(response.message.orderno);
                     } else {
                         $.notify(response.message, "error");
                     }
@@ -252,10 +312,20 @@
             var $form = $('#editCategoryForm');
             $form.bootstrapValidator({
                 fields: {
-                    'edit_unit_name': {
+                    'editcat': {
                         validators: {
                             notEmpty: {
-                                message: 'Please Enter Unit Name'
+                                message: 'The category name is required'
+                            },
+                        }
+                    },
+                    'editimage': {
+                        validators: {
+                            file: {
+                                extension: 'jpeg,jpg,png',
+                                type: 'image/jpeg,image/png',
+                                maxSize: 1024 * 1024, // 1 MB in bytes
+                                message: 'The selected file is not valid or exceeds 1 MB in size',
                             },
                         }
                     },
@@ -263,12 +333,13 @@
             });
             $form.bootstrapValidator('validate');
             if ($form.data('bootstrapValidator').isValid()) {
-                var formData = $form.serialize();
-                // console.log(formData);
+                var formData = new FormData($form[0]);
                 $.ajax({
                     method: "POST",
-                    url: "<?= base_url('admin/updateUnitMaster') ?>",
+                    url: "<?= base_url('admin/updateCategory') ?>",
                     data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         // console.log(response);
                         if (response.status == 'success') {
@@ -291,7 +362,7 @@
             // console.log(catId);
             $.ajax({
                 method: "POST",
-                url: "<?= base_url('admin/deleteUnitMaster') ?>",
+                url: "<?= base_url('admin/deleteCategory') ?>",
                 data: {
                     'id': catId
                 },
@@ -308,6 +379,6 @@
         });
 
     });
-</script>
+</script> -->
 
 <?= $this->endSection() ?>
