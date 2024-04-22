@@ -67,6 +67,12 @@
 
                         <div class="row">
                             <div class="col-lg-4 col-md-6">
+                                <label for="sub-sub-cat">Sub Sub-Category</label><span class="text-danger">*</span>
+                                <select class="form-control" name="ssct" id="ssct">
+                                    <option value="" selected="selected">Please choose an option</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
                                 <label for="prcode">Product Code</label><span class="text-danger">*</span>
                                 <input type="text" class="form-control onlyalphanum" name="product_code"
                                     id="product_code" placeholder="Enter Product Code (Eg. GHEE9389)">
@@ -82,17 +88,17 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <label for="tax">Tax %</label><span class="text-danger">*</span>
-                                <input type="text" class="form-control onlynum" name="tax" id="tax"
-                                    placeholder="Enter Tax">
-                            </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-4 col-md-6">
                                 <label for="orderno">Order Number</label><span class="text-danger">*</span>
                                 <input type="text" class="form-control onlynum" name="orderno" id="orderno"
                                     placeholder="Enter Product Order number">
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <label for="tax">Tax %</label><span class="text-danger">*</span>
+                                <input type="text" class="form-control onlynum" name="tax" id="tax"
+                                    placeholder="Enter Tax">
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -137,24 +143,32 @@
                                 <input type="text" class="form-control onlynum" name="product_stock[]"
                                     id="product_stock" placeholder="Enter Product Stock (Eg. 10)">
                             </div>
+                            <div class="col-lg-6 col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="primg">Product Image</label><span class="text-danger">*</span>
+                                    <input type="file" class="form-control" name="product_image[]" id="product_image"
+                                        accept=".jpg, .png, .jpeg">
+                                </div>
+                                <div class="note_form">
+                                    <small>Less than or equal to 1Mb </small>
+                                </div>
+                            </div>
                         </div>
                         <!-- <div class="row mt-2"> -->
                         <div id="additionalSize"></div>
                         <!-- </div> -->
 
-                        <div class="row mt-2">
+                        <!-- <div class="row mt-2">
                             <div class="col-lg-12 col-md-12 text-right">
                                 <button type="button" class="btn btn-outline-warning" id="add_image">Add Image</button>
                             </div>
-                        </div>
-                        <div class="row mt-2">
+                        </div> -->
+                        <!-- <div class="row mt-2">
                             <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
                                     <label for="primg">Product Image</label><span class="text-danger">*</span>
                                     <input type="file" class="form-control" name="product_image[]" id="product_image"
                                         accept=".jpg, .png, .jpeg">
-                                    <!-- <input type="file" class="form-control" name="product_image" id="product_image"
-                                        accept=".jpg, .png, .jpeg"> -->
                                 </div>
                                 <div class="note_form">
                                     <small>Less than or equal to 1Mb </small>
@@ -168,7 +182,7 @@
                             <div class="col-lg-6 col-md-6">
                                 <div id="additionalImages"></div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row mt-2">
                             <div class="col-lg-6 col-md-6">
                                 <label for="meta_title">Meta Title </label><small class="text-danger">(Maximum 60
@@ -207,7 +221,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="ProductModalLabel">Edit Categories Data</h5>
+                            <h5 class="modal-title" id="ProductModalLabel">Edit Product Form Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -290,7 +304,7 @@
                                             Size</button>
                                     </div>
                                 </div>
-                                <div class="row mt-2">
+                                <!-- <div class="row mt-2">
                                     <div class="col-lg-3 col-md-4">
                                         <label for="Sizes">Sizes</label><span class="text-danger">*</span>
                                         <select class="form-control" name="eproduct_size[]" id="eproduct_size">
@@ -317,31 +331,16 @@
                                         <input type="text" class="form-control onlynum" name="eproduct_stock[]"
                                             id="eproduct_stock" placeholder="Enter Product Stock (Eg. 10)">
                                     </div>
-                                </div>
-                                <!-- <div class="row mt-2"> -->
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="pr_img">Product Image</label>
+                                        <input type="file" class="form-control onlynum" name="eproduct_img[]"
+                                            id="eproduct_img">
+                                    </div>
+                                </div> -->
+
+                                <div class="row mt-2" id="sizesContainer"></div>
+
                                 <div id="eadditionalSize"></div>
-                                <!-- </div> -->
-                                <div class="row mt-2">
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="primg">Product Image</label><span class="text-danger">*</span>
-                                            <input type="file" class="form-control" name="eproduct_image[]"
-                                                id="eproduct_image" accept=".jpg, .png, .jpeg">
-                                            <!-- <input type="file" class="form-control" name="product_image" id="product_image"
-                                        accept=".jpg, .png, .jpeg"> -->
-                                        </div>
-                                        <div class="note_form">
-                                            <small>Less than or equal to 1Mb </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 text-right mt-4">
-                                        <button type="button" class="btn btn-outline-warning" id="eadd_image">Add
-                                            Image</button>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6">
-                                        <div id="eadditionalImages"></div>
-                                    </div>
-                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -418,6 +417,11 @@
                 console.error(error);
             });
         ClassicEditor
+            .create(document.querySelector('#edesc'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
             .create(document.querySelector('#specs'))
             .catch(error => {
                 console.error(error);
@@ -454,6 +458,38 @@
             }
         });
 
+        $('#sub_cat').change(function () {
+            var catID = $(this).val();
+            if (catID != '') {
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('admin/fetchsubSububCategoryData') ?>",
+                    data: {
+                        'id': catID
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        if (res.status == 'success') {
+                            var options = '<option value="">Please choose an option</option>';
+                            $.each(res.message, function (index, value) {
+                                options += '<option value="' + value.id + '">' + value.ssname + '</option>';
+                            });
+                            $('#ssct').html(options);
+                        } else {
+                            $('#ssct').html('<option value="">No variants found</option>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching subcategories:", error);
+                        $('#ssct').html('<option value="">Error fetching subcategories</option>');
+                    }
+                });
+            } else {
+                $.notify("Please choose a category first", "error");
+                $('#sub_cat').html('<option value="">Please choose a category first</option>');
+            }
+        });
+
         var maxSizes = 5;
         var countSize = 0;
 
@@ -461,7 +497,7 @@
             e.preventDefault();
             // console.log('clicked');
             if (countSize < maxSizes) {
-                var newSize = '<div class="row mt-2">' + // Start a new row
+                var newSize = '<div class="row mt-2">' +
                     '<div class="col-lg-3 col-md-3">' +
                     '<div class="form-group">' +
                     '<label for="Size">Size</label>' +
@@ -481,7 +517,7 @@
                     '<input type="text" class="form-control onlynum" name="mrp[]" id="mrp" placeholder="Enter MRP (Eg. 1000)">' +
                     '</div>' +
                     '</div>' +
-                    '<div class="col-lg-2 col-md-3">' +
+                    '<div class="col-lg-3 col-md-3">' +
                     '<div class="form-group">' +
                     '<label for="sp">Selling Price</label>' +
                     '<input type="text" class="form-control onlynum" name="sp[]" id="sp" placeholder="Enter Selling Price (Eg. 1000)">' +
@@ -493,10 +529,16 @@
                     '<input type="text" class="form-control onlynum" name="product_stock[]" id="product_stock" placeholder="Enter Product Stock (Eg. 10)">' +
                     '</div>' +
                     '</div>' +
+                    ' <div class="col-lg-6 col-md-6 mt-2">' +
+                    '<div class="form-group">' +
+                    ' <label for="primg">Product Image</label>' +
+                    '<input type="file" class="form-control" name="product_image[]" id="product_image" accept=".jpg, .png, .jpeg">' +
+                    '</div>' +
+                    '</div>' +
                     '<div class="col-md-1 mt-4">' +
                     '<button type="button" class="btn btn-outline-danger btn-sm remove-size"><i class="fa-solid fa-xmark"></i></button>' +
                     '</div>' +
-                    '</div>'; // End of new row
+                    '</div>';
                 $('#additionalSize').append(newSize);
                 countSize++;
             } else {
@@ -510,44 +552,61 @@
             // console.log('click');
         });
 
-
-        var maxImages = 5;
-        var count = 0;
-
-        $('#add_image').click(function () {
-            if (count < maxImages) {
-                var newInput =
+        $('#eadd_size').click(function (e) {
+            e.preventDefault();
+            if (countSize < maxSizes) {
+                var newSize = '<div class="row mt-2">' +
+                    '<div class="col-lg-3 col-md-3">' +
                     '<div class="form-group">' +
-                    '<div class="row">' +
-                    '<div class="col-lg-10 col-md-6">' +
-                    '<label for="primg">Image</label>' +
-                    '<input type="file" class="form-control product-image" name="product_image[]" accept=".jpg, .png, .jpeg">' +
+                    '<label for="Size">Size</label>' +
+                    '<select class="form-control" name="eproduct_size[]" id="eproduct_size">' +
+                    '<option value="" selected="selected">Please choose an option</option>' +
+                    '<?php foreach ($unit as $option): ?>' +
+                        '<option value="<?php echo $option['s_id']; ?>">' +
+                        '<?php echo $option['sname']; ?>' +
+                        '</option>' +
+                        '<?php endforeach; ?>' +
+                    '</select>' +
                     '</div>' +
-                    '<div class="col-md-2 mt-4">' +
-                    '<button type="button" class="btn btn-outline-danger btn-sm remove-image"><i class="fa-solid fa-xmark"></i></button>' +
                     '</div>' +
+                    '<div class="col-lg-3 col-md-3">' +
+                    '<div class="form-group">' +
+                    '<label for="mrp">MRP (In Rs)</label>' +
+                    '<input type="text" class="form-control onlynum" name="emrp[]" id="emrp" placeholder="Enter MRP (Eg. 1000)">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-3 col-md-3">' +
+                    '<div class="form-group">' +
+                    '<label for="sp">Selling Price</label>' +
+                    '<input type="text" class="form-control onlynum" name="esp[]" id="esp" placeholder="Enter Selling Price (Eg. 1000)">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-3 col-md-3">' +
+                    '<div class="form-group">' +
+                    '<label for="prstck">Product Stock</label>' +
+                    '<input type="text" class="form-control onlynum" name="eproduct_stock[]" id="eproduct_stock" placeholder="Enter Product Stock (Eg. 10)">' +
+                    '</div>' +
+                    '</div>' +
+                    ' <div class="col-lg-6 col-md-6 mt-2">' +
+                    '<div class="form-group">' +
+                    ' <label for="primg">Product Image</label>' +
+                    '<input type="file" class="form-control" name="eproduct_image[]" id="eproduct_image" accept=".jpg, .png, .jpeg">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-1 mt-4">' +
+                    '<button type="button" class="btn btn-outline-danger btn-sm eremove-size"><i class="fa-solid fa-xmark"></i></button>' +
                     '</div>' +
                     '</div>';
-                $('#additionalImages').append(newInput);
-                $('#additionalImages .form-group:last-child input[type="file"]').change(function () {
-                    var file = this.files[0];
-                    if (file) {
-                        var fileSize = file.size / 1024 / 1024;
-                        if (fileSize > 1) {
-                            $.notify('File size exceeds 1MB limit.');
-                            $(this).val('');
-                        }
-                    }
-                });
-                count++;
+                $('#eadditionalSize').append(newSize);
+                countSize++;
             } else {
-                // alert('Maximum ' + maxImages + ' additional images allowed.');
-                $.notify('Maximum ' + maxImages + ' additional images allowed.');
+                $.notify('Maximum ' + maxSizes + ' additional sizes allowed.');
             }
-        });
+        })
 
-        $('#additionalImages').on('click', '.remove-image', function () {
-            $(this).closest('.form-group').remove();
+        $('#eadditionalSize').on('click', '.eremove-size', function () {
+            $(this).closest('.row').remove();
+            countSize--;
             // console.log('click');
         });
 
@@ -628,7 +687,7 @@
                             }
                         }
                     },
-                    'tax':{
+                    'tax': {
                         validators: {
                             notEmpty: {
                                 message: 'Please Enter Tax'
@@ -654,7 +713,7 @@
                 var $form = $(e.target);
                 var bv = $form.data('bootstrapValidator');
                 var formData = new FormData($form[0]);
-                console.log(formData);
+                // console.log(formData);
                 $.ajax({
                     url: "<?= base_url('admin/products') ?>",
                     type: 'POST',
@@ -665,7 +724,8 @@
                         // console.log(response);
                         if (response.status === 'success') {
                             // ClassicEditor.instances.desc.setData('');
-                            $('input, select').val('');
+                            // $('input, select').val('');
+                            $form[0].reset();
                             $('.category_container').hide();
                             $.notify(response.message, "success");
                             table.ajax.reload(null, false);
@@ -685,7 +745,7 @@
             processing: true,
             serverSide: true,
             paging: true,
-            order: [[1, 'desc']],
+            order: [[2, 'desc']],
             "fnCreatedRow": function (row, data, index) {
                 var pageInfo = table.page.info();
                 var currentPage = pageInfo.page;
@@ -693,6 +753,9 @@
                 var rowNumber = index + 1 + (currentPage * pageLength);
                 $('td', row).eq(0).html(rowNumber);
             },
+            columnDefs: [
+                { targets: [0, 1, 7, 8], orderable: false }
+            ],
             ajax: {
                 url: "<?= base_url('admin/fetchproducts') ?>",
                 type: "GET",
@@ -705,35 +768,42 @@
             }
         });
 
-        // $(document).on('click', '#statusBtn', function (e) {
-        //     e.preventDefault();
-        //     var button = $(this);
-        //     var data = table.row(button.closest('tr')).data();
-        //     var prdId = data[0];
-        //     var status = $(this).data('status');
-        //     var dataID = $(this).data('id');
-        //     // console.log(prdId, dataID, status);
-        //     $.ajax({
-        //         method: 'POST',
-        //         url: "<?= base_url('admin/productStatus') ?>",
-        //         data: {
-        //             'id': prdId,
-        //             'sts': status,
-        //             'dataId': dataID
-        //         },
-        //         success: function (res) {
-        //             console.log(res);
-        //         }
-        //     });
-        // });
 
+        $(document).on('click', '#statusBtn', function (e) {
+            e.preventDefault();
+            var button = $(this);
+            var data = table.row(button.closest('tr')).data();
+            var prdId = data[0];
+            var status = $(this).data('status');
+            var dataID = $(this).data('id');
+            console.log(prdId, dataID, status);
+            // $.ajax({
+            //     method: 'POST',
+            //     url: "<?= base_url('admin/productStatus') ?>",
+            //     data: {
+            //         'id': prdId,
+            //         'sts': status,
+            //         'dataId': dataID
+            //     },
+            //     success: function (res) {
+            //         // console.log(res);
+            //         if (response.status === 1) {
+            //             button.data('status', 'active').text('Active');
+            //             button.removeClass('btn-outline-danger').addClass('btn-outline-success');
+            //         } else {
+            //             button.data('status', 'inactive').text('In-Active');
+            //             button.removeClass('btn-outline-success').addClass('btn-outline-danger');
+            //         }
+            //     }
+            // });
+        });
 
         $(document).on('click', '#editProd', function (e) {
             e.preventDefault();
             var button = $(this);
             var data = table.row(button.closest('tr')).data();
             var prId = data[0];
-            console.log(prId);
+            // console.log(prId);
             $('#productId').val(prId);
             $.ajax({
                 method: 'POST',
@@ -742,15 +812,28 @@
                     'id': prId
                 },
                 success: function (response) {
-                    // console.log(response);
-                    if (response.status == 'true') {
-                        $('#editcat').val(response.message.cat_name);
+                    console.log(response);
+
+                    if (response.status == 'success') {
+                        $('#eproduct_name').val(response.data.product.ptitle);
+                        $('#ecat_name').val(response.data.product.cat_id);
+                        $('#esub_cat').val(response.data.product.subcat_id);
+                        $('#eproduct_code').val(response.data.product.pcode);
+                        $('#ebrand').val(response.data.product.brand_id);
+                        $('#etax').val(response.data.product.tax);
+                        $('#eorderno').val(response.data.product.orderno);
+                        $('#edesc').val(response.data.product.overview);
+                        $('#especs').val(response.data.product.pspec);
+
+
+
                     } else {
                         $.notify(response.message, "error");
                     }
                 }
             });
         });
+
 
         // $(document).on('click', '#updatebtn', function () {
         //     var $form = $('#editCategoryForm');

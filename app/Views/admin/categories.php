@@ -234,7 +234,7 @@
                 $('td', row).eq(0).html(rowNumber);
             },
             columnDefs: [
-                { targets: [0, 2, 3, 4], orderable: false }
+                { targets: [0, 3, 4], orderable: false }
             ],
             ajax: {
                 url: "<?= base_url('admin/fetchdata') ?>",

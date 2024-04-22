@@ -10,4 +10,9 @@ class ProductModel extends Model
   protected $primaryKey = 'id';
   protected $protectFields = [];
 
+  public function updateStatus($id, $status)
+  {
+    return $this->set(['status' => $status])->where('id', $id)->update();
+  }
+
 }

@@ -608,6 +608,136 @@ class Home extends BaseController
         }
         return $this->response->setJSON($response);
     }
+
+    public function sub_sub_cat()
+    {
+        if ($this->request->getMethod() == 'get') {
+            $ct = new \App\Models\CategoryModel();
+
+            $data['category'] = $ct->where('status', 1)->findAll();
+            return view('admin/sub_sub_cat', $data);
+        } elseif ($this->request->getMethod() == 'post') {
+            $st = $this->request->getPost('scat');
+            $ssct = $this->request->getPost('ssub_cat');
+            $ssctImg = $this->request->getFile('sscimage');
+
+            if ($ssctImg->isValid() && !$ssctImg->hasMoved()) {
+                $newImageName = $ssctImg->getRandomName();
+                $ssctImg->move("../public/assets/uploads/sub_sub_category/", $newImageName);
+                $data = [
+                    'sub_id' => esc($st),
+                    'ssname' => ucwords(esc($ssct)),
+                    'subsub_img' => esc($newImageName),
+                ];
+
+                $catModel = new \App\Models\Sub_SCatModel();
+                try {
+                    $query = $catModel->insert($data);
+
+                    if ($query) {
+                        $response = ['status' => 'success', 'message' => 'Sub Sub-Category Added Successfully!'];
+                    } else {
+                        $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+                    }
+                    return $this->response->setJSON($response);
+                } catch (\Exception $e) {
+                    $response = ['status' => 'false', 'message' => 'An unexpected error occurred. Please try again later.'];
+                    return $this->response->setStatusCode(500)->setJSON($response);
+                }
+            }
+
+        }
+    }
+
+    public function fetchSubSubCategory()
+    {
+        try {
+            $fetchSubCat = new \App\Models\Sub_SCatModel();
+
+            $draw = $_GET['draw'];
+            $start = $_GET['start'];
+            $length = $_GET['length'];
+            $searchValue = $_GET['search']['value'];
+            $orderColumnIndex = $_GET['order'][0]['column'];
+            $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
+            $orderDir = $_GET['order'][0]['dir'];
+
+            $fetchSubCat->select('subsubcategory.*, subcategory.sname');
+            $fetchSubCat->join('subcategory', 'subcategory.id = subsubcategory.sub_id');
+
+            $fetchSubCat->orderBy($orderColumnName, $orderDir);
+
+            // if (!empty($searchValue)) {
+            //     // $fetchSubCat->groupStart();
+            //     $fetchSubCat->Like('sub_cat', $searchValue);
+            //     $fetchSubCat->orLike('cat_name', $searchValue);
+            //     // $fetchSubCat->groupEnd();
+            // }
+
+            $data['ssubcat'] = $fetchSubCat->findAll($length, $start);
+            $totalRecords = $fetchSubCat->countAll();
+            // $totalFilterRecords = (!empty($searchValue)) ? $fetchSubCat->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
+            $totalFilterRecords = $totalRecords;
+            $associativeArray = [];
+
+            foreach ($data['ssubcat'] as $row) {
+                $status = $row['status'];
+
+                if ($status == 1) {
+                    $buttonCSSClass = 'btn-outline-danger';
+                    $buttonName = 'In-Active';
+                } elseif ($status == 0) {
+                    $buttonCSSClass = 'btn-outline-success';
+                    $buttonName = 'Active';
+                }
+                $associativeArray[] = array(
+                    0 => $row['id'],
+                    1 => ucfirst($row['sname']),
+                    2 => ucfirst($row['ssname']),
+                    3 => '<img src="../assets/uploads/sub_sub_category/' . $row['subsub_img'] . '" height="100px" width="100px">',
+                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    5 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
+                    <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
+                );
+            }
+
+
+            if (empty($data['ssubcat'])) {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'data' => []
+                );
+            } else {
+                $output = array(
+                    'draw' => intval($draw),
+                    'recordsTotal' => $totalRecords,
+                    'recordsFiltered' => $totalFilterRecords,
+                    'data' => $associativeArray
+                );
+            }
+            return $this->response->setJSON($output);
+        } catch (\Exception $e) {
+            // log_message('error', 'Error in fetch_Category: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+    }
+
+    public function subcatdrop()
+    {
+        $id = $this->request->getPost('id');
+
+        $cl = new \App\Models\SubCatModel();
+        $vr = $cl->where('cat_id', esc($id))->findAll();
+        if ($vr) {
+            $response = ['status' => 'success', 'message' => $vr];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Please choose a correct Category'];
+        }
+        return $this->response->setJSON($response);
+    }
+
     public function unitMaster()
     {
         if ($this->request->getMethod() == 'get') {
@@ -796,6 +926,19 @@ class Home extends BaseController
         return $this->response->setJSON($response);
     }
 
+    public function fetchsubSububCategoryData()
+    {
+        $id = $this->request->getPost('id');
+
+        $cl = new \App\Models\Sub_SCatModel();
+        $vr = $cl->where('sub_id', esc($id))->findAll();
+        if ($vr) {
+            $response = ['status' => 'success', 'message' => $vr];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Please choose a correct Category'];
+        }
+        return $this->response->setJSON($response);
+    }
     public function Products()
     {
         if ($this->request->getMethod() == 'get') {
@@ -826,7 +969,6 @@ class Home extends BaseController
             $stck = $this->request->getPost('product_stock');
 
             $primg = $this->request->getFileMultiple('product_image');
-            $yt = $this->request->getPost('ylink');
 
             $mttl = $this->request->getPost('meta_title');
             $mdes = $this->request->getPost('meta_desc');
@@ -846,7 +988,6 @@ class Home extends BaseController
                 'meta_title' => esc($mttl),
                 'meta_keywords' => esc($mkwrd),
                 'meta_description' => esc($mdes),
-                'youtubelink' => esc($yt)
             ];
 
             $catModel = new \App\Models\ProductModel();
@@ -858,18 +999,22 @@ class Home extends BaseController
                 $lastInsertId = $catModel->insertID();
 
                 if ($lastInsertId) {
-                    foreach ($primg as $image) {
+                    foreach ($primg as $key => $image) {
                         if ($image->isValid() && !$image->hasMoved()) {
                             $newImageName = $image->getRandomName();
                             $image->move("../public/assets/uploads/product/", $newImageName);
 
+                            $sz = $size[$key];
+
                             $data2 = [
                                 'pid' => $lastInsertId,
+                                'sz_id' => esc($sz),
                                 'p_image' => $newImageName
                             ];
                             $ImgModel->insert($data2);
                         }
                     }
+
 
                     foreach ($size as $key => $value) {
                         $data3 = [
@@ -892,7 +1037,6 @@ class Home extends BaseController
             }
         }
     }
-
 
 
     function validate_ProductCode()
@@ -993,6 +1137,33 @@ class Home extends BaseController
         }
     }
 
+    public function productStatus()
+    {
+try {
+            $md = new \App\Models\UnitMasterModel();
+            $id = $this->request->getPost('id');
+            $st = $this->request->getPost('status');
+            $dId = $this->request->getPost('dataId');
+
+            if ($dId == 1 && $st == 'active') {
+                $status = 0;
+            } else {
+                $status = 1;
+            }
+
+            $result = $md->updateStatus(esc($id), $status);
+
+            if ($result) {
+                return $this->response->setJSON(['status' => $status]);
+            } else {
+                return $this->response->setJSON(['error' => 'Failed to update status']);
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Error in toggle_status: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+
+    }
     public function editProductData()
     {
         $id = $this->request->getPost('id');
@@ -1004,11 +1175,20 @@ class Home extends BaseController
         $psd = $ProductSize->where('pid', $id)->findAll();
         $pI = $ProductImage->where('pid', $id)->findAll();
 
+        $response = [];
+
         if ($ed) {
-            $response = ['status' => 'true', 'message' => [$ed, $psd, $pI]];
+            $response['status'] = 'success';
+            $response['data'] = [
+                'product' => $ed,
+                'sizes' => $psd,
+                'images' => $pI
+            ];
         } else {
-            $response = ['status' => 'error', 'message' => 'Data not Found!'];
+            $response['status'] = 'error';
+            $response['message'] = 'Data not Found!';
         }
+
         return $this->response->setJSON($response);
     }
 

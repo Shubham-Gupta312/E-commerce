@@ -40,6 +40,12 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     $routes->post('updateSubCategory', 'Home::updateSubCategory');
     $routes->post('deleteSubCategory', 'Home::deleteSubCategory');
 
+    $routes->get('sSubCategory', 'Home::sub_sub_cat');
+    $routes->post('subsubCategory', 'Home::sub_sub_cat');
+    $routes->post('subcatdrop', 'Home::subcatdrop');
+    $routes->get('fetchSubScat', 'Home::fetchSubSubCategory');
+    $routes->post('fetchsubSububCategoryData', 'Home::fetchsubSububCategoryData');
+
     $routes->get('unitMaster', 'Home::unitMaster');
     $routes->post('unitMaster', 'Home::unitMaster');
     $routes->get('fetchUnitMaster', 'Home::fetchUnitMaster');

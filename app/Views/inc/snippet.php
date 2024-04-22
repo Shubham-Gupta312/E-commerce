@@ -93,6 +93,9 @@
         #categorizationForm input::placeholder {
             color: #b7bcc1;
         }
+        #ssubCategoryForm input::placeholder {
+            color: #b7bcc1;
+        }
 
         @media (min-width: 576px) {
     #ProductModal .modal-dialog {

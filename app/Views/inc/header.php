@@ -148,21 +148,32 @@
                             <span class="hide-menu">Brand </span>
                         </a>
                     </li>
-                    <!-- Category -->
+                    <!-- Divsion -->
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/categories') ?>"
                             aria-expanded="false">
                             <!-- <i class="fa-solid fa-list"></i> -->
                             <i class="fa-solid fa-layer-group"></i>
                             <span class="hide-menu">Category </span>
+                            <!-- <span class="hide-menu">Division </span> -->
                         </a>
                     </li>
-                    <!-- Sub-Category -->
+                    <!-- Category -->
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/subCategory') ?>"
                             aria-expanded="false">
                             <i class="fas fa-list-alt"></i>
                             <span class="hide-menu">Sub-Category </span>
+                            <!-- <span class="hide-menu">Category </span> -->
+                        </a>
+                    </li>
+                    <!-- Sub-Category -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark" href="<?= base_url('admin/sSubCategory') ?>"
+                            aria-expanded="false">
+                            <i class="fas fa-list-alt"></i>
+                            <!-- <span class="hide-menu">Sub-Category </span> -->
+                            <span class="hide-menu">Sub-Sub-Category </span>
                         </a>
                     </li>
                     <!-- Product -->
