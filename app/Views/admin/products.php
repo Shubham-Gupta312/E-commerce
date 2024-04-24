@@ -47,7 +47,7 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="form-group">
                                     <label for="cat_name">Category Name</label><span class="text-danger">*</span>
-                                    <select name="cat_name" class="form-control" id="cat_name">
+                                    <select name="cat_name" class="form-control" id="cat_name" style="width: 100%;">
                                         <option value="" selected="selected">Please choose an option</option>
                                         <?php foreach ($category as $option): ?>
                                             <option value="<?php echo $option['id']; ?>"><?php echo $option['cname']; ?>
@@ -58,7 +58,7 @@
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <label for="sub_cat">Sub-Category</label><span class="text-danger">*</span>
-                                <select class="form-control" name="sub_cat" id="sub_cat">
+                                <select class="form-control" name="sub_cat" id="sub_cat" style="width: 100%;">
                                     <option value="" selected="selected">Please choose an option</option>
 
                                 </select>
@@ -68,7 +68,7 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <label for="sub-sub-cat">Sub Sub-Category</label><span class="text-danger">*</span>
-                                <select class="form-control" name="ssct" id="ssct">
+                                <select class="form-control" name="ssct" id="ssct" style="width: 100%;">
                                     <option value="" selected="selected">Please choose an option</option>
                                 </select>
                             </div>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <label for="Brand">Brand Name</label><span class="text-danger">*</span>
-                                <select class="form-control" name="brand" id="brand">
+                                <select class="form-control" name="brand" id="brand" style="width: 100%;">
                                     <option value="" selected="selected">Please choose an option</option>
                                     <?php foreach ($brand as $option): ?>
                                         <option value="<?php echo $option['id']; ?>">
@@ -391,6 +391,8 @@
 
 <script>
     $(document).ready(function () {
+        $('#cat_name, #sub_cat, #ssct, #brand').select2();
+
         $('body').on('keyup', ".onlychars", function (event) {
             this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
         });
@@ -634,6 +636,13 @@
                             }
                         }
                     },
+                    'ssct': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please select Sub Sub-Category'
+                            }
+                        }
+                    },
                     'product_code': {
                         validators: {
                             notEmpty: {
@@ -776,26 +785,26 @@
             var prdId = data[0];
             var status = $(this).data('status');
             var dataID = $(this).data('id');
-            console.log(prdId, dataID, status);
-            // $.ajax({
-            //     method: 'POST',
-            //     url: "<?= base_url('admin/productStatus') ?>",
-            //     data: {
-            //         'id': prdId,
-            //         'sts': status,
-            //         'dataId': dataID
-            //     },
-            //     success: function (res) {
-            //         // console.log(res);
-            //         if (response.status === 1) {
-            //             button.data('status', 'active').text('Active');
-            //             button.removeClass('btn-outline-danger').addClass('btn-outline-success');
-            //         } else {
-            //             button.data('status', 'inactive').text('In-Active');
-            //             button.removeClass('btn-outline-success').addClass('btn-outline-danger');
-            //         }
-            //     }
-            // });
+            // console.log(prdId, dataID, status);
+            $.ajax({
+                method: 'POST',
+                url: "<?= base_url('admin/productToggleStatus') ?>",
+                data: {
+                    'id': prdId,
+                    'sts': status,
+                    'dataId': dataID
+                },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === 1) {
+                        button.data('status', 'active').text('Active');
+                        button.removeClass('btn-outline-danger').addClass('btn-outline-success');
+                    } else {
+                        button.data('status', 'inactive').text('In-Active');
+                        button.removeClass('btn-outline-success').addClass('btn-outline-danger');
+                    }
+                }
+            });
         });
 
         $(document).on('click', '#editProd', function (e) {
@@ -817,13 +826,41 @@
                     if (response.status == 'success') {
                         $('#eproduct_name').val(response.data.product.ptitle);
                         $('#ecat_name').val(response.data.product.cat_id);
-                        $('#esub_cat').val(response.data.product.subcat_id);
+                        $('#ecat_name').val(response.data.product.subcat_id);
                         $('#eproduct_code').val(response.data.product.pcode);
                         $('#ebrand').val(response.data.product.brand_id);
                         $('#etax').val(response.data.product.tax);
                         $('#eorderno').val(response.data.product.orderno);
                         $('#edesc').val(response.data.product.overview);
                         $('#especs').val(response.data.product.pspec);
+
+                        // Loop through each size and add it to the modal
+                        response.data.sizes.forEach(function (size, index) {
+                            var sizeHtml = `
+            <div class="col-lg-3 col-md-4">
+                <label for="Sizes">Size</label><span class="text-danger">*</span>
+                <select class="form-control" name="eproduct_size[]" id="eproduct_size_${index}">
+                    <option value="">Please choose an option</option>
+                  
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <label for="mrp">MRP (In Rs)</label><span class="text-danger">*</span>
+                <input type="text" class="form-control onlynum" name="emrp[]" id="emrp_${index}" value="${size.mrp}">
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <label for="sp">Selling Price (In Rs)</label><span class="text-danger">*</span>
+                <input type="text" class="form-control onlynum" name="esp[]" id="esp_${index}" value="${size.selling_price}">
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <label for="prstck">Product Stock</label>
+                <input type="text" class="form-control onlynum" name="eproduct_stock[]" id="eproduct_stock_${index}" value="${size.stock}">
+            </div>
+        `;
+
+                            // Append the size fields to the container
+                            $('#sizesContainer').append(sizeHtml);
+                        });
 
 
 
@@ -833,6 +870,42 @@
                 }
             });
         });
+
+        // $(document).on('click', '#editProd', function (e) {
+        //     e.preventDefault();
+        //     var button = $(this);
+        //     var data = table.row(button.closest('tr')).data();
+        //     var prId = data[0];
+        //     // console.log(prId);
+        //     $('#productId').val(prId);
+        //     $.ajax({
+        //         method: 'POST',
+        //         url: "<?= base_url('admin/editProductData') ?>",
+        //         data: {
+        //             'id': prId
+        //         },
+        //         success: function (response) {
+        //             console.log(response);
+
+        //             if (response.status == 'success') {
+        //                 $('#eproduct_name').val(response.data.product.ptitle);
+        //                 $('#ecat_name').val(response.data.product.cat_id);
+        //                 $('#esub_cat').val(response.data.product.subcat_id);
+        //                 $('#eproduct_code').val(response.data.product.pcode);
+        //                 $('#ebrand').val(response.data.product.brand_id);
+        //                 $('#etax').val(response.data.product.tax);
+        //                 $('#eorderno').val(response.data.product.orderno);
+        //                 $('#edesc').val(response.data.product.overview);
+        //                 $('#especs').val(response.data.product.pspec);
+
+
+
+        //             } else {
+        //                 $.notify(response.message, "error");
+        //             }
+        //         }
+        //     });
+        // });
 
 
         // $(document).on('click', '#updatebtn', function () {

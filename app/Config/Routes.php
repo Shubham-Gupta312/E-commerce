@@ -42,9 +42,11 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
 
     $routes->get('sSubCategory', 'Home::sub_sub_cat');
     $routes->post('subsubCategory', 'Home::sub_sub_cat');
-    $routes->post('subcatdrop', 'Home::subcatdrop');
     $routes->get('fetchSubScat', 'Home::fetchSubSubCategory');
-    $routes->post('fetchsubSububCategoryData', 'Home::fetchsubSububCategoryData');
+    $routes->post('subsubcatToggleStatus', 'Home::subsubcatToggleStatus');
+    $routes->post('editSubSubCategory', 'Home::editSubSubCategory');
+    $routes->post('updatesubSubCategory', 'Home::updatesubSubCategory');
+    $routes->post('deleteSubSubCategory', 'Home::deleteSubSubCategory');
 
     $routes->get('unitMaster', 'Home::unitMaster');
     $routes->post('unitMaster', 'Home::unitMaster');
@@ -56,20 +58,13 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     
     $routes->get('validateProductCode', 'Home::validate_ProductCode');
     $routes->post('fetchSubCategoryData', 'Home::fetchSubCategoryData');
+    $routes->post('fetchsubSububCategoryData', 'Home::fetchsubSububCategoryData');
 
     $routes->get('products', 'Home::Products');
     $routes->post('products', 'Home::Products');
     $routes->get('fetchproducts', 'Home::fetchproducts');
-    $routes->post('productStatus', 'Home::productStatus');
+    $routes->post('productToggleStatus', 'Home::productToggleStatus');
     $routes->post('editProductData', 'Home::editProductData');
 
-
-    // $routes->get('productImage', 'Home::productImage');
-    // $routes->post('productImage', 'Home::productImage');
-    // $routes->get('fetchproductImage', 'Home::fetchproductImage');
-
-    // $routes->get('productDetail', 'Home::productDetail');
-    // $routes->post('productDetail', 'Home::productDetail');
-    // $routes->get('fetchproductDetail', 'Home::fetchproductDetail');
 
 });

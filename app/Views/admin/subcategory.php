@@ -37,9 +37,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
                                 <label for="cat name">Category Name</label><span class="text-danger">*</span>
-                                <!-- <input type="text" class="form-control onlychars" id="catname" name="catname"
-                                    placeholder="Enter Category Name"> -->
-                                <select class="form-control" name="cat" id="cat">
+                                <select class="form-control" name="cat" id="cat"  style="width: 100%;">
                                     <option value="" selected="selected">Please Choose one option</option>
                                     <?php foreach ($category as $option): ?>
                                         <option value="<?php echo $option['id']; ?>"><?= $option['cname'] ?></option>
@@ -89,7 +87,7 @@
                                     <input type="hidden" name="id" id="catId" val="">
                                     <div class="col-lg-12 col-md-6">
                                         <label for="cat name">Category Name</label><span class="text-danger">*</span>
-                                        <select class="form-control" name="edit_cat" id="edit_cat">
+                                        <select class="form-control" name="edit_cat" id="edit_cat" style="width: 100%;">
                                             <option value="" selected="selected">Please Choose one option</option>
                                             <?php foreach ($category as $option): ?>
                                                 <option value="<?php echo $option['id']; ?>"><?= $option['cname'] ?>
@@ -164,6 +162,8 @@
 
 <script>
     $(document).ready(function () {
+        $('#cat').select2();
+
         $('body').on('keyup', ".onlychars", function (event) {
             this.value = this.value.replace(/[^[A-Za-z ]]*/gi, '');
         });

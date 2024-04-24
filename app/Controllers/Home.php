@@ -86,15 +86,17 @@ class Home extends BaseController
                 if ($status == 0) {
                     $buttonCSSClass = 'btn-outline-danger';
                     $buttonName = 'In-Active';
+                    $dst = 'inactive';
                 } elseif ($status == 1) {
                     $buttonCSSClass = 'btn-outline-success';
                     $buttonName = 'Active';
+                    $dst = 'active';
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
                     1 => ucfirst($row['name']),
                     2 => '<img src="../assets/uploads/brand/' . $row['brand_img'] . '" height="100px" width="100px">',
-                    3 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    3 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="' . $dst . '">' . $buttonName . '</button>',
                     4 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -151,7 +153,6 @@ class Home extends BaseController
             return $this->response->setJSON(['error' => 'Internal Server Error']);
         }
     }
-
     public function editBrand()
     {
         $id = $this->request->getPost('id');
@@ -278,16 +279,18 @@ class Home extends BaseController
                 if ($status == 0) {
                     $buttonCSSClass = 'btn-outline-danger';
                     $buttonName = 'In-Active';
+                    $dst = 'inactive';
                 } elseif ($status == 1) {
                     $buttonCSSClass = 'btn-outline-success';
                     $buttonName = 'Active';
+                    $dst = 'active';
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
                     1 => $row['orderno'],
                     2 => ucfirst($row['cname']),
                     3 => '<img src="../assets/uploads/category/' . $row['image'] . '" height="100px" width="100px">',
-                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="' . $dst . '">' . $buttonName . '</button>',
                     5 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -331,7 +334,7 @@ class Home extends BaseController
                 $status = 1;
             }
 
-            $result = $md->updateStatus(esc($id), $status);
+            $result = $md->updateStatus(esc($id), esc($status));
 
             if ($result) {
                 return $this->response->setJSON(['status' => $status]);
@@ -468,6 +471,7 @@ class Home extends BaseController
                 $fetchSubCat->orLike('cat_name', $searchValue);
                 // $fetchSubCat->groupEnd();
             }
+            // $res = $this->gM->getRow('subcategory', 'cat_name = test');
 
             $data['subcat'] = $fetchSubCat->findAll($length, $start);
             $totalRecords = $fetchSubCat->countAll();
@@ -481,16 +485,18 @@ class Home extends BaseController
                 if ($status == 0) {
                     $buttonCSSClass = 'btn-outline-danger';
                     $buttonName = 'In-Active';
+                    $dst = 'inactive';
                 } elseif ($status == 1) {
                     $buttonCSSClass = 'btn-outline-success';
                     $buttonName = 'Active';
+                    $dst = 'active';
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
                     1 => ucfirst($row['cname']),
                     2 => ucfirst($row['sname']),
                     3 => '<img src="../assets/uploads/sub_category/' . $row['sub_img'] . '" height="100px" width="100px">',
-                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="' . $dst . '">' . $buttonName . '</button>',
                     5 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -612,9 +618,9 @@ class Home extends BaseController
     public function sub_sub_cat()
     {
         if ($this->request->getMethod() == 'get') {
-            $ct = new \App\Models\CategoryModel();
+            $sct = new \App\Models\SubCatModel();
 
-            $data['category'] = $ct->where('status', 1)->findAll();
+            $data['scategory'] = $sct->where('status', 1)->findAll();
             return view('admin/sub_sub_cat', $data);
         } elseif ($this->request->getMethod() == 'post') {
             $st = $this->request->getPost('scat');
@@ -683,19 +689,21 @@ class Home extends BaseController
             foreach ($data['ssubcat'] as $row) {
                 $status = $row['status'];
 
-                if ($status == 1) {
+                if ($status == 0) {
                     $buttonCSSClass = 'btn-outline-danger';
                     $buttonName = 'In-Active';
-                } elseif ($status == 0) {
+                    $dst = 'inactive';
+                } elseif ($status == 1) {
                     $buttonCSSClass = 'btn-outline-success';
                     $buttonName = 'Active';
+                    $dst = 'active';
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
                     1 => ucfirst($row['sname']),
                     2 => ucfirst($row['ssname']),
                     3 => '<img src="../assets/uploads/sub_sub_category/' . $row['subsub_img'] . '" height="100px" width="100px">',
-                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    4 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="' . $dst . '">' . $buttonName . '</button>',
                     5 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -724,20 +732,89 @@ class Home extends BaseController
         }
     }
 
-    public function subcatdrop()
+    public function subsubcatToggleStatus()
+    {
+        $md = new \App\Models\Sub_SCatModel();
+        $id = $this->request->getPost('id');
+        $sts = $this->request->getPost('sts');
+        $dataId = $this->request->getPost('dataId');
+
+        if ($sts == 'active' && $dataId == 1) {
+            $sts = 0;
+        } else {
+            $sts = 1;
+        }
+        ;
+
+        $qry = $md->updateStatus(esc($id), esc($sts));
+
+        if ($qry) {
+            return $this->response->setJSON(['status' => $sts]);
+        } else {
+            return $this->response->setJSON(['error' => 'Failed to update status']);
+        }
+    }
+
+    public function editSubSubCategory()
     {
         $id = $this->request->getPost('id');
 
-        $cl = new \App\Models\SubCatModel();
-        $vr = $cl->where('cat_id', esc($id))->findAll();
-        if ($vr) {
-            $response = ['status' => 'success', 'message' => $vr];
+        $editSSCat = new \App\Models\Sub_SCatModel();
+        $ed = $editSSCat->find($id);
+
+        if ($ed) {
+            $response = ['status' => 'true', 'message' => $ed];
         } else {
-            $response = ['status' => 'error', 'message' => 'Please choose a correct Category'];
+            $response = ['status' => 'error', 'message' => 'Data not Found!'];
         }
         return $this->response->setJSON($response);
     }
 
+    public function updatesubSubCategory()
+    {
+        $updateSSCat = new \App\Models\Sub_SCatModel();
+        $id = $this->request->getPost('id');
+        $esc = $this->request->getPost('escat');
+        $essc = $this->request->getPost('essub_cat');
+        $essi = $this->request->getFile('esscimage');
+
+        $data = [
+            'sub_id' => esc($esc),
+            'ssname' => ucwords(esc($essc)),
+        ];
+
+        if ($essi && $essi->isValid() && !$essi->hasMoved()) {
+            $newName = $essi->getRandomName();
+            $uploadPath = '../public/assets/uploads/sub_sub_category/';
+            $essi->move($uploadPath, $newName);
+
+            $data['subsub_img'] = $newName;
+        } else {
+            unset($data['subsub_img']);
+        }
+        // print_r($data);
+        $query = $updateSSCat->updateSubSubCategory(esc($id), $data);
+        if ($query) {
+            $response = ['status' => 'success', 'message' => 'Data Updated Successfully!'];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Data not Updated!'];
+        }
+        return $this->response->setJSON($response);
+    }
+
+    public function deleteSubSubCategory()
+    {
+        $id = $this->request->getPost('id');
+
+        $dct = new \App\Models\Sub_SCatModel;
+        $query = $dct->deleteSubSubCategory(esc($id));
+        if ($query) {
+            $response = ['status' => 'success', 'message' => 'Sub Sub-Category Deleted Successfully!'];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+        }
+        return $this->response->setJSON($response);
+    }
     public function unitMaster()
     {
         if ($this->request->getMethod() == 'get') {
@@ -800,14 +877,16 @@ class Home extends BaseController
                 if ($status == 0) {
                     $buttonCSSClass = 'btn-outline-danger';
                     $buttonName = 'In-Active';
+                    $dst = 'inactive';
                 } elseif ($status == 1) {
                     $buttonCSSClass = 'btn-outline-success';
                     $buttonName = 'Active';
+                    $dst = 'active';
                 }
                 $associativeArray[] = array(
                     0 => $row['s_id'],
                     1 => ucfirst($row['sname']),
-                    2 => '<button class="btn ' . $buttonCSSClass . '" id="toggle-status" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    2 => '<button class="btn ' . $buttonCSSClass . '" id="toggle-status" data-id="' . $status . '" data-status="' . $dst . '">' . $buttonName . '</button>',
                     3 => '<button class="btn btn-outline-warning" id="editCat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -939,6 +1018,7 @@ class Home extends BaseController
         }
         return $this->response->setJSON($response);
     }
+
     public function Products()
     {
         if ($this->request->getMethod() == 'get') {
@@ -1094,9 +1174,11 @@ class Home extends BaseController
                 if ($status == 0) {
                     $buttonCSSClass = 'btn-outline-danger';
                     $buttonName = 'In-Active';
+                    $dst = 'inactive';
                 } elseif ($status == 1) {
                     $buttonCSSClass = 'btn-outline-success';
                     $buttonName = 'Active';
+                    $dst = 'active';
                 }
                 $associativeArray[] = array(
                     0 => $row['id'],
@@ -1106,7 +1188,7 @@ class Home extends BaseController
                     4 => ucfirst($row['sname']),
                     5 => $row['pcode'],
                     6 => ucfirst($row['name']),
-                    7 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="active">' . $buttonName . '</button>',
+                    7 => '<button class="btn ' . $buttonCSSClass . '" id="statusBtn" data-id="' . $status . '" data-status="' . $dst . '">' . $buttonName . '</button>',
                     8 => '<button class="btn btn-outline-warning" id="editProd" data-bs-toggle="modal" data-bs-target="#ProductModal"><i class="far fa-edit"></i></button>
                     <button class="btn btn-outline-danger" id="deleteCat"><i class="fas fa-trash"></i></button>',
                 );
@@ -1137,12 +1219,12 @@ class Home extends BaseController
         }
     }
 
-    public function productStatus()
+    public function productToggleStatus()
     {
-try {
-            $md = new \App\Models\UnitMasterModel();
+        try {
+            $md = new \App\Models\ProductModel();
             $id = $this->request->getPost('id');
-            $st = $this->request->getPost('status');
+            $st = $this->request->getPost('sts');
             $dId = $this->request->getPost('dataId');
 
             if ($dId == 1 && $st == 'active') {

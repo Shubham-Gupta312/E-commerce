@@ -34,6 +34,11 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>
     <!-- ============================================================== -->
+    <!-- Select2 plugin for Dropdown search -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- ============================================================== -->
 
     <style>
         /* #main-wrapper[data-layout="vertical"][data-sidebartype="full"] .page-wrapper {
@@ -93,16 +98,27 @@
         #categorizationForm input::placeholder {
             color: #b7bcc1;
         }
+
         #ssubCategoryForm input::placeholder {
             color: #b7bcc1;
         }
 
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #b7bcc1;
+            line-height: 28px;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 32px;
+            margin-top: 3px;
+        }
+
         @media (min-width: 576px) {
-    #ProductModal .modal-dialog {
-        max-width: 1100px; /* Sets the maximum width of the modal dialog within #ProductModal to 500 pixels */
-        margin: 1.75rem auto; /* Sets the top and bottom margin to 1.75rem and horizontally centers the modal dialog */
-    }
-}
+            #ProductModal .modal-dialog {
+                max-width: 1100px;
+                margin: 1.75rem auto;
+            }
+        }
     </style>
 
 </head>
@@ -127,10 +143,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <!-- <script src="<?= ASSET_URL ?>public/assets/libs/jquery/dist/jquery.min.js"></script> -->
     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.0/classic/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
         integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Search select Chosen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="<?= ASSET_URL ?>public/assets/libs/popper.js/dist/umd/popper.min.js"></script>
