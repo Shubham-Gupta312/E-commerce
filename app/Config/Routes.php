@@ -47,6 +47,9 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     $routes->post('editSubSubCategory', 'Home::editSubSubCategory');
     $routes->post('updatesubSubCategory', 'Home::updatesubSubCategory');
     $routes->post('deleteSubSubCategory', 'Home::deleteSubSubCategory');
+    $routes->post('sub_cat_retrive', 'Home::sub_cat_retrive');
+    $routes->post('sub_sub_cat_retrive', 'Home::sub_sub_cat_retrive');
+
 
     $routes->get('unitMaster', 'Home::unitMaster');
     $routes->post('unitMaster', 'Home::unitMaster');
@@ -65,6 +68,7 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     $routes->get('fetchproducts', 'Home::fetchproducts');
     $routes->post('productToggleStatus', 'Home::productToggleStatus');
     $routes->post('editProductData', 'Home::editProductData');
+    $routes->post('deleteProduct', 'Home::deleteProduct');
 
 
 });

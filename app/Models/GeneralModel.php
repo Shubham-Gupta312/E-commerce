@@ -12,14 +12,16 @@ class GeneralModel extends Model
         $this->db = db_connect();
     }
 
-    function getRow($table,$where,$columns="*"){
-		$where	 = esc($where);
-		$builder = $this->db->table($table);
-		$builder->select($columns);
-		$builder->where($where);
+    // function getRow($table,$where,$columns="*"){
+	// 	$where	 = esc($where);
+	// 	$builder = $this->db->table($table);
+	// 	$builder->select($columns);
+	// 	$builder->where($where);
 		
-		$query   = $builder->get();
+	// 	$query   = $builder->get();
 		
-		return $query->getRow();
-	}
+	// 	return $query->getRow();
+	// }
+
+	
 }

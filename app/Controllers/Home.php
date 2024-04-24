@@ -1025,10 +1025,13 @@ class Home extends BaseController
             $ctModel = new \App\Models\CategoryModel();
             $brModel = new \App\Models\BrandModel();
             $utModel = new \App\Models\UnitMasterModel();
+            $prsz = new \App\Models\ProductModel();
 
             $data['category'] = $ctModel->where('status', 1)->findAll();
             $data['brand'] = $brModel->where('status', 1)->findAll();
             $data['unit'] = $utModel->where('status', 1)->findAll();
+            // $data['prdctsize'] = $prsz->distinct('pid')->countAllResults();
+            // $data['prdctsize'] = $prsz->countAllResults();
 
             return view('admin/products', $data);
         } elseif ($this->request->getMethod() == 'post') {
@@ -1036,6 +1039,7 @@ class Home extends BaseController
             $cn = $this->request->getPost('cat_name');
             $pn = $this->request->getPost('product_name');
             $sc = $this->request->getPost('sub_cat');
+            $ssct = $this->request->getPost('ssct');
             $pc = $this->request->getPost('product_code');
             $br = $this->request->getPost('brand');
             $tax = $this->request->getPost('tax');
@@ -1057,6 +1061,7 @@ class Home extends BaseController
             $data1 = [
                 'cat_id' => esc($cn),
                 'subcat_id' => esc($sc),
+                'sub_sub_id' => esc($ssct),
                 'brand_id' => esc($br),
                 'ptitle' => ucwords(esc($pn)),
                 'pcode' => strtoupper(esc($pc)),
@@ -1117,8 +1122,6 @@ class Home extends BaseController
             }
         }
     }
-
-
     function validate_ProductCode()
     {
         $pc = trim($this->request->getGet("product_code"));
@@ -1142,7 +1145,7 @@ class Home extends BaseController
             $orderColumnName = $_GET['columns'][$orderColumnIndex]['data'];
             $orderDir = $_GET['order'][0]['dir'];
 
-            $fetchProduct->select('products.*, category.cname, subcategory.sname, brand.name, p_image, mrp, selling_price, stock');
+            $fetchProduct->select('products.*, category.cname, subcategory.sname, brand.name, p_image');
             $fetchProduct->join('brand', 'brand.id = products.brand_id');
             $fetchProduct->join('subcategory', 'subcategory.id = products.subcat_id');
             $fetchProduct->join('category', 'category.id = products.cat_id');
@@ -1161,7 +1164,9 @@ class Home extends BaseController
             //     $fetchProduct->orLike('cat_name', $searchValue);
             //     $fetchProduct->groupEnd();
             // }
+            
 
+           
             $data['product'] = $fetchProduct->findAll($length, $start);
             $totalRecords = $fetchProduct->countAll();
             // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
@@ -1246,6 +1251,23 @@ class Home extends BaseController
         }
 
     }
+
+    public function sub_cat_retrive()
+    {
+        $sct = $this->request->getPost('id');
+        $md = new \App\Models\SubCatModel();
+
+        $res = $md->where('cat_id', esc($sct))->findAll();
+        return $this->response->setJSON(['status' => 'success', 'message' => $res]);
+    }
+    public function sub_sub_cat_retrive()
+    {
+        $ssct = $this->request->getPost('id');
+        $md = new \App\Models\Sub_SCatModel();
+
+        $res = $md->where('sub_id', esc($ssct))->findAll();
+        return $this->response->setJSON(['status' => 'success', 'message' => $res]);
+    }
     public function editProductData()
     {
         $id = $this->request->getPost('id');
@@ -1253,9 +1275,12 @@ class Home extends BaseController
         $ProductModel = new \App\Models\ProductModel();
         $ProductSize = new \App\Models\ProductDetailModel();
         $ProductImage = new \App\Models\ProductImageModel();
+        $sizeMaster = new \App\Models\UnitMasterModel();
+
         $ed = $ProductModel->find($id);
         $psd = $ProductSize->where('pid', $id)->findAll();
         $pI = $ProductImage->where('pid', $id)->findAll();
+        $sizeMasterData = $sizeMaster->findAll();
 
         $response = [];
 
@@ -1264,13 +1289,29 @@ class Home extends BaseController
             $response['data'] = [
                 'product' => $ed,
                 'sizes' => $psd,
-                'images' => $pI
+                'images' => $pI,
+                'sizeMaster' => $sizeMasterData
             ];
         } else {
             $response['status'] = 'error';
             $response['message'] = 'Data not Found!';
         }
 
+        return $this->response->setJSON($response);
+    }
+
+    public function deleteProduct()
+    {
+        $id = $this->request->getPost('id');
+        $md = new \App\Models\ProductModel();
+
+        $q = $md->deleteProductData(esc($id));
+
+        if ($q) {
+            $response = ['status' => 'success', 'message' => 'Category Deleted Successfully!'];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Something went wrong!'];
+        }
         return $this->response->setJSON($response);
     }
 

@@ -14,5 +14,8 @@ class ProductModel extends Model
   {
     return $this->set(['status' => $status])->where('id', $id)->update();
   }
-
+  public function deleteProductData($id)
+  {
+    return $this->where('id', $id)->delete();
+  }
 }
