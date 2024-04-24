@@ -23,5 +23,5 @@ class GeneralModel extends Model
 	// 	return $query->getRow();
 	// }
 
-	
+	// function getData($table, $where, $columns){}
 }
