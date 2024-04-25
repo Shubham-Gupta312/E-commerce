@@ -392,6 +392,15 @@
                 console.error(error);
             });
         ClassicEditor
+            .create(document.querySelector('#edesc'))
+            .then(editor => {
+                // var overviewData = response.data.product.overview;
+                // editor.setData(overviewData);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
             .create(document.querySelector('#specs'))
             .catch(error => {
                 console.error(error);
@@ -792,6 +801,7 @@
                     // console.log(response);
 
                     if (response.status == 'success') {
+
                         var sc = response.data.product.cat_id;
                         $.ajax({
                             method: 'POST',
@@ -831,16 +841,8 @@
                                 $('#ess_cat').val(response.data.product.sub_sub_id);
                             }
                         });
-                        ClassicEditor
-                            .create(document.querySelector('#edesc'))
-                            .then(editor => {
-                                var overviewData = response.data.product.overview;
-                                editor.setData(overviewData);
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
-                        
+
+
 
                         $('#eproduct_name').val(response.data.product.ptitle);
                         $('#ecat_name').val(response.data.product.cat_id);
@@ -861,7 +863,6 @@
                                 <select class="form-control" name="eproduct_size[]" id="eproduct_size_${index}">
                                     <option value="">Please choose an option</option>`;
 
-                            // Loop through sizeMaster data and generate options
                             response.data.sizeMaster.forEach(function (sizeMaster) {
                                 sizeHtml += `<option value="${sizeMaster.s_id}" ${size.sid == sizeMaster.s_id ? 'selected' : ''}>${sizeMaster.sname}</option>`;
                             });
@@ -973,6 +974,31 @@
                     }
                 }
             });
+        });
+
+        $.ajax({
+            method: "GET",
+            url: "<?= base_url('admin/fetchProductVariant') ?>",
+            success: function (response) {
+                // console.log(response);
+                var productIds = response.product_ids;
+                var counts = response.message;
+                for (var pid in counts) {
+                    if (productIds.includes(pid)) {
+                        // console.log('Matching data:', pid, counts[pid]);
+                        $('.badge').each(function (index) {
+                            var pid = productIds[index];
+                            var countsForPid = counts[pid];
+
+                            if (countsForPid > 1) {
+                                $('#badge_' + pid).text(countsForPid + " Variants").css('color', '#fff');
+                            } else {
+                                $('#badge_' + pid).hide();
+                            }
+                        });
+                    }
+                }
+            }
         });
 
     });

@@ -68,7 +68,9 @@ $routes->group('admin',['filter' => 'IsAdminFilter'], static function ($routes) 
     $routes->get('fetchproducts', 'Home::fetchproducts');
     $routes->post('productToggleStatus', 'Home::productToggleStatus');
     $routes->post('editProductData', 'Home::editProductData');
-    $routes->post('deleteProduct', 'Home::deleteProduct');
+    $routes->post('deleteProduct', 'Home::deleteProduct'); 
+
+    $routes->get('fetchProductVariant', 'Home::fetchProductVariant');
 
 
 });

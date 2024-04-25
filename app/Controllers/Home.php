@@ -1164,9 +1164,7 @@ class Home extends BaseController
             //     $fetchProduct->orLike('cat_name', $searchValue);
             //     $fetchProduct->groupEnd();
             // }
-            
 
-           
             $data['product'] = $fetchProduct->findAll($length, $start);
             $totalRecords = $fetchProduct->countAll();
             // $totalFilterRecords = (!empty($searchValue)) ? $fetchProduct->where('cat_name', $searchValue)->countAllResults() : $totalRecords;
@@ -1185,10 +1183,13 @@ class Home extends BaseController
                     $buttonName = 'Active';
                     $dst = 'active';
                 }
+
+                $badgeHTML = '<span class="badge bg-success mt-2" id="badge_' . $row['id'] . '" style="background-color: #FF5733 !important;"></span>';
+
                 $associativeArray[] = array(
                     0 => $row['id'],
                     1 => '<img src="../assets/uploads/product/' . $row['p_image'] . '" height="100px" width="100px">',
-                    2 => ucfirst($row['ptitle']),
+                    2 => ucfirst($row['ptitle']) . ' ' . $badgeHTML,
                     3 => ucfirst($row['cname']),
                     4 => ucfirst($row['sname']),
                     5 => $row['pcode'],
@@ -1315,6 +1316,34 @@ class Home extends BaseController
         return $this->response->setJSON($response);
     }
 
+    public function fetchProductVariant()
+    {
+        try {
+            $mdl = new \App\Models\ProductDetailModel();
+            $pmd = new \App\Models\ProductModel();
+            $prd = $pmd->findAll();
+            $dt = $mdl->findAll();
+
+            foreach ($dt as $record) {
+                $pid = $record['pid'];
+                if (isset($pidCounts[$pid])) {
+                    $pidCounts[$pid]++;
+                } else {
+                    $pidCounts[$pid] = 1;
+                }
+            }
+
+            $response_data = [
+                'status' => 'success',
+                'message' => $pidCounts,
+                'product_ids' => array_column($prd, 'id') // Extracting 'id' values from $prd array
+            ];
+            return $this->response->setJSON($response_data);
+        } catch (\Exception $e) {
+            // log_message('error', 'Error in fetchProductVariant: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'Internal Server Error']);
+        }
+    }
 
 
 }
